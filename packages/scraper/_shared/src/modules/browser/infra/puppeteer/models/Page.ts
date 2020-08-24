@@ -1,0 +1,51 @@
+import puppeteer from 'puppeteer';
+
+import IGoToOptionsDTO from '@scraper/shared/modules/browser/dtos/IGoToOptionsDTO';
+import IPage from '@scraper/shared/modules/browser/models/IPage';
+
+class Page implements IPage<puppeteer.Page> {
+  constructor(public driver: puppeteer.Page) {}
+
+  public async goTo(
+    url: string,
+    options?: IGoToOptionsDTO,
+  ): Promise<puppeteer.Response> {
+    return this.driver.goto(url, { waitUntil: 'networkidle2', ...options });
+  }
+
+  public async select(
+    selector: string,
+    ...values: string[]
+  ): Promise<string[]> {
+    await this.driver.waitForSelector(selector);
+
+    return this.driver.select(selector, ...values);
+  }
+
+  public async type(
+    selector: string,
+    text: string,
+    options?: { delay: number },
+  ): Promise<void> {
+    await this.driver.click(selector);
+
+    return this.driver.type(selector, text, options);
+  }
+
+  public async findElementsByText(
+    str: string,
+    elementTag = '*',
+  ): Promise<puppeteer.ElementHandle[]> {
+    return this.driver.$x(`//${elementTag}[contains(text(), '${str}')]`);
+  }
+
+  public async clickForNavigate(
+    element: puppeteer.ElementHandle<Element>,
+  ): Promise<void> {
+    await element.click();
+
+    await this.driver.waitForNavigation({ waitUntil: 'networkidle2' });
+  }
+}
+
+export default Page;

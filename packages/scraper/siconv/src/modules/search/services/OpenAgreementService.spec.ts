@@ -1,0 +1,76 @@
+import AppError from '@scraper/shared/errors/AppError';
+import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
+import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
+
+import { By } from '@modules/search/dtos/ISearchDTO';
+
+import ExtractAgreementsListService from './ExtractAgreementsListService';
+import OpenAgreementService from './OpenAgreementService';
+import SearchAgreementsService from './SearchAgreementsService';
+
+let puppeteerBrowserProvider: PuppeteerBrowserProvider;
+let searchAgreements: SearchAgreementsService;
+let extractAgreementsList: ExtractAgreementsListService;
+let openAgreement: OpenAgreementService;
+
+let browser: Browser;
+let page: Page;
+
+describe('ListAgreements', () => {
+  beforeAll(async () => {
+    puppeteerBrowserProvider = new PuppeteerBrowserProvider();
+
+    browser = await puppeteerBrowserProvider.launch({
+      headless: false,
+    });
+  });
+
+  beforeEach(async () => {
+    page = await browser.newPage();
+
+    searchAgreements = new SearchAgreementsService(page);
+    extractAgreementsList = new ExtractAgreementsListService(page);
+    openAgreement = new OpenAgreementService(page);
+  });
+
+  afterAll(async () => {
+    // await browser.close();
+  });
+
+  it('should be able to open agreement', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '12.198.693/0001-58',
+    });
+
+    const agreements = await extractAgreementsList.execute();
+
+    expect(agreements.length).toBeGreaterThanOrEqual(1);
+
+    const [{ agreement_id }] = agreements;
+
+    await openAgreement.execute({ agreement_id });
+
+    await expect(
+      page.findElementsByText('Dados da Proposta', 'span'),
+    ).resolves.toBeTruthy();
+  });
+
+  it("should not be able to open agreement when page is not 'AgreementsListPage'", async () => {
+    await expect(
+      openAgreement.execute({ agreement_id: 'any-agreement' }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to open agreement when agreements list is empty', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '27.957.062/0001-42',
+    });
+
+    await expect(
+      openAgreement.execute({ agreement_id: 'any-agreement' }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+});
