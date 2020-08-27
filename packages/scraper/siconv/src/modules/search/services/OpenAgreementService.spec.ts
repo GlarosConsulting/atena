@@ -35,7 +35,7 @@ describe('ListAgreements', () => {
   });
 
   afterAll(async () => {
-    // await browser.close();
+    await browser.close();
   });
 
   it('should be able to open agreement', async () => {
