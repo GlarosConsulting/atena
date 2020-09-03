@@ -2,14 +2,14 @@ import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Brow
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
-import mainHandler from './main.handler';
-import participantsHandler from './participants.handler';
-import programsHandler from './programs.handler';
+import MainHandler from './MainHandler';
+import ParticipantsHandler from './ParticipantsHandler';
+import ProgramsHandler from './ProgramsHandler';
 
-class RegisterHandler implements IHandler {
+class ProposalDataHandler implements IHandler {
   public async handle(browser: Browser, page: Page): Promise<void> {
-    await browser.run(page, mainHandler, programsHandler, participantsHandler);
+    await browser.run(page, MainHandler, ProgramsHandler, ParticipantsHandler);
   }
 }
 
-export default RegisterHandler;
+export default ProposalDataHandler;
