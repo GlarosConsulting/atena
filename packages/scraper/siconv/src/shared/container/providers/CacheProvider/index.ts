@@ -1,10 +1,10 @@
 import { container } from 'tsyringe';
 
-import MemoryCacheProvider from './implementations/MemoryCacheProvider';
+import RedisCacheProvider from './implementations/RedisCacheProvider';
 import ICacheProvider from './models/ICacheProvider';
 
 const providers = {
-  memory: MemoryCacheProvider,
+  redis: RedisCacheProvider,
 };
 
-container.registerSingleton<ICacheProvider>('CacheProvider', providers.memory);
+container.registerSingleton<ICacheProvider>('CacheProvider', providers.redis);

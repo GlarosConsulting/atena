@@ -31,7 +31,7 @@ export default class ExtractAgreementsListService {
         const end_date = getTextBySelector('.dataFimExecucao a', row);
         const program = getTextBySelector('.nomePrograma a', row);
 
-        const agreement: IAgreement = {
+        const agreement: Omit<IAgreement, 'data'> = {
           agreement_id,
           organ,
           status,
@@ -40,7 +40,7 @@ export default class ExtractAgreementsListService {
           program,
         };
 
-        data.push(agreement);
+        data.push(agreement as IAgreement);
       });
 
       return data;
