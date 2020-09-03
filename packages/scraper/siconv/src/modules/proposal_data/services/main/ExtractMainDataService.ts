@@ -4,7 +4,7 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import IMainData from '../models/IMainData';
+import IMainData from '../../models/main/IMainData';
 
 @injectable()
 export default class ExtractMainDataService {
@@ -23,7 +23,7 @@ export default class ExtractMainDataService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const mainData = await this.page.driver.evaluate<() => IMainData>(() => {
+    const mainData = await this.page.evaluate<IMainData>(() => {
       const modality = getTextBySelector(
         '#tr-alterarModalidade > td:nth-child(2) > table > tbody > tr > td:nth-child(1)',
       );

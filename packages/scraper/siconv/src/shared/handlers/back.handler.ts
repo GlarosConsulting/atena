@@ -1,15 +1,19 @@
+import { container } from 'tsyringe';
+
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
-import mainHandler from './main.handler';
-import participantsHandler from './participants.handler';
-import programsHandler from './programs.handler';
-
-class RegisterHandler implements IHandler {
+class BackHandler implements IHandler {
   public async handle(browser: Browser, page: Page): Promise<void> {
-    await browser.run(page, mainHandler, programsHandler, participantsHandler);
+    let title = await page.driver.title();
+
+    while (title !== 'Detalhar Proposta') {
+      await page.driver.goBack();
+
+      title = await page.driver.title();
+    }
   }
 }
 
-export default RegisterHandler;
+export default BackHandler;

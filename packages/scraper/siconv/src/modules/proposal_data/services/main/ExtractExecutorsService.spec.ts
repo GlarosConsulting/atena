@@ -8,24 +8,22 @@ import ExtractAgreementsListService from '@modules/search/services/ExtractAgreem
 import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import ExtractBankDataService from './ExtractBankDataService';
+import ExtractExecutorsService from './ExtractExecutorsService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
 let openAgreement: OpenAgreementService;
-let extractBankData: ExtractBankDataService;
+let extractExecutors: ExtractExecutorsService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractBankData', () => {
+describe('ExtractExecutors', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
-    browser = await puppeteerBrowserProvider.launch({
-      headless: false,
-    });
+    browser = await puppeteerBrowserProvider.launch();
   });
 
   beforeEach(async () => {
@@ -34,14 +32,14 @@ describe('ExtractBankData', () => {
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
     openAgreement = new OpenAgreementService(page);
-    extractBankData = new ExtractBankDataService(page);
+    extractExecutors = new ExtractExecutorsService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract bank data', async () => {
+  it('should be able to extract executors', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -55,26 +53,22 @@ describe('ExtractBankData', () => {
 
     await openAgreement.execute({ agreement_id });
 
-    const bankData = await extractBankData.execute();
+    const executors = await extractExecutors.execute();
 
-    expect(bankData).toHaveProperty('bank');
-    expect(bankData).toHaveProperty('agency');
-    expect(bankData).toHaveProperty('account');
-    expect(bankData).toHaveProperty('status');
-    expect(bankData).toHaveProperty('description');
-    expect(bankData).toHaveProperty('updated_at', expect.any(Date));
+    expect(executors).toHaveProperty('legal_foundation');
+    expect(executors).toHaveProperty('organ');
   });
 
-  it('should not be able to extract bank data when page is not an opened agreement', async () => {
+  it('should not be able to extract executors when page is not an opened agreement', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
     });
 
-    await expect(extractBankData.execute()).rejects.toBeInstanceOf(AppError);
+    await expect(extractExecutors.execute()).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to extract bank data when opened opened agreement does not have this section', async () => {
+  it('should not be able to extract executors when opened opened agreement does not have this section', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -92,8 +86,8 @@ describe('ExtractBankData', () => {
       return [];
     });
 
-    const bankData = await extractBankData.execute();
+    const executors = await extractExecutors.execute();
 
-    expect(bankData).toBeFalsy();
+    expect(executors).toBeFalsy();
   });
 });

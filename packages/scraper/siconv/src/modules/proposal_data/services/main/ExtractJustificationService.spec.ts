@@ -23,9 +23,7 @@ describe('ExtractJustification', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
-    browser = await puppeteerBrowserProvider.launch({
-      headless: false,
-    });
+    browser = await puppeteerBrowserProvider.launch();
   });
 
   beforeEach(async () => {

@@ -1,18 +1,22 @@
 import { container } from 'tsyringe';
 
-import IBankData from '@modules/proposal_data/models/IBankData';
-import IDates from '@modules/proposal_data/models/IDates';
-import IExecutors from '@modules/proposal_data/models/IExecutors';
-import IJustification from '@modules/proposal_data/models/IJustification';
-import IMainData from '@modules/proposal_data/models/IMainData';
+import IBankData from '@modules/proposal_data/models/main/IBankData';
+import IDates from '@modules/proposal_data/models/main/IDates';
+import IExecutors from '@modules/proposal_data/models/main/IExecutors';
+import IJustification from '@modules/proposal_data/models/main/IJustification';
+import IMainData from '@modules/proposal_data/models/main/IMainData';
 import IDataPage from '@modules/proposal_data/pages/IDataPage';
-import ExtractBankDataService from '@modules/proposal_data/services/ExtractBankDataService';
-import ExtractDatesService from '@modules/proposal_data/services/ExtractDatesService';
-import ExtractExecutorsService from '@modules/proposal_data/services/ExtractExecutorsService';
-import ExtractJustificationService from '@modules/proposal_data/services/ExtractJustificationService';
-import ExtractMainDataService from '@modules/proposal_data/services/ExtractMainDataService';
+import ExtractBankDataService from '@modules/proposal_data/services/main/ExtractBankDataService';
+import ExtractDatesService from '@modules/proposal_data/services/main/ExtractDatesService';
+import ExtractExecutorsService from '@modules/proposal_data/services/main/ExtractExecutorsService';
+import ExtractJustificationService from '@modules/proposal_data/services/main/ExtractJustificationService';
+import ExtractMainDataService from '@modules/proposal_data/services/main/ExtractMainDataService';
 
 class DataPage implements IDataPage {
+  public async navigateTo(): Promise<void> {
+    // when open agreement, this is the default page
+  }
+
   public async getMainData(): Promise<IMainData> {
     const extractMainData = container.resolve(ExtractMainDataService);
 

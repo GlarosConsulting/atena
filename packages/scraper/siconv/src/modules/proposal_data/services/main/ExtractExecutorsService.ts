@@ -4,7 +4,7 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import IExecutors from '../models/IExecutors';
+import IExecutors from '../../models/main/IExecutors';
 
 @injectable()
 export default class ExtractExecutorsService {
@@ -32,7 +32,7 @@ export default class ExtractExecutorsService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const executors = await this.page.driver.evaluate<() => IExecutors>(() => {
+    const executors = await this.page.evaluate<IExecutors>(() => {
       const legal_foundation = getTextBySelector(
         '#tr-alterarFundamentoLegal > td.field',
       );

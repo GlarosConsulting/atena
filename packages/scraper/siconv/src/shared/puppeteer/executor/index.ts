@@ -13,6 +13,8 @@ import { By } from '@modules/search/dtos/ISearchDTO';
 import AgreementsListPage from '@modules/search/infra/puppeteer/pages/AgreementsListPage';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 
+import backHandler from '../../handlers/back.handler';
+
 (async () => {
   const puppeteerBrowser = new PuppeteerBrowser();
 
@@ -38,6 +40,8 @@ import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
   const [{ agreement_id }] = agreements;
 
   await agreementsListPage.openById(agreement_id);
+
+  await browser.use(backHandler);
 
   await browser.run(page, proposalData);
 })();

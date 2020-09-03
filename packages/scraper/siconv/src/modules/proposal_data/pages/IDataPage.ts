@@ -1,10 +1,12 @@
-import IBankData from '../models/IBankData';
-import IDates from '../models/IDates';
-import IExecutors from '../models/IExecutors';
-import IJustification from '../models/IJustification';
-import IMainData from '../models/IMainData';
+import IPuppeteerPage from '@shared/puppeteer/pages/IPuppeteerPage';
 
-export default interface IDataPage {
+import IBankData from '../models/main/IBankData';
+import IDates from '../models/main/IDates';
+import IExecutors from '../models/main/IExecutors';
+import IJustification from '../models/main/IJustification';
+import IMainData from '../models/main/IMainData';
+
+export default interface IDataPage extends IPuppeteerPage {
   getMainData(): Promise<IMainData>;
   getExecutors(): Promise<IExecutors>;
   getJustification(): Promise<IJustification>;
