@@ -3,10 +3,11 @@ import puppeteer from 'puppeteer';
 import IGoToOptionsDTO from '../dtos/IGoToOptionsDTO';
 import IPage from './IPage';
 
-export type PageHandler = (
-  browser: IBrowser<any, any>,
-  page: IPage<any>,
-) => Promise<void>;
+export type Handler = new (...args: any[]) => IHandler;
+
+export interface IHandler {
+  handle(browser: IBrowser<any, any>, page: IPage<any>): Promise<void>;
+}
 
 export default interface IBrowser<Browser, Page extends IPage<any>> {
   driver: Browser;
@@ -18,7 +19,9 @@ export default interface IBrowser<Browser, Page extends IPage<any>> {
     options?: IGoToOptionsDTO,
   ): Promise<puppeteer.Response | null>;
 
-  run(page: IPage<any>, ...handlers: PageHandler[]): Promise<void>;
+  use(...handlers: Handler[]): Promise<void>;
+
+  run(page: IPage<any>, ...handlers: Handler[]): Promise<void>;
 
   close(): Promise<void>;
 }

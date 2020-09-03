@@ -40,6 +40,7 @@
     "no-underscore-dangle": "off",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "camelcase": "off",
     "react/prop-types": "off",
     "jsx-a11y/label-has-for": "off",

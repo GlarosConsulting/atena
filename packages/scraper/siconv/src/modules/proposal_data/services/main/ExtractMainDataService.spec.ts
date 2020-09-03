@@ -8,24 +8,22 @@ import ExtractAgreementsListService from '@modules/search/services/ExtractAgreem
 import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import ExtractExecutorsService from './ExtractExecutorsService';
+import ExtractMainDataService from './ExtractMainDataService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
 let openAgreement: OpenAgreementService;
-let extractExecutors: ExtractExecutorsService;
+let extractMainData: ExtractMainDataService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractExecutors', () => {
+describe('ExtractMainData', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
-    browser = await puppeteerBrowserProvider.launch({
-      headless: false,
-    });
+    browser = await puppeteerBrowserProvider.launch();
   });
 
   beforeEach(async () => {
@@ -34,14 +32,14 @@ describe('ExtractExecutors', () => {
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
     openAgreement = new OpenAgreementService(page);
-    extractExecutors = new ExtractExecutorsService(page);
+    extractMainData = new ExtractMainDataService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract executors', async () => {
+  it('should be able to extract main data', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -55,41 +53,27 @@ describe('ExtractExecutors', () => {
 
     await openAgreement.execute({ agreement_id });
 
-    const executors = await extractExecutors.execute();
+    const mainData = await extractMainData.execute();
 
-    expect(executors).toHaveProperty('legal_foundation');
-    expect(executors).toHaveProperty('organ');
+    expect(mainData).toHaveProperty('modality');
+    expect(mainData).toHaveProperty('sent');
+    expect(mainData).toHaveProperty('siafi_status');
+    expect(mainData).toHaveProperty('hiring_status');
+    expect(mainData).toHaveProperty('status');
+    expect(mainData.status).toHaveProperty('value');
+    expect(mainData.status).toHaveProperty('committed');
+    expect(mainData.status).toHaveProperty('publication');
+    expect(mainData).toHaveProperty('proposal_id');
+    expect(mainData).toHaveProperty('organ_intern_id');
+    expect(mainData).toHaveProperty('process_id');
   });
 
-  it('should not be able to extract executors when page is not an opened agreement', async () => {
+  it('should not be able to extract main data when page is not an opened agreement', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
     });
 
-    await expect(extractExecutors.execute()).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('should not be able to extract executors when opened opened agreement does not have this section', async () => {
-    await searchAgreements.execute({
-      by: By.CNPJ,
-      value: '12.198.693/0001-58',
-    });
-
-    const agreements = await extractAgreementsList.execute();
-
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
-
-    const [{ agreement_id }] = agreements;
-
-    await openAgreement.execute({ agreement_id });
-
-    jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
-      return [];
-    });
-
-    const executors = await extractExecutors.execute();
-
-    expect(executors).toBeFalsy();
+    await expect(extractMainData.execute()).rejects.toBeInstanceOf(AppError);
   });
 });

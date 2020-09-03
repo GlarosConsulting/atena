@@ -46,6 +46,10 @@ class Page implements IPage<puppeteer.Page> {
 
     await this.driver.waitForNavigation({ waitUntil: 'networkidle2' });
   }
+
+  public async evaluate<T = void>(fn: () => T): Promise<T> {
+    return this.driver.evaluate(fn) as Promise<T>;
+  }
 }
 
 export default Page;

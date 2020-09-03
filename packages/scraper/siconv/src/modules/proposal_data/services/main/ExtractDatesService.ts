@@ -5,10 +5,19 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import IDates from '../models/IDates';
+import IDates from '../../models/main/IDates';
+
+interface IExtractDates {
+  proposal_date: string;
+  signature_date: string;
+  published_dou_date: string;
+  validity_start_date: string;
+  validity_end_date: string;
+  accountability_limit_date: string;
+}
 
 @injectable()
-export default class ExtractBankDataService {
+export default class ExtractDatesService {
   constructor(
     @inject('Page')
     private page: Page,
@@ -33,7 +42,7 @@ export default class ExtractBankDataService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalDates = await this.page.driver.evaluate(() => {
+    const originalDates = await this.page.evaluate<IExtractDates>(() => {
       const proposal_date = getTextBySelector(
         '#tr-alterarDataProposta > td.field',
       );

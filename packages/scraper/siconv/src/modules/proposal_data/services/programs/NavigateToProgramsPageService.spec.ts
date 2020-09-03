@@ -8,24 +8,22 @@ import ExtractAgreementsListService from '@modules/search/services/ExtractAgreem
 import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import ExtractMainDataService from './ExtractMainDataService';
+import NavigateToProgramsPageService from './NavigateToProgramsPageService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
 let openAgreement: OpenAgreementService;
-let extractMainData: ExtractMainDataService;
+let navigateToProgramsPage: NavigateToProgramsPageService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractMainData', () => {
+describe('NavigateToProgramsPage', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
-    browser = await puppeteerBrowserProvider.launch({
-      headless: false,
-    });
+    browser = await puppeteerBrowserProvider.launch();
   });
 
   beforeEach(async () => {
@@ -34,14 +32,14 @@ describe('ExtractMainData', () => {
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
     openAgreement = new OpenAgreementService(page);
-    extractMainData = new ExtractMainDataService(page);
+    navigateToProgramsPage = new NavigateToProgramsPageService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract main data', async () => {
+  it('should be able to navigate to programs page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -49,33 +47,44 @@ describe('ExtractMainData', () => {
 
     const agreements = await extractAgreementsList.execute();
 
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
-
     const [{ agreement_id }] = agreements;
 
     await openAgreement.execute({ agreement_id });
 
-    const mainData = await extractMainData.execute();
+    await navigateToProgramsPage.execute();
 
-    expect(mainData).toHaveProperty('modality');
-    expect(mainData).toHaveProperty('sent');
-    expect(mainData).toHaveProperty('siafi_status');
-    expect(mainData).toHaveProperty('hiring_status');
-    expect(mainData).toHaveProperty('status');
-    expect(mainData.status).toHaveProperty('value');
-    expect(mainData.status).toHaveProperty('committed');
-    expect(mainData.status).toHaveProperty('publication');
-    expect(mainData).toHaveProperty('proposal_id');
-    expect(mainData).toHaveProperty('organ_intern_id');
-    expect(mainData).toHaveProperty('process_id');
+    await expect(page.driver.title()).resolves.toEqual('Programas da Proposta');
   });
 
-  it('should not be able to extract main data when page is not an opened agreement', async () => {
+  it('should not be able to navigate to programs page when page is not an opened agreement', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
     });
 
-    await expect(extractMainData.execute()).rejects.toBeInstanceOf(AppError);
+    await expect(navigateToProgramsPage.execute()).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
+  it("should not be able to navigate to programs page when not able to find 'Programas' submenu", async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '12.198.693/0001-58',
+    });
+
+    const agreements = await extractAgreementsList.execute();
+
+    const [{ agreement_id }] = agreements;
+
+    await openAgreement.execute({ agreement_id });
+
+    jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
+      return [];
+    });
+
+    await expect(navigateToProgramsPage.execute()).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 });

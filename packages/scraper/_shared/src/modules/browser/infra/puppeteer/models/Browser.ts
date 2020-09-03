@@ -1,13 +1,16 @@
 import puppeteer from 'puppeteer';
+import { container } from 'tsyringe';
 
 import IGoToOptionsDTO from '@scraper/shared/modules/browser/dtos/IGoToOptionsDTO';
 import IBrowser, {
-  PageHandler,
+  Handler,
 } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import Page from './Page';
 
 class Browser implements IBrowser<puppeteer.Browser, Page> {
+  private handlers: Handler[] = [];
+
   constructor(public driver: puppeteer.Browser) {}
 
   public async newPage(): Promise<Page> {
@@ -35,9 +38,21 @@ class Browser implements IBrowser<puppeteer.Browser, Page> {
     return page.goTo(url, options);
   }
 
-  public async run(page: Page, ...handlers: PageHandler[]): Promise<void> {
-    for (const handler of handlers) {
-      await handler(this, page);
+  public async use(...handlers: Handler[]): Promise<void> {
+    this.handlers.push(...handlers);
+  }
+
+  public async run(page: Page, ...handlers: Handler[]): Promise<void> {
+    for (const handlerToken of handlers) {
+      const handler = container.resolve(handlerToken);
+
+      await handler.handle(this, page);
+
+      for (const usedHandlerToken of this.handlers) {
+        const usedHandler = container.resolve(usedHandlerToken);
+
+        await usedHandler.handle(this, page);
+      }
     }
   }
 

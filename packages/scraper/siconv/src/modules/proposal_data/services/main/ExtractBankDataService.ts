@@ -5,7 +5,11 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import IBankData from '../models/IBankData';
+import IBankData from '../../models/main/IBankData';
+
+interface IExtractBankData extends Omit<IBankData, 'updated_at'> {
+  updated_at: string;
+}
 
 @injectable()
 export default class ExtractBankDataService {
@@ -33,7 +37,7 @@ export default class ExtractBankDataService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalBankData = await this.page.driver.evaluate(() => {
+    const originalBankData = await this.page.evaluate<IExtractBankData>(() => {
       const bank = getTextBySelector(
         '#tr-alterarBancoEscolhido > td.field[colspan="4"]',
       );
@@ -45,7 +49,6 @@ export default class ExtractBankDataService {
       const description = getTextBySelector(
         '#tr-alterarDescricaoConta > td.field',
       );
-
       const updated_at = getTextBySelector(
         '#tr-alterarSituacaoConta > td:nth-child(4)',
       );
