@@ -8,7 +8,7 @@ import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
 import PuppeteerBrowser from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
-import proposalData from '@modules/proposal_data/infra/handlers';
+import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import AgreementsListPage from '@modules/search/infra/puppeteer/pages/AgreementsListPage';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
@@ -43,5 +43,5 @@ import backHandler from '../../handlers/back.handler';
 
   await browser.use(backHandler);
 
-  await browser.run(page, proposalData);
+  await browser.run(page, ProposalDataHandler);
 })();
