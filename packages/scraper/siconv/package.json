@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --root-mode upward --extensions \".js,.ts\" --ignore *.spec.ts --out-dir dist --copy-files",
     "start": "node dist/shared/puppeteer/executor/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --no-notify --ignore-watch node_modules src/shared/puppeteer/executor/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --no-notify --ignore-watch node_modules src/shared/puppeteer/executor/index.ts",
     "test": "jest"
   },
   "dependencies": {

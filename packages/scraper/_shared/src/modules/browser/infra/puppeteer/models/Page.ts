@@ -32,11 +32,23 @@ class Page implements IPage<puppeteer.Page> {
     return this.driver.type(selector, text, options);
   }
 
+  public async findElementsBySelector(
+    selector: string,
+  ): Promise<puppeteer.ElementHandle[]> {
+    const elements = await this.driver.$$(selector);
+
+    return elements;
+  }
+
   public async findElementsByText(
     str: string,
     elementTag = '*',
   ): Promise<puppeteer.ElementHandle[]> {
-    return this.driver.$x(`//${elementTag}[contains(text(), '${str}')]`);
+    const elements = await this.driver.$x(
+      `//${elementTag}[contains(text(), '${str}')]`,
+    );
+
+    return elements;
   }
 
   public async clickForNavigate(

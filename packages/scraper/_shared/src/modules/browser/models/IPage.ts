@@ -15,6 +15,7 @@ export default interface IPage<Page> {
     text: string,
     options?: { delay: number },
   ): Promise<void>;
+  findElementsBySelector(selector: string): Promise<puppeteer.ElementHandle[]>;
   findElementsByText(
     str: string,
     elementTag?: string,

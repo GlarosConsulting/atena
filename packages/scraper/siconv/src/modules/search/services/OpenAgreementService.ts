@@ -18,7 +18,7 @@ export default class OpenAgreementService {
     const title = await this.page.driver.title();
 
     if (title !== 'Resultado da Consulta de Convênio') {
-      throw new AppError("You should be on 'AgreementsListPage' or similar.");
+      throw new AppError('You should be on agreements list page.');
     }
 
     const findAgreementElements = await this.page.findElementsByText(

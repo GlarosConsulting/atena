@@ -5,6 +5,7 @@ import { container, injectable, inject } from 'tsyringe';
 
 import '@shared/container';
 
+import AppError from '@scraper/shared/errors/AppError';
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
@@ -18,7 +19,8 @@ import AgreementsListPage from '@modules/search/infra/puppeteer/pages/Agreements
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 import IAgreement from '@modules/search/models/IAgreement';
 
-import BackHandler from '../../handlers/BackHandler';
+import BackToAgreementsListHandler from '../../handlers/BackToAgreementsListHandler';
+import BackToMainHandler from '../../handlers/BackToMainHandler';
 
 @injectable()
 class Executor {
@@ -50,24 +52,33 @@ class Executor {
 
     console.log(agreements);
 
-    let [agreement] = agreements;
+    await browser.use(BackToMainHandler);
 
-    await this.cacheProvider.save('agreement', agreement);
+    for (const agreement of agreements) {
+      let cacheAgreement = agreement;
 
-    await agreementsListPage.openById(agreement.agreement_id);
+      console.log(agreement.agreement_id);
 
-    await browser.use(BackHandler);
+      await this.cacheProvider.save('agreement', cacheAgreement);
 
-    await browser.run(page, ProposalDataHandler);
+      await agreementsListPage.openById(agreement.agreement_id);
 
-    agreement = await this.cacheProvider.recover<IAgreement>('agreement');
+      await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
 
-    if (agreement) {
-      console.log(JSON.stringify(agreement));
+      cacheAgreement = await this.cacheProvider.recover<IAgreement>(
+        'agreement',
+      );
+
+      if (cacheAgreement) {
+        console.log(JSON.stringify(cacheAgreement));
+      }
     }
   }
 }
 
 const executor = container.resolve(Executor);
 
-executor.run();
+executor.run().catch(err => {
+  console.log('Occurred an unexpected error:');
+  console.log(err);
+});
