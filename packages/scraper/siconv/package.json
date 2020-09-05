@@ -6,11 +6,19 @@
   "scripts": {
     "build": "babel src --root-mode upward --extensions \".js,.ts\" --ignore *.spec.ts --out-dir dist --copy-files",
     "start": "node dist/shared/puppeteer/executor/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --no-notify --ignore-watch node_modules src/shared/puppeteer/executor/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --no-notify --ignore-watch node_modules src/shared/puppeteer/executor/index.ts",
     "test": "jest"
   },
   "dependencies": {
     "@scraper/shared": "*",
-    "date-fns": "^2.16.0"
+    "date-fns": "^2.16.0",
+    "dotenv": "^8.2.0",
+    "ioredis": "^4.17.3",
+    "lodash": "^4.17.20"
+  },
+  "devDependencies": {
+    "@types/ioredis": "^4.17.3",
+    "@types/lodash": "^4.14.161",
+    "type-fest": "^0.16.0"
   }
 }

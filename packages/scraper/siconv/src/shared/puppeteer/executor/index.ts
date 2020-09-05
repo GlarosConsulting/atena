@@ -1,47 +1,91 @@
+import 'dotenv/config';
 import 'reflect-metadata';
 
-import { container } from 'tsyringe';
+import { container, injectable, inject } from 'tsyringe';
 
 import '@shared/container';
 
+import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
-import PuppeteerBrowser from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
+import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/models/IBrowserProvider';
+
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import AgreementsListPage from '@modules/search/infra/puppeteer/pages/AgreementsListPage';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
+import IAgreement from '@modules/search/models/IAgreement';
 
-import backHandler from '../../handlers/back.handler';
+import BackToAgreementsListHandler from '../../handlers/BackToAgreementsListHandler';
+import BackToMainHandler from '../../handlers/BackToMainHandler';
 
-(async () => {
-  const puppeteerBrowser = new PuppeteerBrowser();
+@injectable()
+class Executor {
+  constructor(
+    @inject('BrowserProvider')
+    private browserProvider: IBrowserProvider<Browser>,
 
-  const browser = await puppeteerBrowser.launch({ headless: false });
-  const page = await browser.newPage();
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
+  ) {}
 
-  container.registerInstance<IBrowser<any, any>>('Browser', browser);
-  container.registerInstance<IPage<any>>('Page', page);
+  public async run(): Promise<void> {
+    console.time('Elapsed time');
 
-  const siconvSearchPage = new SiconvSearchPage();
+    const browser = await this.browserProvider.launch({ headless: false });
+    const page = await browser.newPage();
 
-  await siconvSearchPage.search({
-    by: By.CNPJ,
-    value: '12.198.693/0001-58',
-  });
+    container.registerInstance<IBrowser<any, any>>('Browser', browser);
+    container.registerInstance<IPage<any>>('Page', page);
 
-  const agreementsListPage = new AgreementsListPage();
+    const siconvSearchPage = new SiconvSearchPage();
 
-  const agreements = await agreementsListPage.getAll();
+    await siconvSearchPage.search({
+      by: By.CNPJ,
+      value: '12.198.693/0001-58',
+    });
 
-  console.log(agreements);
+    const agreementsListPage = new AgreementsListPage();
 
-  const [{ agreement_id }] = agreements;
+    const totalPages = await agreementsListPage.getTotalPages();
 
-  await agreementsListPage.openById(agreement_id);
+    console.log(totalPages);
 
-  await browser.use(backHandler);
+    const agreements = await agreementsListPage.getAll();
 
-  await browser.run(page, ProposalDataHandler);
-})();
+    console.log(agreements);
+
+    await browser.use(BackToMainHandler);
+
+    for (const agreement of agreements) {
+      let cacheAgreement = agreement;
+
+      console.log(agreement.agreement_id);
+
+      await this.cacheProvider.save('agreement', cacheAgreement);
+
+      // await agreementsListPage.openById(agreement.agreement_id);
+
+      // await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
+
+      cacheAgreement = await this.cacheProvider.recover<IAgreement>(
+        'agreement',
+      );
+
+      if (cacheAgreement) {
+        // console.log(JSON.stringify(cacheAgreement));
+      }
+    }
+
+    console.timeEnd('Elapsed time');
+  }
+}
+
+const executor = container.resolve(Executor);
+
+executor.run().catch(err => {
+  console.log('Occurred an unexpected error:');
+  console.log(err);
+});

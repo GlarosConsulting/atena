@@ -21,13 +21,15 @@ class FakeCacheProvider implements ICacheProvider {
     return parsedData;
   }
 
-  public async invalidate(key: string): Promise<void> {
-    delete this.cache[key];
+  public async invalidate(...keys: string[]): Promise<void> {
+    keys.forEach(key => {
+      delete this.cache[key];
+    });
   }
 
-  public async invalidatePrefix(prefix: string): Promise<void> {
+  public async invalidatePrefix(...prefixes: string[]): Promise<void> {
     const keys = Object.keys(this.cache).filter(key =>
-      key.startsWith(`${prefix}:`),
+      prefixes.some(prefix => key.startsWith(`${prefix}`)),
     );
 
     keys.forEach(key => {

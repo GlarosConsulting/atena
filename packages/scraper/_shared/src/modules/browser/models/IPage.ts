@@ -15,10 +15,14 @@ export default interface IPage<Page> {
     text: string,
     options?: { delay: number },
   ): Promise<void>;
+  findElementsBySelector(selector: string): Promise<puppeteer.ElementHandle[]>;
   findElementsByText(
     str: string,
     elementTag?: string,
   ): Promise<puppeteer.ElementHandle[]>;
   clickForNavigate(element: puppeteer.ElementHandle<Element>): Promise<void>;
-  evaluate<T = void>(fn: () => T): Promise<T>;
+  evaluate<T = void, A = puppeteer.SerializableOrJSHandle>(
+    fn: (...args: A[]) => T,
+    ...args: A[]
+  ): Promise<T>;
 }

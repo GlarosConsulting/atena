@@ -1,5 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
+import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
@@ -13,6 +14,12 @@ export default class ExtractAgreementsListService {
   ) {}
 
   public async execute(): Promise<IAgreement[]> {
+    const title = await this.page.driver.title();
+
+    if (title !== 'Resultado da Consulta de Convênio') {
+      throw new AppError('You should be on agreements list page.');
+    }
+
     await this.page.driver.waitForSelector('#tbodyrow');
 
     await injectFunctions(this.page);
@@ -31,7 +38,7 @@ export default class ExtractAgreementsListService {
         const end_date = getTextBySelector('.dataFimExecucao a', row);
         const program = getTextBySelector('.nomePrograma a', row);
 
-        const agreement: IAgreement = {
+        const agreement: Omit<IAgreement, 'data'> = {
           agreement_id,
           organ,
           status,
@@ -40,7 +47,7 @@ export default class ExtractAgreementsListService {
           program,
         };
 
-        data.push(agreement);
+        data.push(agreement as IAgreement);
       });
 
       return data;

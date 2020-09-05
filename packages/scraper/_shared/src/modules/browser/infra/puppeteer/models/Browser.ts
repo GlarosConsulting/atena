@@ -48,10 +48,12 @@ class Browser implements IBrowser<puppeteer.Browser, Page> {
 
       await handler.handle(this, page);
 
-      for (const usedHandlerToken of this.handlers) {
-        const usedHandler = container.resolve(usedHandlerToken);
+      if (handlers.indexOf(handlerToken) < handlers.length - 1) {
+        for (const usedHandlerToken of this.handlers) {
+          const usedHandler = container.resolve(usedHandlerToken);
 
-        await usedHandler.handle(this, page);
+          await usedHandler.handle(this, page);
+        }
       }
     }
   }

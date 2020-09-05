@@ -1,3 +1,5 @@
+import IProposalData from '@modules/proposal_data/models/IProposalData';
+
 export default interface IAgreement {
   agreement_id: string;
   organ: string;
@@ -5,4 +7,7 @@ export default interface IAgreement {
   start_date: string;
   end_date: string;
   program: string;
+  data: {
+    proposal_data: IProposalData;
+  };
 }

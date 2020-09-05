@@ -1,18 +1,46 @@
+import merge from 'lodash/merge';
+import { injectable, inject } from 'tsyringe';
+import { PartialDeep } from 'type-fest';
+
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
-import ProgramsPage from '@modules/proposal_data/infra/puppeteer/pages/ProgramsPage';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
+import ProgramsPage from '@modules/proposal_data/infra/puppeteer/pages/ProgramsPage';
+import IPrograms from '@modules/proposal_data/models/IPrograms';
+import IAgreement from '@modules/search/models/IAgreement';
+
+@injectable()
 class ProgramsHandler implements IHandler {
+  constructor(
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
+  ) {}
+
   public async handle(): Promise<void> {
     const programsPage = new ProgramsPage();
 
     await programsPage.navigateTo();
 
-    const data = await programsPage.getAll();
+    const programs_list = await programsPage.getAll();
 
-    console.log('programs', {
-      data,
-    });
+    const data: IPrograms = {
+      programs_list,
+    };
+
+    const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
+
+    if (!agreement) return;
+
+    merge(agreement, {
+      data: {
+        proposal_data: {
+          programs: data,
+        },
+      },
+    } as PartialDeep<IAgreement>);
+
+    await this.cacheProvider.save('agreement', agreement);
   }
 }
 
