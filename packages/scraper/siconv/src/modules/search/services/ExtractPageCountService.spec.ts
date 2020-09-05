@@ -5,17 +5,17 @@ import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/
 
 import { By } from '@modules/search/dtos/ISearchDTO';
 
-import ExtractAgreementsListService from './ExtractAgreementsListService';
+import ExtractPageCountService from './ExtractPageCountService';
 import SearchAgreementsService from './SearchAgreementsService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
-let extractAgreementsList: ExtractAgreementsListService;
+let extractPageCount: ExtractPageCountService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractAgreementsList', () => {
+describe('ExtractPageCount', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
@@ -26,33 +26,36 @@ describe('ExtractAgreementsList', () => {
     page = await browser.newPage();
 
     searchAgreements = new SearchAgreementsService(page);
-    extractAgreementsList = new ExtractAgreementsListService(page);
+    extractPageCount = new ExtractPageCountService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract agreements list', async () => {
+  it('should be able to extract page count', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
     });
 
-    const agreements = await extractAgreementsList.execute();
+    const pageCount = await extractPageCount.execute();
 
-    expect(agreements).toEqual(
-      expect.objectContaining([
-        expect.objectContaining({
-          agreement_id: expect.any(String),
-        }),
-      ]),
-    );
+    expect(pageCount).toEqual(4);
   });
 
-  it('should not be able to extract agreements list outside agreements list page', async () => {
-    await expect(extractAgreementsList.execute()).rejects.toBeInstanceOf(
-      AppError,
-    );
+  it('should not be able to extract page count outside agreements list page', async () => {
+    await expect(extractPageCount.execute()).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should be able to extract page count when list is empty', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '99.999.999/9999-99',
+    });
+
+    const pageCount = await extractPageCount.execute();
+
+    expect(pageCount).toEqual(0);
   });
 });

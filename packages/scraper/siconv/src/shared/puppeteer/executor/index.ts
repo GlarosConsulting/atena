@@ -5,7 +5,6 @@ import { container, injectable, inject } from 'tsyringe';
 
 import '@shared/container';
 
-import AppError from '@scraper/shared/errors/AppError';
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
@@ -33,6 +32,8 @@ class Executor {
   ) {}
 
   public async run(): Promise<void> {
+    console.time('Elapsed time');
+
     const browser = await this.browserProvider.launch({ headless: false });
     const page = await browser.newPage();
 
@@ -48,6 +49,10 @@ class Executor {
 
     const agreementsListPage = new AgreementsListPage();
 
+    const totalPages = await agreementsListPage.getTotalPages();
+
+    console.log(totalPages);
+
     const agreements = await agreementsListPage.getAll();
 
     console.log(agreements);
@@ -61,18 +66,20 @@ class Executor {
 
       await this.cacheProvider.save('agreement', cacheAgreement);
 
-      await agreementsListPage.openById(agreement.agreement_id);
+      // await agreementsListPage.openById(agreement.agreement_id);
 
-      await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
+      // await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
 
       cacheAgreement = await this.cacheProvider.recover<IAgreement>(
         'agreement',
       );
 
       if (cacheAgreement) {
-        console.log(JSON.stringify(cacheAgreement));
+        // console.log(JSON.stringify(cacheAgreement));
       }
     }
+
+    console.timeEnd('Elapsed time');
   }
 }
 

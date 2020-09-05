@@ -59,8 +59,11 @@ class Page implements IPage<puppeteer.Page> {
     await this.driver.waitForNavigation({ waitUntil: 'networkidle2' });
   }
 
-  public async evaluate<T = void>(fn: () => T): Promise<T> {
-    return this.driver.evaluate(fn) as Promise<T>;
+  evaluate<T = void, A = puppeteer.SerializableOrJSHandle>(
+    fn: (...args: A[]) => T,
+    ...args: A[]
+  ): Promise<T> {
+    return this.driver.evaluate(fn, ...(args as any[])) as Promise<T>;
   }
 }
 

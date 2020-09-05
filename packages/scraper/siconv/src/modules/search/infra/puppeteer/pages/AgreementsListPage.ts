@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import IAgreement from '@modules/search/models/IAgreement';
 import IAgreementsListPage from '@modules/search/pages/IAgreementsListPage';
 import ExtractAgreementsListService from '@modules/search/services/ExtractAgreementsListService';
+import ExtractPageCountService from '@modules/search/services/ExtractPageCountService';
 import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 
 class AgreementsListPage implements IAgreementsListPage {
@@ -20,6 +21,14 @@ class AgreementsListPage implements IAgreementsListPage {
     const openAgreement = container.resolve(OpenAgreementService);
 
     await openAgreement.execute({ agreement_id });
+  }
+
+  public async getTotalPages(): Promise<number> {
+    const extractPageCount = container.resolve(ExtractPageCountService);
+
+    const totalPages = await extractPageCount.execute();
+
+    return totalPages;
   }
 }
 

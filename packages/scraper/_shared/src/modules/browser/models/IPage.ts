@@ -21,5 +21,8 @@ export default interface IPage<Page> {
     elementTag?: string,
   ): Promise<puppeteer.ElementHandle[]>;
   clickForNavigate(element: puppeteer.ElementHandle<Element>): Promise<void>;
-  evaluate<T = void>(fn: () => T): Promise<T>;
+  evaluate<T = void, A = puppeteer.SerializableOrJSHandle>(
+    fn: (...args: A[]) => T,
+    ...args: A[]
+  ): Promise<T>;
 }
