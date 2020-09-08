@@ -1,4 +1,4 @@
-import { injectable, inject, container } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
@@ -26,6 +26,10 @@ export default class NavigateToPageService {
     const extractListInfo = new ExtractListInfoService(this.page);
 
     let listInfo = await extractListInfo.execute();
+
+    if (page < 1) {
+      throw new AppError('Not able to navigate to page less than one.');
+    }
 
     if (page > listInfo.total_pages) {
       throw new AppError(
@@ -79,10 +83,6 @@ export default class NavigateToPageService {
         String(page),
         'span[@class="pagelinks"]/a',
       );
-    }
-
-    if (findPageAnchorElements.length === 0) {
-      throw new AppError('It was not able to find page anchor element.');
     }
 
     await this.page.clickForNavigate(findPageAnchorElements[0]);
