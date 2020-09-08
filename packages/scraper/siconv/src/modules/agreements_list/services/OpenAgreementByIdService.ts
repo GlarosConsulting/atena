@@ -8,7 +8,7 @@ interface IRequest {
 }
 
 @injectable()
-export default class OpenAgreementService {
+export default class OpenAgreementByIdService {
   constructor(
     @inject('Page')
     private page: Page,

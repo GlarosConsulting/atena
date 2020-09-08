@@ -1,6 +1,6 @@
-import IMain from './IMain';
-import IParticipants from './IParticipants';
-import IPrograms from './IPrograms';
+import IMain from './main';
+import IParticipants from './participants';
+import IPrograms from './programs';
 
 export default interface IProposalData {
   main: IMain;

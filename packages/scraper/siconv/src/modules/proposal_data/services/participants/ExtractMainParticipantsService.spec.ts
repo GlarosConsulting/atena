@@ -3,9 +3,9 @@ import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Brow
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
+import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
+import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 import { By } from '@modules/search/dtos/ISearchDTO';
-import ExtractAgreementsListService from '@modules/search/services/ExtractAgreementsListService';
-import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
 import ExtractMainParticipantsService from './ExtractMainParticipantsService';
@@ -14,7 +14,7 @@ import NavigateToParticipantsPageService from './NavigateToParticipantsPageServi
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
-let openAgreement: OpenAgreementService;
+let openAgreementById: OpenAgreementByIdService;
 let navigateToParticipantsPage: NavigateToParticipantsPageService;
 let extractMainParticipants: ExtractMainParticipantsService;
 
@@ -33,7 +33,7 @@ describe('ExtractMainParticipants', () => {
 
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
-    openAgreement = new OpenAgreementService(page);
+    openAgreementById = new OpenAgreementByIdService(page);
     navigateToParticipantsPage = new NavigateToParticipantsPageService(page);
     extractMainParticipants = new ExtractMainParticipantsService(page);
   });
@@ -52,7 +52,7 @@ describe('ExtractMainParticipants', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     await navigateToParticipantsPage.execute();
 
@@ -76,7 +76,7 @@ describe('ExtractMainParticipants', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     await expect(extractMainParticipants.execute()).rejects.toBeInstanceOf(
       AppError,
