@@ -4,9 +4,9 @@ import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
 import { By } from '@modules/search/dtos/ISearchDTO';
+import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
 import ExtractAgreementsListService from './ExtractAgreementsListService';
-import SearchAgreementsService from './SearchAgreementsService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;

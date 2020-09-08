@@ -3,9 +3,9 @@ import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Brow
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
+import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
+import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 import { By } from '@modules/search/dtos/ISearchDTO';
-import ExtractAgreementsListService from '@modules/search/services/ExtractAgreementsListService';
-import OpenAgreementService from '@modules/search/services/OpenAgreementService';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
 import ExtractExecutorsService from './ExtractExecutorsService';
@@ -13,7 +13,7 @@ import ExtractExecutorsService from './ExtractExecutorsService';
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
-let openAgreement: OpenAgreementService;
+let openAgreementById: OpenAgreementByIdService;
 let extractExecutors: ExtractExecutorsService;
 
 let browser: Browser;
@@ -31,7 +31,7 @@ describe('ExtractExecutors', () => {
 
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
-    openAgreement = new OpenAgreementService(page);
+    openAgreementById = new OpenAgreementByIdService(page);
     extractExecutors = new ExtractExecutorsService(page);
   });
 
@@ -51,7 +51,7 @@ describe('ExtractExecutors', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     const executors = await extractExecutors.execute();
 
@@ -80,7 +80,7 @@ describe('ExtractExecutors', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
       return [];

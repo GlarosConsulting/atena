@@ -4,20 +4,20 @@ import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
 import { By } from '@modules/search/dtos/ISearchDTO';
+import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
 import ExtractAgreementsListService from './ExtractAgreementsListService';
-import OpenAgreementService from './OpenAgreementService';
-import SearchAgreementsService from './SearchAgreementsService';
+import OpenAgreementByIdService from './OpenAgreementByIdService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
-let openAgreement: OpenAgreementService;
+let openAgreementById: OpenAgreementByIdService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ListAgreements', () => {
+describe('OpenAgreementById', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
@@ -29,14 +29,14 @@ describe('ListAgreements', () => {
 
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
-    openAgreement = new OpenAgreementService(page);
+    openAgreementById = new OpenAgreementByIdService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to open agreement', async () => {
+  it('should be able to open agreement by id', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -48,7 +48,7 @@ describe('ListAgreements', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     await expect(page.driver.title()).resolves.toEqual('Detalhar Proposta');
     await expect(
@@ -56,20 +56,20 @@ describe('ListAgreements', () => {
     ).resolves.toBeTruthy();
   });
 
-  it("should not be able to open agreement when page is not 'AgreementsListPage'", async () => {
+  it('should not be able to open agreement by id outside agreements list page', async () => {
     await expect(
-      openAgreement.execute({ agreement_id: 'any-agreement' }),
+      openAgreementById.execute({ agreement_id: 'any-agreement' }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to open agreement when agreements list is empty', async () => {
+  it('should not be able to open agreement by id when agreements list is empty', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '27.957.062/0001-42',
     });
 
     await expect(
-      openAgreement.execute({ agreement_id: 'any-agreement' }),
+      openAgreementById.execute({ agreement_id: 'any-agreement' }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });
