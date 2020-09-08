@@ -55,29 +55,41 @@ class Executor {
     console.log(currentPage);
     console.log(totalPages);
 
-    const agreements = await agreementsListPage.getAll();
-
-    // console.log(agreements);
-
     await browser.use(BackToMainHandler);
 
-    for (const agreement of agreements) {
-      let cacheAgreement = agreement;
+    for (let i = currentPage; i <= totalPages; i++) {
+      if (i > 1) {
+        await agreementsListPage.navigateToPage(i);
+      }
 
-      // console.log(agreement.agreement_id);
+      const agreements = await agreementsListPage.getAll();
 
-      await this.cacheProvider.save('agreement', cacheAgreement);
+      for (const agreement of agreements) {
+        if (i > 1) {
+          await agreementsListPage.navigateToPage(i);
+        }
 
-      // await agreementsListPage.openById(agreement.agreement_id);
+        let cacheAgreement = agreement;
 
-      // await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
+        console.log(agreement.agreement_id);
 
-      cacheAgreement = await this.cacheProvider.recover<IAgreement>(
-        'agreement',
-      );
+        await this.cacheProvider.save('agreement', cacheAgreement);
 
-      if (cacheAgreement) {
-        // console.log(JSON.stringify(cacheAgreement));
+        await agreementsListPage.openById(agreement.agreement_id);
+
+        await browser.run(
+          page,
+          ProposalDataHandler,
+          BackToAgreementsListHandler,
+        );
+
+        cacheAgreement = await this.cacheProvider.recover<IAgreement>(
+          'agreement',
+        );
+
+        if (cacheAgreement) {
+          console.log(JSON.stringify(cacheAgreement));
+        }
       }
     }
 

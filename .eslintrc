@@ -42,6 +42,7 @@
     "no-useless-constructor": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "camelcase": "off",
+    "no-plusplus": "off",
     "react/prop-types": "off",
     "jsx-a11y/label-has-for": "off",
     "no-case-declarations": "off",
