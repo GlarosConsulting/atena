@@ -52,6 +52,17 @@ describe('NavigateToPageService', () => {
     );
   });
 
+  it('should not be able to navigate to page 0 or less than one', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: 'max',
+    });
+
+    await expect(navigateToPage.execute({ page: 0 })).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
   it('should not be able to navigate to page 5 that is greater than total pages, equals to 4', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
@@ -88,5 +99,47 @@ describe('NavigateToPageService', () => {
     await navigateToPage.execute({ page: 12 });
 
     expect(clickForNavigate).toHaveBeenCalledTimes(5);
+  });
+
+  it('should not be able to go to next pages when not able to find next pages anchor', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: 'max',
+    });
+
+    const clickForNavigate = jest.spyOn(page, 'clickForNavigate');
+    const findElementsByText = jest
+      .spyOn(page, 'findElementsByText')
+      .mockImplementationOnce(async () => [])
+      .mockImplementationOnce(async () => []);
+
+    await expect(navigateToPage.execute({ page: 12 })).rejects.toBeInstanceOf(
+      AppError,
+    );
+
+    expect(clickForNavigate).not.toHaveBeenCalled();
+    expect(findElementsByText).toHaveBeenCalledTimes(2);
+  });
+
+  it('should not be able to go to previous pages when not able to find previous pages anchor', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: 'max',
+    });
+
+    await navigateToPage.execute({ page: 12 });
+
+    const clickForNavigate = jest.spyOn(page, 'clickForNavigate');
+    const findElementsByText = jest
+      .spyOn(page, 'findElementsByText')
+      .mockImplementationOnce(async () => [])
+      .mockImplementationOnce(async () => []);
+
+    await expect(navigateToPage.execute({ page: 2 })).rejects.toBeInstanceOf(
+      AppError,
+    );
+
+    expect(clickForNavigate).not.toHaveBeenCalled();
+    expect(findElementsByText).toHaveBeenCalledTimes(2);
   });
 });
