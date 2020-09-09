@@ -27,7 +27,7 @@ export default class ExtractDatesService {
     const title = await this.page.driver.title();
 
     if (title !== 'Detalhar Proposta') {
-      throw new AppError('You should be on an opened agreement page.');
+      throw new AppError('You should be on opened agreement page.');
     }
 
     const findDatesSubtitles = await this.page.findElementsByText(

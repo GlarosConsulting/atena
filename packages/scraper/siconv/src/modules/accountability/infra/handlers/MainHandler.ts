@@ -24,7 +24,22 @@ class MainHandler implements IHandler {
 
     const data: IMain = {
       main_data,
+      dates: {
+        validity: {
+          start_date: new Date(),
+          end_date: new Date(),
+        },
+        limit_date: new Date(),
+      },
+      values: {
+        agreement_total_value: 0,
+        transfer_value: 0,
+        counterpart_value: 0,
+        income_value: 0,
+      },
     };
+
+    console.log('accountability', data);
 
     const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
 

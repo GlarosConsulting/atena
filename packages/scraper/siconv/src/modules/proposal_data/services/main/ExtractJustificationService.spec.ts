@@ -47,8 +47,6 @@ describe('ExtractJustification', () => {
 
     const agreements = await extractAgreementsList.execute();
 
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
-
     const [{ agreement_id }] = agreements;
 
     await openAgreementById.execute({ agreement_id });
@@ -83,8 +81,6 @@ describe('ExtractJustification', () => {
     });
 
     const agreements = await extractAgreementsList.execute();
-
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
 
     const [{ agreement_id }] = agreements;
 
