@@ -1,8 +1,8 @@
-import IBankData from './main/IBankData';
-import IDates from './main/IDates';
-import IExecutors from './main/IExecutors';
-import IJustification from './main/IJustification';
-import IMainData from './main/IMainData';
+import IBankData from './IBankData';
+import IDates from './IDates';
+import IExecutors from './IExecutors';
+import IJustification from './IJustification';
+import IMainData from './IMainData';
 
 export default interface IMain {
   main_data: IMainData;

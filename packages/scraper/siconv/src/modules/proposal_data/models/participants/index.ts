@@ -1,4 +1,4 @@
-import IMainParticipants from '@modules/proposal_data/models/participants/IMainParticipants';
+import IMainParticipants from './IMainParticipants';
 
 export default interface IParticipants {
   main_participants: IMainParticipants;
