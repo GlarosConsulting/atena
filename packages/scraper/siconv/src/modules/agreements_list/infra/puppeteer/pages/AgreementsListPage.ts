@@ -9,6 +9,10 @@ import NavigateToPageService from '@modules/agreements_list/services/NavigateToP
 import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 
 class AgreementsListPage implements IAgreementsListPage {
+  public async navigateTo(): Promise<void> {
+    // useless
+  }
+
   public async getAll(): Promise<IAgreement[]> {
     const extractAgreementsList = container.resolve(
       ExtractAgreementsListService,

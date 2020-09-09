@@ -23,7 +23,7 @@ export default class NavigateToParticipantsPageService {
     );
 
     if (findParticipantesSubmenus.length === 0) {
-      throw new AppError("It was not able to navigate to 'Participants Page'.");
+      throw new AppError('It was not able to navigate to participants page.');
     }
 
     await this.page.clickForNavigate(findParticipantesSubmenus[0]);

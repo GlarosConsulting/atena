@@ -23,7 +23,7 @@ export default class NavigateToProgramsPageService {
     );
 
     if (findProgramasSubmenus.length === 0) {
-      throw new AppError("It was not able to navigate to 'Programs Page'.");
+      throw new AppError('It was not able to navigate to programs page.');
     }
 
     await this.page.clickForNavigate(findProgramasSubmenus[0]);

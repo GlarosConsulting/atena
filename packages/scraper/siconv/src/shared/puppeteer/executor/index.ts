@@ -13,6 +13,7 @@ import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserP
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
 
+import AccountabilityHandler from '@modules/accountability/infra/handlers';
 import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';
 import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
@@ -55,31 +56,54 @@ class Executor {
     console.log(currentPage);
     console.log(totalPages);
 
-    const agreements = await agreementsListPage.getAll();
-
-    // console.log(agreements);
-
     await browser.use(BackToMainHandler);
 
-    for (const agreement of agreements) {
-      let cacheAgreement = agreement;
+    const agreements = await agreementsListPage.getAll();
 
-      // console.log(agreement.agreement_id);
+    await agreementsListPage.openById(agreements[0].agreement_id);
 
-      await this.cacheProvider.save('agreement', cacheAgreement);
+    await browser.run(
+      page,
+      ProposalDataHandler,
+      AccountabilityHandler,
+      BackToAgreementsListHandler,
+    );
 
-      // await agreementsListPage.openById(agreement.agreement_id);
-
-      // await browser.run(page, ProposalDataHandler, BackToAgreementsListHandler);
-
-      cacheAgreement = await this.cacheProvider.recover<IAgreement>(
-        'agreement',
-      );
-
-      if (cacheAgreement) {
-        // console.log(JSON.stringify(cacheAgreement));
+    /* for (let i = currentPage; i <= totalPages; i++) {
+      if (i > 1) {
+        await agreementsListPage.navigateToPage(i);
       }
-    }
+
+      const agreements = await agreementsListPage.getAll();
+
+      for (const agreement of agreements) {
+        if (i > 1) {
+          await agreementsListPage.navigateToPage(i);
+        }
+
+        let cacheAgreement = agreement;
+
+        console.log(agreement.agreement_id);
+
+        await this.cacheProvider.save('agreement', cacheAgreement);
+
+        await agreementsListPage.openById(agreement.agreement_id);
+
+        await browser.run(
+          page,
+          ProposalDataHandler,
+          BackToAgreementsListHandler,
+        );
+
+        cacheAgreement = await this.cacheProvider.recover<IAgreement>(
+          'agreement',
+        );
+
+        if (cacheAgreement) {
+          console.log(JSON.stringify(cacheAgreement));
+        }
+      }
+    } */
 
     console.timeEnd('Elapsed time');
   }
