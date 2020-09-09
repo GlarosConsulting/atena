@@ -13,7 +13,7 @@ import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserP
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
 
-import MainHandler from '@modules/accountability/infra/handlers';
+import AccountabilityHandler from '@modules/accountability/infra/handlers';
 import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';
 import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
@@ -65,7 +65,7 @@ class Executor {
     await browser.run(
       page,
       ProposalDataHandler,
-      MainHandler,
+      AccountabilityHandler,
       BackToAgreementsListHandler,
     );
 

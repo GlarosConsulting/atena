@@ -1,4 +1,4 @@
-import IPuppeteerPage from '@shared/puppeteer/pages/IPuppeteerPage';
+import ISiconvPage from '@shared/pages/ISiconvPage';
 
 import IBankData from '../models/main/IBankData';
 import IDates from '../models/main/IDates';
@@ -6,7 +6,7 @@ import IExecutors from '../models/main/IExecutors';
 import IJustification from '../models/main/IJustification';
 import IMainData from '../models/main/IMainData';
 
-export default interface IDataPage extends IPuppeteerPage {
+export default interface IDataPage extends ISiconvPage {
   getMainData(): Promise<IMainData>;
   getExecutors(): Promise<IExecutors>;
   getJustification(): Promise<IJustification>;
