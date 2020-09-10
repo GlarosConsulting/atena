@@ -5,9 +5,9 @@ import { PartialDeep } from 'type-fest';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import IAgreement from '@shared/models/IAgreement';
 
-import IMain from '@modules/proposal_data/models/IMain';
-import IAgreement from '@modules/search/models/IAgreement';
+import IMain from '@modules/proposal_data/models/main';
 
 import DataPage from '../puppeteer/pages/DataPage';
 

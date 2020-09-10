@@ -22,16 +22,12 @@ class MainHandler implements IHandler {
 
     const main_data = await dataPage.getMainData();
     const dates = await dataPage.getDates();
+    const values = await dataPage.getValues();
 
     const data: IMain = {
       main_data,
       dates,
-      values: {
-        agreement_total_value: 0,
-        transfer_value: 0,
-        counterpart_value: 0,
-        income_value: 0,
-      },
+      values,
     };
 
     console.log('accountability', data);

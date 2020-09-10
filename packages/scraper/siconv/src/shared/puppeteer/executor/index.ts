@@ -11,7 +11,6 @@ import IPage from '@scraper/shared/modules/browser/models/IPage';
 import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/models/IBrowserProvider';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
-import IAgreement from '@shared/models/IAgreement';
 
 import AccountabilityHandler from '@modules/accountability/infra/handlers';
 import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';

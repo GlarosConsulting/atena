@@ -4,7 +4,7 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import IAgreement from '@modules/search/models/IAgreement';
+import IAgreement from '@shared/models/IAgreement';
 
 @injectable()
 export default class ExtractAgreementsListService {

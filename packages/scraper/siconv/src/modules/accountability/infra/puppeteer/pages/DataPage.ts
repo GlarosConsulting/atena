@@ -6,6 +6,7 @@ import IValues from '@modules/accountability/models/main/IValues';
 import IDataPage from '@modules/accountability/pages/IDataPage';
 import ExtractDatesService from '@modules/accountability/services/main/ExtractDatesService';
 import ExtractMainDataService from '@modules/accountability/services/main/ExtractMainDataService';
+import ExtractValuesService from '@modules/accountability/services/main/ExtractValuesService';
 import NavigateToAccountabilityPageService from '@modules/accountability/services/NavigateToAccountabilityPageService';
 
 class DataPage implements IDataPage {
@@ -34,7 +35,11 @@ class DataPage implements IDataPage {
   }
 
   public async getValues(): Promise<IValues> {
-    throw new Error('Method not implemented.');
+    const extractValues = container.resolve(ExtractValuesService);
+
+    const values = await extractValues.execute();
+
+    return values;
   }
 }
 
