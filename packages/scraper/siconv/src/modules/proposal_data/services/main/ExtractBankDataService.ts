@@ -1,9 +1,10 @@
-import { parse as parseDateFns } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+
+import parseDate from '@utils/parseDate';
 
 import IBankData from '../../models/main/IBankData';
 
@@ -22,7 +23,7 @@ export default class ExtractBankDataService {
     const title = await this.page.driver.title();
 
     if (title !== 'Detalhar Proposta') {
-      throw new AppError('You should be on an opened agreement page.');
+      throw new AppError('You should be on opened agreement page.');
     }
 
     const findBankDataSubtitles = await this.page.findElementsByText(
@@ -63,13 +64,9 @@ export default class ExtractBankDataService {
       };
     });
 
-    function parse(dateString: string): Date {
-      return parseDateFns(dateString, 'dd/MM/yyyy HH:mm:ss', Date.now());
-    }
-
     const bankData: IBankData = {
       ...originalBankData,
-      updated_at: parse(originalBankData.updated_at),
+      updated_at: parseDate(originalBankData.updated_at, 'dd/MM/yyyy HH:mm:ss'),
     };
 
     return bankData;

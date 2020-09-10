@@ -47,8 +47,6 @@ describe('ExtractDates', () => {
 
     const agreements = await extractAgreementsList.execute();
 
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
-
     const [{ agreement_id }] = agreements;
 
     await openAgreementById.execute({ agreement_id });
@@ -58,8 +56,8 @@ describe('ExtractDates', () => {
     expect(dates).toHaveProperty('proposal_date');
     expect(dates).toHaveProperty('signature_date');
     expect(dates).toHaveProperty('published_dou_date');
-    expect(dates).toHaveProperty('validity_start_date');
-    expect(dates).toHaveProperty('validity_end_date');
+    expect(dates.validity).toHaveProperty('start_date');
+    expect(dates.validity).toHaveProperty('end_date');
     expect(dates).toHaveProperty('accountability_limit_date');
   });
 
@@ -79,8 +77,6 @@ describe('ExtractDates', () => {
     });
 
     const agreements = await extractAgreementsList.execute();
-
-    expect(agreements.length).toBeGreaterThanOrEqual(1);
 
     const [{ agreement_id }] = agreements;
 

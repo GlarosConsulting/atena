@@ -58,18 +58,24 @@ class Executor {
 
     await browser.use(BackToMainHandler);
 
+    /* await agreementsListPage.navigateToPage(2);
+
     const agreements = await agreementsListPage.getAll();
 
-    await agreementsListPage.openById(agreements[0].agreement_id);
+    const agreement = agreements.find(
+      findAgreement => findAgreement.agreement_id === '837439/2016',
+    );
+
+    await agreementsListPage.openById(agreement.agreement_id);
 
     await browser.run(
       page,
       ProposalDataHandler,
       AccountabilityHandler,
       BackToAgreementsListHandler,
-    );
+    ); */
 
-    /* for (let i = currentPage; i <= totalPages; i++) {
+    for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {
         await agreementsListPage.navigateToPage(i);
       }
@@ -92,6 +98,7 @@ class Executor {
         await browser.run(
           page,
           ProposalDataHandler,
+          AccountabilityHandler,
           BackToAgreementsListHandler,
         );
 
@@ -103,7 +110,7 @@ class Executor {
           console.log(JSON.stringify(cacheAgreement));
         }
       }
-    } */
+    }
 
     console.timeEnd('Elapsed time');
   }

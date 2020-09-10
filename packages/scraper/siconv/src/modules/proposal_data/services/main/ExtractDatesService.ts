@@ -1,9 +1,10 @@
-import { parse as parseDateFns } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+
+import _parseDate from '@utils/parseDate';
 
 import IDates from '../../models/main/IDates';
 
@@ -11,9 +12,17 @@ interface IExtractDates {
   proposal_date: string;
   signature_date: string;
   published_dou_date: string;
-  validity_start_date: string;
-  validity_end_date: string;
+  validity: {
+    start_date: string;
+    end_date: string;
+  };
   accountability_limit_date: string;
+}
+
+function parseDate(dateString: string) {
+  const [dateStringToParse] = dateString.split('(');
+
+  return _parseDate(dateStringToParse);
 }
 
 @injectable()
@@ -27,7 +36,7 @@ export default class ExtractDatesService {
     const title = await this.page.driver.title();
 
     if (title !== 'Detalhar Proposta') {
-      throw new AppError('You should be on an opened agreement page.');
+      throw new AppError('You should be on opened agreement page.');
     }
 
     const findDatesSubtitles = await this.page.findElementsByText(
@@ -66,24 +75,26 @@ export default class ExtractDatesService {
         proposal_date,
         signature_date,
         published_dou_date,
-        validity_start_date,
-        validity_end_date,
+        validity: {
+          start_date: validity_start_date,
+          end_date: validity_end_date,
+        },
         accountability_limit_date,
       };
     });
 
-    function parse(dateString: string): Date {
-      return parseDateFns(dateString, 'dd/MM/yyyy', Date.now());
-    }
-
     const dates: IDates = {
       ...originalDates,
-      proposal_date: parse(originalDates.proposal_date),
-      signature_date: parse(originalDates.signature_date),
-      published_dou_date: parse(originalDates.published_dou_date),
-      validity_start_date: parse(originalDates.validity_start_date),
-      validity_end_date: parse(originalDates.validity_end_date),
-      accountability_limit_date: parse(originalDates.accountability_limit_date),
+      proposal_date: parseDate(originalDates.proposal_date),
+      signature_date: parseDate(originalDates.signature_date),
+      published_dou_date: parseDate(originalDates.published_dou_date),
+      validity: {
+        start_date: parseDate(originalDates.validity.start_date),
+        end_date: parseDate(originalDates.validity.end_date),
+      },
+      accountability_limit_date: parseDate(
+        originalDates.accountability_limit_date,
+      ),
     };
 
     return dates;

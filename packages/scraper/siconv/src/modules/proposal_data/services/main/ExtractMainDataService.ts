@@ -17,7 +17,7 @@ export default class ExtractMainDataService {
     const title = await this.page.driver.title();
 
     if (title !== 'Detalhar Proposta') {
-      throw new AppError('You should be on an opened agreement page.');
+      throw new AppError('You should be on opened agreement page.');
     }
 
     await injectFunctions(this.page);

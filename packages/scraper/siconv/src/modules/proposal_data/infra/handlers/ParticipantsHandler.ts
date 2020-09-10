@@ -5,10 +5,10 @@ import { PartialDeep } from 'type-fest';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import IAgreement from '@shared/models/IAgreement';
 
 import ParticipantsPage from '@modules/proposal_data/infra/puppeteer/pages/ParticipantsPage';
-import IParticipants from '@modules/proposal_data/models/IParticipants';
-import IAgreement from '@modules/search/models/IAgreement';
+import IParticipants from '@modules/proposal_data/models/participants';
 
 @injectable()
 class ParticipantsHandler implements IHandler {

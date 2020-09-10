@@ -2,7 +2,6 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
-import IPage from '@scraper/shared/modules/browser/models/IPage';
 
 import siconvConfig from '@config/siconv';
 

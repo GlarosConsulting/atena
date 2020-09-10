@@ -42,6 +42,7 @@
     "no-useless-constructor": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "camelcase": "off",
+    "no-console": "off",
     "no-plusplus": "off",
     "react/prop-types": "off",
     "jsx-a11y/label-has-for": "off",
@@ -81,6 +82,7 @@
           ],
           "/^@scraper\/shared/",
           "/^@config/",
+          "/^@utils/",
           "/^@shared/",
           "/^@/",
           [
@@ -150,6 +152,14 @@
     "import/resolver": {
       "typescript": {
         "project": "packages/**/tsconfig.json"
+      },
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       }
     }
   }

@@ -11,7 +11,8 @@
   "scripts": {
     "build:scraper": "lerna run build --scope @scraper/* --stream",
     "lint:fix": "eslint --fix packages --ext ts,tsx",
-    "test": "jest"
+    "test": "lerna run test --stream --parallel -- --watchAll false",
+    "scraper:siconv": "yarn workspace @scraper/siconv"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",

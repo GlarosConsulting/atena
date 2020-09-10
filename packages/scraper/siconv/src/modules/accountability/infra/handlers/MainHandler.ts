@@ -21,9 +21,13 @@ class MainHandler implements IHandler {
     const dataPage = new DataPage();
 
     const main_data = await dataPage.getMainData();
+    const dates = await dataPage.getDates();
+    const values = await dataPage.getValues();
 
     const data: IMain = {
       main_data,
+      dates,
+      values,
     };
 
     const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
