@@ -1,9 +1,12 @@
-import { parse as parseDateFns } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+
+import siconvConfig from '@config/siconv';
+
+import parseDate from '@utils/parseDate';
 
 import IDates from '../../models/main/IDates';
 
@@ -72,18 +75,16 @@ export default class ExtractDatesService {
       };
     });
 
-    function parse(dateString: string): Date {
-      return parseDateFns(dateString, 'dd/MM/yyyy', Date.now());
-    }
-
     const dates: IDates = {
       ...originalDates,
-      proposal_date: parse(originalDates.proposal_date),
-      signature_date: parse(originalDates.signature_date),
-      published_dou_date: parse(originalDates.published_dou_date),
-      validity_start_date: parse(originalDates.validity_start_date),
-      validity_end_date: parse(originalDates.validity_end_date),
-      accountability_limit_date: parse(originalDates.accountability_limit_date),
+      proposal_date: parseDate(originalDates.proposal_date),
+      signature_date: parseDate(originalDates.signature_date),
+      published_dou_date: parseDate(originalDates.published_dou_date),
+      validity_start_date: parseDate(originalDates.validity_start_date),
+      validity_end_date: parseDate(originalDates.validity_end_date),
+      accountability_limit_date: parseDate(
+        originalDates.accountability_limit_date,
+      ),
     };
 
     return dates;

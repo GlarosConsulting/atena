@@ -21,16 +21,11 @@ class MainHandler implements IHandler {
     const dataPage = new DataPage();
 
     const main_data = await dataPage.getMainData();
+    const dates = await dataPage.getDates();
 
     const data: IMain = {
       main_data,
-      dates: {
-        validity: {
-          start_date: new Date(),
-          end_date: new Date(),
-        },
-        limit_date: new Date(),
-      },
+      dates,
       values: {
         agreement_total_value: 0,
         transfer_value: 0,

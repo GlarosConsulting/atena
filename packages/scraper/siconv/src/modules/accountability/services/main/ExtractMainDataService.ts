@@ -7,7 +7,7 @@ import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import IMainData from '../../models/main/IMainData';
 
 @injectable()
-export default class ExtractBankDataService {
+export default class ExtractMainDataService {
   constructor(
     @inject('Page')
     private page: Page,

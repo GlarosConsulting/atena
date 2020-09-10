@@ -17,7 +17,8 @@ module.exports = {
         "@shared": "./src/shared",
         "@modules": "./src/modules",
         "@infra": "./src/infra",
-        "@config": "./src/config"
+        "@config": "./src/config",
+        "@utils": "./src/utils"
       }
     }],
     'babel-plugin-transform-typescript-metadata',

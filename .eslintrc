@@ -150,6 +150,14 @@
     "import/resolver": {
       "typescript": {
         "project": "packages/**/tsconfig.json"
+      },
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       }
     }
   }
