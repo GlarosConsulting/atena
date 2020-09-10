@@ -4,7 +4,6 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import parseDate from '@utils/parseDate';
 import parsePrice from '@utils/parsePrice';
 
 import IValues from '../../models/main/IValues';

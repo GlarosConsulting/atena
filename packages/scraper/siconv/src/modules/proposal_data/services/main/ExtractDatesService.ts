@@ -4,7 +4,7 @@ import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
-import parseDate from '@utils/parseDate';
+import _parseDate from '@utils/parseDate';
 
 import IDates from '../../models/main/IDates';
 
@@ -12,9 +12,17 @@ interface IExtractDates {
   proposal_date: string;
   signature_date: string;
   published_dou_date: string;
-  validity_start_date: string;
-  validity_end_date: string;
+  validity: {
+    start_date: string;
+    end_date: string;
+  };
   accountability_limit_date: string;
+}
+
+function parseDate(dateString: string) {
+  const [dateStringToParse] = dateString.split('(');
+
+  return _parseDate(dateStringToParse);
 }
 
 @injectable()
@@ -67,8 +75,10 @@ export default class ExtractDatesService {
         proposal_date,
         signature_date,
         published_dou_date,
-        validity_start_date,
-        validity_end_date,
+        validity: {
+          start_date: validity_start_date,
+          end_date: validity_end_date,
+        },
         accountability_limit_date,
       };
     });
@@ -78,8 +88,10 @@ export default class ExtractDatesService {
       proposal_date: parseDate(originalDates.proposal_date),
       signature_date: parseDate(originalDates.signature_date),
       published_dou_date: parseDate(originalDates.published_dou_date),
-      validity_start_date: parseDate(originalDates.validity_start_date),
-      validity_end_date: parseDate(originalDates.validity_end_date),
+      validity: {
+        start_date: parseDate(originalDates.validity.start_date),
+        end_date: parseDate(originalDates.validity.end_date),
+      },
       accountability_limit_date: parseDate(
         originalDates.accountability_limit_date,
       ),

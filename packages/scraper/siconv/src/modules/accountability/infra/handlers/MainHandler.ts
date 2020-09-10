@@ -30,8 +30,6 @@ class MainHandler implements IHandler {
       values,
     };
 
-    console.log('accountability', data);
-
     const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
 
     if (!agreement) return;
