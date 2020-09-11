@@ -38,7 +38,7 @@ export default class ExtractBankDataService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalBankData = await this.page.evaluate<IExtractBankData>(() => {
+    const extractedBankData = await this.page.evaluate<IExtractBankData>(() => {
       const bank = getTextBySelector(
         '#tr-alterarBancoEscolhido > td.field[colspan="4"]',
       );
@@ -65,8 +65,11 @@ export default class ExtractBankDataService {
     });
 
     const bankData: IBankData = {
-      ...originalBankData,
-      updated_at: parseDate(originalBankData.updated_at, 'dd/MM/yyyy HH:mm:ss'),
+      ...extractedBankData,
+      updated_at: parseDate(
+        extractedBankData.updated_at,
+        'dd/MM/yyyy HH:mm:ss',
+      ),
     };
 
     return bankData;
