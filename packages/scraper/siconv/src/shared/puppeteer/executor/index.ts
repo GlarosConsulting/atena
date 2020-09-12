@@ -59,7 +59,7 @@ class Executor {
 
     await browser.use(BackToMainHandler);
 
-    /* const agreements = await agreementsListPage.getAll();
+    const agreements = await agreementsListPage.getAll();
 
     const agreement = agreements.find(
       findAgreement => findAgreement.agreement_id === '876519/2018',
@@ -83,9 +83,9 @@ class Executor {
 
     if (cacheAgreement) {
       console.log(JSON.stringify(cacheAgreement));
-    } */
+    }
 
-    for (let i = currentPage; i <= totalPages; i++) {
+    /* for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {
         await agreementsListPage.navigateToPage(i);
       }
@@ -120,7 +120,7 @@ class Executor {
           console.log(JSON.stringify(cacheAgreement));
         }
       }
-    }
+    } */
 
     console.timeEnd('Elapsed time');
   }

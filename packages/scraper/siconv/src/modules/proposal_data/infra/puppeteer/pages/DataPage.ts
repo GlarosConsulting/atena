@@ -5,12 +5,14 @@ import IDates from '@modules/proposal_data/models/main/IDates';
 import IExecutors from '@modules/proposal_data/models/main/IExecutors';
 import IJustification from '@modules/proposal_data/models/main/IJustification';
 import IMainData from '@modules/proposal_data/models/main/IMainData';
+import IValues from '@modules/proposal_data/models/main/IValues';
 import IDataPage from '@modules/proposal_data/pages/IDataPage';
 import ExtractBankDataService from '@modules/proposal_data/services/main/ExtractBankDataService';
 import ExtractDatesService from '@modules/proposal_data/services/main/ExtractDatesService';
 import ExtractExecutorsService from '@modules/proposal_data/services/main/ExtractExecutorsService';
 import ExtractJustificationService from '@modules/proposal_data/services/main/ExtractJustificationService';
 import ExtractMainDataService from '@modules/proposal_data/services/main/ExtractMainDataService';
+import ExtractValuesService from '@modules/proposal_data/services/main/ExtractValuesService';
 
 class DataPage implements IDataPage {
   public async navigateTo(): Promise<void> {
@@ -55,6 +57,14 @@ class DataPage implements IDataPage {
     const dates = await extractDates.execute();
 
     return dates;
+  }
+
+  public async getValues(): Promise<IValues> {
+    const extractValues = container.resolve(ExtractValuesService);
+
+    const values = await extractValues.execute();
+
+    return values;
   }
 }
 
