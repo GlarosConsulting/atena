@@ -26,6 +26,7 @@ class MainHandler implements IHandler {
     const justification = await dataPage.getJustification();
     const bankData = await dataPage.getBankData();
     const dates = await dataPage.getDates();
+    const values = await dataPage.getValues();
 
     const data: IMain = {
       main_data,
@@ -33,6 +34,7 @@ class MainHandler implements IHandler {
       justification,
       bankData,
       dates,
+      values,
     };
 
     const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
