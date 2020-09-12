@@ -11,10 +11,14 @@ interface IRequest {
 
 @injectable()
 export default class NavigateToPageService {
+  private extractListInfo: ExtractListInfoService;
+
   constructor(
     @inject('Page')
     private page: Page,
-  ) {}
+  ) {
+    this.extractListInfo = new ExtractListInfoService(page);
+  }
 
   public async execute({ page }: IRequest): Promise<void> {
     const title = await this.page.driver.title();
@@ -23,9 +27,7 @@ export default class NavigateToPageService {
       throw new AppError('You should be on agreements list page.');
     }
 
-    const extractListInfo = new ExtractListInfoService(this.page);
-
-    let listInfo = await extractListInfo.execute();
+    let listInfo = await this.extractListInfo.execute();
 
     if (page < 1) {
       throw new AppError('Not able to navigate to page less than one.');
@@ -69,7 +71,7 @@ export default class NavigateToPageService {
     );
 
     while (findPageAnchorElements.length === 0) {
-      listInfo = await extractListInfo.execute();
+      listInfo = await this.extractListInfo.execute();
 
       if (page < listInfo.current_page) {
         await goToPreviousPagesList();

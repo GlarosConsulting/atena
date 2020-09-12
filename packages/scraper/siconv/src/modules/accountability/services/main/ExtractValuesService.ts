@@ -32,7 +32,7 @@ export default class ExtractValuesService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalValues = await this.page.evaluate<IExtractValues>(() => {
+    const extractedValues = await this.page.evaluate<IExtractValues>(() => {
       const agreement_total_value = getTextBySelector(
         '#mainForm > div.lineGroup > div:nth-child(15) > span.unit.unitData.blueBold',
       );
@@ -55,11 +55,11 @@ export default class ExtractValuesService {
     });
 
     const values: IValues = {
-      ...originalValues,
-      agreement_total_value: parsePrice(originalValues.agreement_total_value),
-      transfer_value: parsePrice(originalValues.transfer_value),
-      counterpart_value: parsePrice(originalValues.counterpart_value),
-      income_value: parsePrice(originalValues.income_value),
+      ...extractedValues,
+      agreement_total_value: parsePrice(extractedValues.agreement_total_value),
+      transfer_value: parsePrice(extractedValues.transfer_value),
+      counterpart_value: parsePrice(extractedValues.counterpart_value),
+      income_value: parsePrice(extractedValues.income_value),
     };
 
     return values;

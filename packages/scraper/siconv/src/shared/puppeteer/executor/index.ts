@@ -15,6 +15,7 @@ import IAgreement from '@shared/models/IAgreement';
 
 import AccountabilityHandler from '@modules/accountability/infra/handlers';
 import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';
+import CovenantExecutionHandler from '@modules/covenant_execution/infra/handlers';
 import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
@@ -53,27 +54,36 @@ class Executor {
     const currentPage = await agreementsListPage.getCurrentPage();
     const totalPages = await agreementsListPage.getTotalPages();
 
-    console.log(currentPage);
-    console.log(totalPages);
+    console.log(`Current page: ${currentPage}`);
+    console.log(`Total pages: ${totalPages}`);
 
     await browser.use(BackToMainHandler);
 
-    /* await agreementsListPage.navigateToPage(2);
-
-    const agreements = await agreementsListPage.getAll();
+    /* const agreements = await agreementsListPage.getAll();
 
     const agreement = agreements.find(
-      findAgreement => findAgreement.agreement_id === '837439/2016',
+      findAgreement => findAgreement.agreement_id === '876519/2018',
     );
+
+    let cacheAgreement = agreement;
+
+    await this.cacheProvider.save('agreement', cacheAgreement);
 
     await agreementsListPage.openById(agreement.agreement_id);
 
     await browser.run(
       page,
       ProposalDataHandler,
+      CovenantExecutionHandler,
       AccountabilityHandler,
       BackToAgreementsListHandler,
-    ); */
+    );
+
+    cacheAgreement = await this.cacheProvider.recover<IAgreement>('agreement');
+
+    if (cacheAgreement) {
+      console.log(JSON.stringify(cacheAgreement));
+    } */
 
     for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {

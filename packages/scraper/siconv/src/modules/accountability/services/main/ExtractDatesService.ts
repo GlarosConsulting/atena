@@ -30,7 +30,7 @@ export default class ExtractDatesService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalDates = await this.page.evaluate<IExtractDates>(() => {
+    const extractedDates = await this.page.evaluate<IExtractDates>(() => {
       const validity = getTextBySelector(
         '#mainForm > div.lineGroup > div:nth-child(13) > span.unit.unitData.blueBold',
       );
@@ -47,15 +47,15 @@ export default class ExtractDatesService {
     const [
       validity_start_date_formatted,
       validity_end_date_formatted,
-    ] = originalDates.validity.split(' a ');
+    ] = extractedDates.validity.split(' a ');
 
     const dates: IDates = {
-      ...originalDates,
+      ...extractedDates,
       validity: {
         start_date: parseDate(validity_start_date_formatted),
         end_date: parseDate(validity_end_date_formatted),
       },
-      limit_date: parseDate(originalDates.limit_date),
+      limit_date: parseDate(extractedDates.limit_date),
     };
 
     return dates;

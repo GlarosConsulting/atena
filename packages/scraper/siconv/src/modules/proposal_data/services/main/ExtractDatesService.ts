@@ -51,7 +51,7 @@ export default class ExtractDatesService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const originalDates = await this.page.evaluate<IExtractDates>(() => {
+    const extractedDates = await this.page.evaluate<IExtractDates>(() => {
       const proposal_date = getTextBySelector(
         '#tr-alterarDataProposta > td.field',
       );
@@ -84,16 +84,16 @@ export default class ExtractDatesService {
     });
 
     const dates: IDates = {
-      ...originalDates,
-      proposal_date: parseDate(originalDates.proposal_date),
-      signature_date: parseDate(originalDates.signature_date),
-      published_dou_date: parseDate(originalDates.published_dou_date),
+      ...extractedDates,
+      proposal_date: parseDate(extractedDates.proposal_date),
+      signature_date: parseDate(extractedDates.signature_date),
+      published_dou_date: parseDate(extractedDates.published_dou_date),
       validity: {
-        start_date: parseDate(originalDates.validity.start_date),
-        end_date: parseDate(originalDates.validity.end_date),
+        start_date: parseDate(extractedDates.validity.start_date),
+        end_date: parseDate(extractedDates.validity.end_date),
       },
       accountability_limit_date: parseDate(
-        originalDates.accountability_limit_date,
+        extractedDates.accountability_limit_date,
       ),
     };
 
