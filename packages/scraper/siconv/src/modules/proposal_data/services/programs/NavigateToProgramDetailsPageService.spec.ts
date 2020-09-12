@@ -8,20 +8,22 @@ import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgre
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import NavigateToCovenantExecutionPageService from '../NavigateToCovenantExecutionPageService';
-import NavigateToExecutionProcessesPageService from './NavigateToExecutionProcessesPageService';
+import ExtractProgramsListService from './ExtractProgramsListService';
+import NavigateToProgramDetailsPageService from './NavigateToProgramDetailsPageService';
+import NavigateToProgramsPageService from './NavigateToProgramsPageService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
 let openAgreement: OpenAgreementByIdService;
-let navigateToCovenantExecutionPage: NavigateToCovenantExecutionPageService;
-let navigateToExecutionProcessesPage: NavigateToExecutionProcessesPageService;
+let navigateToProgramsPage: NavigateToProgramsPageService;
+let extractProgramsList: ExtractProgramsListService;
+let navigateToProgramDetailsPage: NavigateToProgramDetailsPageService;
 
 let browser: Browser;
 let page: Page;
 
-describe('NavigateToExecutionProcessesPage', () => {
+describe('NavigateToProgramDetailsPage', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
@@ -34,10 +36,9 @@ describe('NavigateToExecutionProcessesPage', () => {
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
     openAgreement = new OpenAgreementByIdService(page);
-    navigateToCovenantExecutionPage = new NavigateToCovenantExecutionPageService(
-      page,
-    );
-    navigateToExecutionProcessesPage = new NavigateToExecutionProcessesPageService(
+    navigateToProgramsPage = new NavigateToProgramsPageService(page);
+    extractProgramsList = new ExtractProgramsListService(page);
+    navigateToProgramDetailsPage = new NavigateToProgramDetailsPageService(
       page,
     );
   });
@@ -46,7 +47,7 @@ describe('NavigateToExecutionProcessesPage', () => {
     await browser.close();
   });
 
-  it('should be able to navigate to execution processes page', async () => {
+  it('should be able to navigate to programs page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -58,25 +59,27 @@ describe('NavigateToExecutionProcessesPage', () => {
 
     await openAgreement.execute({ agreement_id });
 
-    await navigateToCovenantExecutionPage.execute();
+    await navigateToProgramsPage.execute();
 
-    await navigateToExecutionProcessesPage.execute();
+    const [{ program_id }] = await extractProgramsList.execute();
 
-    await expect(page.driver.title()).resolves.toEqual('Listar Licitacoes');
+    await navigateToProgramDetailsPage.execute({ program_id });
+
+    await expect(page.driver.title()).resolves.toEqual('Valores do Programa');
   });
 
-  it('should not be able to navigate to execution processes page outside opened agreement page', async () => {
+  it('should not be able to navigate to program details page outside agreement programs page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
     });
 
     await expect(
-      navigateToExecutionProcessesPage.execute(),
+      navigateToProgramDetailsPage.execute({ program_id: 'any-program-id' }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it("should not be able to navigate to execution processes page when not able to find 'Processo de Execução' submenu", async () => {
+  it('should not be able to navigate to program details page when not able to find program id element', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -88,14 +91,16 @@ describe('NavigateToExecutionProcessesPage', () => {
 
     await openAgreement.execute({ agreement_id });
 
-    await navigateToCovenantExecutionPage.execute();
+    await navigateToProgramsPage.execute();
+
+    const [{ program_id }] = await extractProgramsList.execute();
 
     jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
       return [];
     });
 
     await expect(
-      navigateToExecutionProcessesPage.execute(),
+      navigateToProgramDetailsPage.execute({ program_id }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

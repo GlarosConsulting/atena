@@ -43,9 +43,10 @@ class Page implements IPage<puppeteer.Page> {
   public async findElementsByText(
     str: string,
     elementTag = '*',
+    restPath = '',
   ): Promise<puppeteer.ElementHandle[]> {
     const elements = await this.driver.$x(
-      `//${elementTag}[contains(text(), '${str}')]`,
+      `//${elementTag}[contains(text(), '${str}')]${restPath}`,
     );
 
     return elements;

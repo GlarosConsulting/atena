@@ -65,6 +65,10 @@ class Executor {
       findAgreement => findAgreement.agreement_id === '876519/2018',
     );
 
+    let cacheAgreement = agreement;
+
+    await this.cacheProvider.save('agreement', cacheAgreement);
+
     await agreementsListPage.openById(agreement.agreement_id);
 
     await browser.run(
@@ -73,7 +77,13 @@ class Executor {
       CovenantExecutionHandler,
       AccountabilityHandler,
       BackToAgreementsListHandler,
-    ); */
+    );
+
+    cacheAgreement = await this.cacheProvider.recover<IAgreement>('agreement');
+
+    if (cacheAgreement) {
+      console.log(JSON.stringify(cacheAgreement));
+    } */
 
     for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {

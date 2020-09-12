@@ -59,7 +59,9 @@ describe('ExtractExecutionProcessesList', () => {
 
     const agreements = await extractAgreementsList.execute();
 
-    const [{ agreement_id }] = agreements;
+    const { agreement_id } = agreements.find(
+      findAgreement => findAgreement.agreement_id === '876519/2018',
+    );
 
     await openAgreementById.execute({ agreement_id });
 
@@ -67,15 +69,19 @@ describe('ExtractExecutionProcessesList', () => {
 
     await navigateToExecutionProcessesPage.execute();
 
-    // const executionProcesses = await extractExecutionProcessesList.execute();
+    const executionProcesses = await extractExecutionProcessesList.execute();
 
-    // expect(executionProcesses).toContainEqual(
-    //   expect.objectContaining({
-    //     program_id: expect.any(String),
-    //     name: expect.any(String),
-    //     investment_global_value: expect.any(Number),
-    //   }),
-    // );
+    expect(executionProcesses).toContainEqual(
+      expect.objectContaining({
+        number: expect.any(String),
+        execution_process: expect.any(String),
+        process_number: expect.any(String),
+        status: expect.any(String),
+        origin_system_status: expect.any(String),
+        origin_system: expect.any(String),
+        execution_process_accept: expect.any(String),
+      }),
+    );
   });
 
   it('should not be able to extract execution processes list outside execution processes page', async () => {
