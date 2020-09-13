@@ -20,8 +20,8 @@ import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 
-import BackToAgreementsListHandler from '../../handlers/BackToAgreementsListHandler';
-import BackToMainHandler from '../../handlers/BackToMainHandler';
+import GoBackFromAgreementHandler from '../../handlers/GoBackFromAgreementHandler';
+import GoBackToMainHandler from '../../handlers/GoBackToMainHandler';
 
 @injectable()
 class Executor {
@@ -57,12 +57,15 @@ class Executor {
     console.log(`Current page: ${currentPage}`);
     console.log(`Total pages: ${totalPages}`);
 
-    await browser.use(BackToMainHandler);
+    await browser.use(GoBackToMainHandler);
+
+    /* // await agreementsListPage.navigateToPage(2);
 
     const agreements = await agreementsListPage.getAll();
 
     const agreement = agreements.find(
       findAgreement => findAgreement.agreement_id === '876519/2018',
+      // findAgreement => findAgreement.agreement_id === '837439/2016',
     );
 
     let cacheAgreement = agreement;
@@ -76,16 +79,16 @@ class Executor {
       ProposalDataHandler,
       CovenantExecutionHandler,
       AccountabilityHandler,
-      BackToAgreementsListHandler,
+      GoBackFromAgreementHandler,
     );
 
     cacheAgreement = await this.cacheProvider.recover<IAgreement>('agreement');
 
     if (cacheAgreement) {
       console.log(JSON.stringify(cacheAgreement));
-    }
+    } */
 
-    /* for (let i = currentPage; i <= totalPages; i++) {
+    for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {
         await agreementsListPage.navigateToPage(i);
       }
@@ -108,8 +111,9 @@ class Executor {
         await browser.run(
           page,
           ProposalDataHandler,
+          CovenantExecutionHandler,
           AccountabilityHandler,
-          BackToAgreementsListHandler,
+          GoBackFromAgreementHandler,
         );
 
         cacheAgreement = await this.cacheProvider.recover<IAgreement>(
@@ -120,7 +124,7 @@ class Executor {
           console.log(JSON.stringify(cacheAgreement));
         }
       }
-    } */
+    }
 
     console.timeEnd('Elapsed time');
   }

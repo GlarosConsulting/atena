@@ -8,8 +8,8 @@ import parsePrice from '@utils/parsePrice';
 
 import IProgram from '@modules/proposal_data/models/programs/IProgram';
 
-import ExtractProgramDetailsService from './ExtractProgramDetailsService';
-import NavigateToProgramDetailsPageService from './NavigateToProgramDetailsPageService';
+import ExtractProgramDetailsService from './details/ExtractProgramDetailsService';
+import NavigateToProgramDetailsPageService from './details/NavigateToProgramDetailsPageService';
 
 interface IExtractProgram
   extends Omit<IProgram, 'investment_global_value' | 'details'> {

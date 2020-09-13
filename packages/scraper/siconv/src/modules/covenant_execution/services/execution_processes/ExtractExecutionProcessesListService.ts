@@ -8,17 +8,35 @@ import parseDate from '@utils/parseDate';
 
 import IExecutionProcess from '@modules/covenant_execution/models/execution_processes/IExecutionProcess';
 
+import ExtractMainDetailsService from './details/ExtractMainDetailsService';
+import GoBackFromExecutionProcessDetailsService from './details/GoBackFromExecutionProcessDetailsPageService';
+import NavigateToExecutionProcessDetailsPageService from './details/NavigateToExecutionProcessDetailsPageService';
+
 interface IExtractExecutionProcess
-  extends Omit<IExecutionProcess, 'publish_date'> {
+  extends Omit<IExecutionProcess, 'publish_date' | 'details'> {
   publish_date: string;
 }
 
 @injectable()
 export default class ExtractProgramsListService {
+  private navigateToExecutionProcessDetailsPage: NavigateToExecutionProcessDetailsPageService;
+
+  private extractMainDetails: ExtractMainDetailsService;
+
+  private goBackFromExecutionProcessDetails: GoBackFromExecutionProcessDetailsService;
+
   constructor(
     @inject('Page')
     private page: Page,
-  ) {}
+  ) {
+    this.navigateToExecutionProcessDetailsPage = new NavigateToExecutionProcessDetailsPageService(
+      page,
+    );
+    this.extractMainDetails = new ExtractMainDetailsService(page);
+    this.goBackFromExecutionProcessDetails = new GoBackFromExecutionProcessDetailsService(
+      page,
+    );
+  }
 
   public async execute(): Promise<IExecutionProcess[]> {
     const title = await this.page.driver.title();
@@ -40,7 +58,7 @@ export default class ExtractProgramsListService {
       const tableRows = document.querySelectorAll('#tbodyrow tr');
 
       tableRows.forEach(row => {
-        const number = getTextBySelector('.numeroLicitacao', row);
+        const execution_process_id = getTextBySelector('.numeroLicitacao', row);
         const execution_process = getTextBySelector('.modalidade', row);
         const publish_date = getTextBySelector('.dataPublicacao', row);
         const process_number = getTextBySelector('.numeroProcesso', row);
@@ -56,7 +74,7 @@ export default class ExtractProgramsListService {
         );
 
         const program: IExtractExecutionProcess = {
-          number,
+          execution_process_id,
           execution_process,
           publish_date,
           process_number,
@@ -72,14 +90,23 @@ export default class ExtractProgramsListService {
       return data;
     });
 
-    const executionProcesses = extractedExecutionProcesses.map<
-      IExecutionProcess
-    >(executionProcess => {
-      return {
+    const executionProcesses: IExecutionProcess[] = [];
+
+    for (const executionProcess of extractedExecutionProcesses) {
+      await this.navigateToExecutionProcessDetailsPage.execute({
+        execution_process_id: executionProcess.execution_process_id,
+      });
+
+      const details = await this.extractMainDetails.execute();
+
+      await this.goBackFromExecutionProcessDetails.execute();
+
+      executionProcesses.push({
         ...executionProcess,
         publish_date: parseDate(executionProcess.publish_date),
-      };
-    });
+        details,
+      });
+    }
 
     return executionProcesses;
   }

@@ -1,5 +1,7 @@
+import IExecutionProcessDetails from './details';
+
 export default interface IExecutionProcess {
-  number: string;
+  execution_process_id: string;
   execution_process: string;
   publish_date?: Date;
   process_number: string;
@@ -7,4 +9,5 @@ export default interface IExecutionProcess {
   origin_system_status: string;
   origin_system: string;
   execution_process_accept: string;
+  details: IExecutionProcessDetails;
 }

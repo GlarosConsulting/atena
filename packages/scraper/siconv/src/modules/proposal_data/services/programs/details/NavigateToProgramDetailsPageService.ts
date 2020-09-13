@@ -30,7 +30,9 @@ export default class NavigateToProgramDetailsPageService {
     );
 
     if (!findProgramDetailsButtonElement) {
-      throw new AppError('It was not able to find program id element.');
+      throw new AppError(
+        'It was not able to find program details button element.',
+      );
     }
 
     await this.page.clickForNavigate(findProgramDetailsButtonElement);
