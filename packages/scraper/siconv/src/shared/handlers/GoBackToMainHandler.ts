@@ -2,7 +2,7 @@ import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Brow
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
-class BackToMainHandler implements IHandler {
+class GoBackToMainHandler implements IHandler {
   public async handle(_browser: Browser, page: Page): Promise<void> {
     let title = await page.driver.title();
 
@@ -14,4 +14,4 @@ class BackToMainHandler implements IHandler {
   }
 }
 
-export default BackToMainHandler;
+export default GoBackToMainHandler;

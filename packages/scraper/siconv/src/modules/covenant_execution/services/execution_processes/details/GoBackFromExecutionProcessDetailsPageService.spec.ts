@@ -8,9 +8,11 @@ import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgre
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import NavigateToCovenantExecutionPageService from '../NavigateToCovenantExecutionPageService';
-import ExtractExecutionProcessesListService from './ExtractExecutionProcessesListService';
-import NavigateToExecutionProcessesPageService from './NavigateToExecutionProcessesPageService';
+import NavigateToCovenantExecutionPageService from '../../NavigateToCovenantExecutionPageService';
+import ExtractExecutionProcessesListService from '../ExtractExecutionProcessesListService';
+import NavigateToExecutionProcessesPageService from '../NavigateToExecutionProcessesPageService';
+import GoBackFromExecutionProcessDetailsPageService from './GoBackFromExecutionProcessDetailsPageService';
+import NavigateToExecutionProcessDetailsPageService from './NavigateToExecutionProcessDetailsPageService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
@@ -19,11 +21,13 @@ let openAgreementById: OpenAgreementByIdService;
 let navigateToCovenantExecutionPage: NavigateToCovenantExecutionPageService;
 let navigateToExecutionProcessesPage: NavigateToExecutionProcessesPageService;
 let extractExecutionProcessesList: ExtractExecutionProcessesListService;
+let navigateToExecutionProcessDetailsPage: NavigateToExecutionProcessDetailsPageService;
+let goBackFromExecutionProcessDetailsPage: GoBackFromExecutionProcessDetailsPageService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractExecutionProcessesList', () => {
+describe('GoBackFromExecutionProcessDetailsPage', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
@@ -45,13 +49,19 @@ describe('ExtractExecutionProcessesList', () => {
     extractExecutionProcessesList = new ExtractExecutionProcessesListService(
       page,
     );
+    navigateToExecutionProcessDetailsPage = new NavigateToExecutionProcessDetailsPageService(
+      page,
+    );
+    goBackFromExecutionProcessDetailsPage = new GoBackFromExecutionProcessDetailsPageService(
+      page,
+    );
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract execution processes list', async () => {
+  it('should be able to go back from execution process details page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -69,23 +79,20 @@ describe('ExtractExecutionProcessesList', () => {
 
     await navigateToExecutionProcessesPage.execute();
 
-    const executionProcesses = await extractExecutionProcessesList.execute();
+    const [
+      { execution_process_id },
+    ] = await extractExecutionProcessesList.execute();
 
-    expect(executionProcesses).toContainEqual(
-      expect.objectContaining({
-        execution_process_id: expect.any(String),
-        execution_process: expect.any(String),
-        process_number: expect.any(String),
-        status: expect.any(String),
-        origin_system_status: expect.any(String),
-        origin_system: expect.any(String),
-        execution_process_accept: expect.any(String),
-        details: expect.any(Object),
-      }),
-    );
+    await navigateToExecutionProcessDetailsPage.execute({
+      execution_process_id,
+    });
+
+    await goBackFromExecutionProcessDetailsPage.execute();
+
+    await expect(page.driver.title()).resolves.toEqual('Listar Licitacoes');
   });
 
-  it('should not be able to extract execution processes list outside execution processes page', async () => {
+  it('should not be able to go back from execution process details page outside the same', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -98,7 +105,44 @@ describe('ExtractExecutionProcessesList', () => {
     await openAgreementById.execute({ agreement_id });
 
     await expect(
-      extractExecutionProcessesList.execute(),
+      goBackFromExecutionProcessDetailsPage.execute(),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to go back from execution process details page when not able to find go back button element', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '12.198.693/0001-58',
+    });
+
+    const agreements = await extractAgreementsList.execute();
+
+    const { agreement_id } = agreements.find(
+      findAgreement => findAgreement.agreement_id === '876519/2018',
+    );
+
+    await openAgreementById.execute({ agreement_id });
+
+    await navigateToCovenantExecutionPage.execute();
+
+    await navigateToExecutionProcessesPage.execute();
+
+    const [
+      { execution_process_id },
+    ] = await extractExecutionProcessesList.execute();
+
+    await navigateToExecutionProcessDetailsPage.execute({
+      execution_process_id,
+    });
+
+    jest
+      .spyOn(page, 'findElementsBySelector')
+      .mockImplementationOnce(async () => {
+        return [];
+      });
+
+    await expect(
+      goBackFromExecutionProcessDetailsPage.execute(),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

@@ -3,7 +3,7 @@ import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Brow
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
-class BackToAgreementsListHandler implements IHandler {
+class GoBackFromAgreementHandler implements IHandler {
   public async handle(_browser: Browser, page: Page): Promise<void> {
     const findBackButtonElements = await page.findElementsBySelector(
       'td.FormLinhaBotoes input[value="Voltar"]',
@@ -19,4 +19,4 @@ class BackToAgreementsListHandler implements IHandler {
   }
 }
 
-export default BackToAgreementsListHandler;
+export default GoBackFromAgreementHandler;

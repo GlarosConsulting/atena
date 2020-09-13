@@ -8,22 +8,24 @@ import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgre
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
 
-import ExtractProgramsListService from './ExtractProgramsListService';
+import ExtractProgramsListService from '../ExtractProgramsListService';
+import NavigateToProgramsPageService from '../NavigateToProgramsPageService';
+import ExtractProgramDetailsService from './ExtractProgramDetailsService';
 import NavigateToProgramDetailsPageService from './NavigateToProgramDetailsPageService';
-import NavigateToProgramsPageService from './NavigateToProgramsPageService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
 let searchAgreements: SearchAgreementsService;
 let extractAgreementsList: ExtractAgreementsListService;
-let openAgreement: OpenAgreementByIdService;
+let openAgreementById: OpenAgreementByIdService;
 let navigateToProgramsPage: NavigateToProgramsPageService;
 let extractProgramsList: ExtractProgramsListService;
 let navigateToProgramDetailsPage: NavigateToProgramDetailsPageService;
+let extractProgramDetails: ExtractProgramDetailsService;
 
 let browser: Browser;
 let page: Page;
 
-describe('NavigateToProgramDetailsPage', () => {
+describe('ExtractProgramDetails', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
@@ -35,19 +37,20 @@ describe('NavigateToProgramDetailsPage', () => {
 
     searchAgreements = new SearchAgreementsService(page);
     extractAgreementsList = new ExtractAgreementsListService(page);
-    openAgreement = new OpenAgreementByIdService(page);
+    openAgreementById = new OpenAgreementByIdService(page);
     navigateToProgramsPage = new NavigateToProgramsPageService(page);
     extractProgramsList = new ExtractProgramsListService(page);
     navigateToProgramDetailsPage = new NavigateToProgramDetailsPageService(
       page,
     );
+    extractProgramDetails = new ExtractProgramDetailsService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to navigate to programs page', async () => {
+  it('should be able to extract program details', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -57,7 +60,7 @@ describe('NavigateToProgramDetailsPage', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
     await navigateToProgramsPage.execute();
 
@@ -65,21 +68,31 @@ describe('NavigateToProgramDetailsPage', () => {
 
     await navigateToProgramDetailsPage.execute({ program_id });
 
-    await expect(page.driver.title()).resolves.toEqual('Valores do Programa');
+    const details = await extractProgramDetails.execute();
+
+    expect(details).toEqual(
+      expect.objectContaining({
+        program_id: expect.any(String),
+        program_name: expect.any(String),
+        investment_items: expect.any(String),
+        counterpart_rule: expect.any(String),
+        values: {
+          investment_items_global_value: expect.any(Number),
+          counterpart_values: {
+            total_value: expect.any(Number),
+            financial_value: expect.any(Number),
+            assets_services_value: expect.any(Number),
+          },
+          transfer_values: {
+            total_value: expect.any(Number),
+            amendment_value: expect.any(String),
+          },
+        },
+      }),
+    );
   });
 
-  it('should not be able to navigate to program details page outside agreement programs page', async () => {
-    await searchAgreements.execute({
-      by: By.CNPJ,
-      value: '12.198.693/0001-58',
-    });
-
-    await expect(
-      navigateToProgramDetailsPage.execute({ program_id: 'any-program-id' }),
-    ).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('should not be able to navigate to program details page when not able to find program id element', async () => {
+  it('should not be able to extract program details outside program details page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -89,18 +102,10 @@ describe('NavigateToProgramDetailsPage', () => {
 
     const [{ agreement_id }] = agreements;
 
-    await openAgreement.execute({ agreement_id });
+    await openAgreementById.execute({ agreement_id });
 
-    await navigateToProgramsPage.execute();
-
-    const [{ program_id }] = await extractProgramsList.execute();
-
-    jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
-      return [];
-    });
-
-    await expect(
-      navigateToProgramDetailsPage.execute({ program_id }),
-    ).rejects.toBeInstanceOf(AppError);
+    await expect(extractProgramDetails.execute()).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 });

@@ -19,7 +19,7 @@ let extractValues: ExtractValuesService;
 let browser: Browser;
 let page: Page;
 
-describe('ExtractBankData', () => {
+describe('ExtractValues', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
