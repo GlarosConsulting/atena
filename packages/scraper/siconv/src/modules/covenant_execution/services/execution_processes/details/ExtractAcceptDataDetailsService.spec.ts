@@ -11,7 +11,7 @@ import SearchAgreementsService from '@modules/search/services/SearchAgreementsSe
 import NavigateToCovenantExecutionPageService from '../../NavigateToCovenantExecutionPageService';
 import ExtractExecutionProcessesListService from '../ExtractExecutionProcessesListService';
 import NavigateToExecutionProcessesPageService from '../NavigateToExecutionProcessesPageService';
-import ExtractMainDetailsService from './ExtractMainDetailsService';
+import ExtractAcceptDataDetailsService from './ExtractAcceptDataDetailsService';
 import NavigateToExecutionProcessDetailsPageService from './NavigateToExecutionProcessDetailsPageService';
 
 let puppeteerBrowserProvider: PuppeteerBrowserProvider;
@@ -22,16 +22,16 @@ let navigateToCovenantExecutionPage: NavigateToCovenantExecutionPageService;
 let navigateToExecutionProcessesPage: NavigateToExecutionProcessesPageService;
 let extractExecutionProcessesList: ExtractExecutionProcessesListService;
 let navigateToExecutionProcessDetailsPage: NavigateToExecutionProcessDetailsPageService;
-let extractMainDetails: ExtractMainDetailsService;
+let extractAcceptDataDetails: ExtractAcceptDataDetailsService;
 
 let browser: Browser;
 let page: Page;
 
-describe('ExtractMainDetails', () => {
+describe('ExtractAcceptDataDetails', () => {
   beforeAll(async () => {
     puppeteerBrowserProvider = new PuppeteerBrowserProvider();
 
-    browser = await puppeteerBrowserProvider.launch({ headless: false });
+    browser = await puppeteerBrowserProvider.launch();
   });
 
   beforeEach(async () => {
@@ -52,14 +52,14 @@ describe('ExtractMainDetails', () => {
     navigateToExecutionProcessDetailsPage = new NavigateToExecutionProcessDetailsPageService(
       page,
     );
-    extractMainDetails = new ExtractMainDetailsService(page);
+    extractAcceptDataDetails = new ExtractAcceptDataDetailsService(page);
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  it('should be able to extract execution process main details', async () => {
+  it('should be able to extract execution process accept data details', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -85,38 +85,21 @@ describe('ExtractMainDetails', () => {
       execution_process_id,
     });
 
-    const mainDetails = await extractMainDetails.execute();
+    const acceptDataDetails = await extractAcceptDataDetails.execute();
 
-    expect(mainDetails).toEqual(
+    expect(acceptDataDetails).toEqual(
       expect.objectContaining({
-        execution_process: expect.any(String),
-        buy_type: expect.any(String),
-        bidding_status: expect.any(String),
-        resource_origin: expect.any(String),
-        financial_resource: expect.any(String),
-        modality: expect.any(String),
-        bidding_type: expect.any(String),
-        process_number: expect.any(String),
-        bidding_number: expect.any(String),
-        object: expect.any(String),
-        legal_foundation: expect.any(String),
+        responsibility_assignment: expect.any(String),
+        analysis_date: expect.any(Date),
+        execution_process_accept: expect.any(String),
         justification: expect.any(String),
-        bidding_value: expect.any(Number),
-        dates: expect.any(Object),
-        homologation_responsible: {
-          cpf_document: expect.any(String),
-          name: expect.any(String),
-          role: expect.any(String),
-        },
-        city: {
-          name: expect.any(String),
-          state: expect.any(String),
-        },
+        responsible: expect.any(String),
+        analysis_record_date: expect.any(Date),
       }),
     );
   });
 
-  it('should not be able to extract execution process main details outside execution process details page', async () => {
+  it('should not be able to extract execution process accept data details outside execution process details page', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -128,10 +111,12 @@ describe('ExtractMainDetails', () => {
 
     await openAgreementById.execute({ agreement_id });
 
-    await expect(extractMainDetails.execute()).rejects.toBeInstanceOf(AppError);
+    await expect(extractAcceptDataDetails.execute()).rejects.toBeInstanceOf(
+      AppError,
+    );
   });
 
-  it('should not be able to extract main details when execution process details page does not have this section', async () => {
+  it('should not be able to extract accept data details when execution process details page does not have this section', async () => {
     await searchAgreements.execute({
       by: By.CNPJ,
       value: '12.198.693/0001-58',
@@ -161,8 +146,8 @@ describe('ExtractMainDetails', () => {
       return [];
     });
 
-    const mainDetails = await extractMainDetails.execute();
+    const acceptDataDetails = await extractAcceptDataDetails.execute();
 
-    expect(mainDetails).toBeFalsy();
+    expect(acceptDataDetails).toBeFalsy();
   });
 });

@@ -26,12 +26,12 @@ export default class ExtractBankDataService {
       throw new AppError('You should be on opened agreement page.');
     }
 
-    const findBankDataSubtitles = await this.page.findElementsByText(
+    const [findBankDataSubtitle] = await this.page.findElementsByText(
       'Dados Bancários',
       'td[@class="subtitulo"]',
     );
 
-    if (findBankDataSubtitles.length === 0) {
+    if (!findBankDataSubtitle) {
       return undefined;
     }
 
