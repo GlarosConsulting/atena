@@ -59,7 +59,7 @@ class Executor {
 
     await browser.use(GoBackToMainHandler);
 
-    /* // await agreementsListPage.navigateToPage(2);
+    // await agreementsListPage.navigateToPage(2);
 
     const agreements = await agreementsListPage.getAll();
 
@@ -86,9 +86,9 @@ class Executor {
 
     if (cacheAgreement) {
       console.log(JSON.stringify(cacheAgreement));
-    } */
+    }
 
-    for (let i = currentPage; i <= totalPages; i++) {
+    /* for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {
         await agreementsListPage.navigateToPage(i);
       }
@@ -124,7 +124,7 @@ class Executor {
           console.log(JSON.stringify(cacheAgreement));
         }
       }
-    }
+    } */
 
     console.timeEnd('Elapsed time');
   }

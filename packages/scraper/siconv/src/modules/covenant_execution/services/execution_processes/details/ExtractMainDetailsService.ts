@@ -36,6 +36,17 @@ export default class ExtractMainDetailsService {
       throw new AppError('You should be on execution process details page.');
     }
 
+    const [
+      findExecutionProcessDataSubtitle,
+    ] = await this.page.findElementsByText(
+      'Dados do Processo de Execução',
+      'div[@class="subTitulo"]',
+    );
+
+    if (!findExecutionProcessDataSubtitle) {
+      return undefined;
+    }
+
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
@@ -68,13 +79,14 @@ export default class ExtractMainDetailsService {
         const bidding_number = getTextBySelector(
           '#tr-alterarDadosNumeroDaLicitacao > td.field',
         );
-        const object = getTextBySelector('#alterarDadosObjeto');
+        const object = document.querySelector('#alterarDadosObjeto')
+          .textContent;
         const legal_foundation = getTextBySelector(
           '#tr-alterarDadosFundamentoLegal > td.field',
         );
-        const justification = getTextBySelector(
+        const justification = document.querySelector(
           '#tr-alterarDadosFundamentoLegal > td.field',
-        );
+        ).textContent;
         const bidding_value = getTextBySelector('#alterarDadosJustificativa');
 
         const notice_publish_date = getTextBySelector(

@@ -8,6 +8,7 @@ import parseDate from '@utils/parseDate';
 
 import IExecutionProcess from '@modules/covenant_execution/models/execution_processes/IExecutionProcess';
 
+import ExtractAcceptDataDetailsService from './details/ExtractAcceptDataDetailsService';
 import ExtractMainDetailsService from './details/ExtractMainDetailsService';
 import GoBackFromExecutionProcessDetailsService from './details/GoBackFromExecutionProcessDetailsPageService';
 import NavigateToExecutionProcessDetailsPageService from './details/NavigateToExecutionProcessDetailsPageService';
@@ -23,6 +24,8 @@ export default class ExtractProgramsListService {
 
   private extractMainDetails: ExtractMainDetailsService;
 
+  private extractAcceptDataDetails: ExtractAcceptDataDetailsService;
+
   private goBackFromExecutionProcessDetails: GoBackFromExecutionProcessDetailsService;
 
   constructor(
@@ -33,6 +36,7 @@ export default class ExtractProgramsListService {
       page,
     );
     this.extractMainDetails = new ExtractMainDetailsService(page);
+    this.extractAcceptDataDetails = new ExtractAcceptDataDetailsService(page);
     this.goBackFromExecutionProcessDetails = new GoBackFromExecutionProcessDetailsService(
       page,
     );
@@ -97,14 +101,18 @@ export default class ExtractProgramsListService {
         execution_process_id: executionProcess.execution_process_id,
       });
 
-      const details = await this.extractMainDetails.execute();
+      const main_details = await this.extractMainDetails.execute();
+      const accept_data_details = await this.extractAcceptDataDetails.execute();
 
       await this.goBackFromExecutionProcessDetails.execute();
 
       executionProcesses.push({
         ...executionProcess,
         publish_date: parseDate(executionProcess.publish_date),
-        details,
+        details: {
+          main_details,
+          accept_data_details,
+        },
       });
     }
 
