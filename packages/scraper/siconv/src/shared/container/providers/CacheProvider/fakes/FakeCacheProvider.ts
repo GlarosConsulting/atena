@@ -1,3 +1,7 @@
+import cacheConfig from '@config/cache';
+
+import ICacheInvalidateDTO from '../dtos/ICacheInvalidateDTO';
+import ICacheInvalidatePrefixDTO from '../dtos/ICacheInvalidatePrefixDTO';
 import ICacheProvider from '../models/ICacheProvider';
 
 interface ICacheData {
@@ -7,12 +11,31 @@ interface ICacheData {
 class FakeCacheProvider implements ICacheProvider {
   private cache: ICacheData = {};
 
-  public async save(key: string, value: any): Promise<void> {
-    this.cache[key] = JSON.stringify(value);
+  public async save(
+    key: string,
+    value: any,
+    withCacheKey?: boolean,
+  ): Promise<void> {
+    let setKey = key;
+
+    if (withCacheKey) {
+      setKey = `${cacheConfig.key}-${setKey}`;
+    }
+
+    this.cache[setKey] = JSON.stringify(value);
   }
 
-  public async recover<T>(key: string): Promise<T | null> {
-    const data = this.cache[key];
+  public async recover<T>(
+    key: string,
+    withCacheKey?: boolean,
+  ): Promise<T | null> {
+    let getKey = key;
+
+    if (withCacheKey) {
+      getKey = `${cacheConfig.key}-${getKey}`;
+    }
+
+    const data = this.cache[getKey];
 
     if (!data) return null;
 
@@ -21,15 +44,31 @@ class FakeCacheProvider implements ICacheProvider {
     return parsedData;
   }
 
-  public async invalidate(...keys: string[]): Promise<void> {
+  public async invalidate(data: ICacheInvalidateDTO): Promise<void> {
+    let { keys } = data;
+
+    if (data.withCacheKey) {
+      keys = keys.map(key => `${cacheConfig.key}-${key}`);
+    }
+
     keys.forEach(key => {
       delete this.cache[key];
     });
   }
 
-  public async invalidatePrefix(...prefixes: string[]): Promise<void> {
+  public async invalidatePrefix(
+    data: ICacheInvalidatePrefixDTO,
+  ): Promise<void> {
     const keys = Object.keys(this.cache).filter(key =>
-      prefixes.some(prefix => key.startsWith(`${prefix}`)),
+      data.prefixes.some(prefix => {
+        let findPrefix = prefix;
+
+        if (data.withCacheKey) {
+          findPrefix = `${cacheConfig.key}-${prefix}`;
+        }
+
+        return key.startsWith(findPrefix);
+      }),
     );
 
     keys.forEach(key => {

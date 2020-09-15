@@ -1,14 +1,13 @@
-import 'dotenv/config';
-import 'reflect-metadata';
-
-import '@shared/container';
-
 import { container, injectable, inject } from 'tsyringe';
 
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
 import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/models/IBrowserProvider';
+
+import cacheConfig from '@config/cache';
+
+import Timer from '@utils/timer';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
@@ -23,8 +22,13 @@ import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 import GoBackFromAgreementHandler from '../../handlers/GoBackFromAgreementHandler';
 import GoBackToMainHandler from '../../handlers/GoBackToMainHandler';
 
+interface IRequest {
+  company: string;
+  verbose: boolean;
+}
+
 @injectable()
-class Executor {
+export default class Executor {
   constructor(
     @inject('BrowserProvider')
     private browserProvider: IBrowserProvider<Browser>,
@@ -33,10 +37,18 @@ class Executor {
     private cacheProvider: ICacheProvider,
   ) {}
 
-  public async run(): Promise<void> {
-    console.time('Elapsed time');
+  public async run({ company, verbose }: IRequest): Promise<void> {
+    const log = (str: string) => {
+      if (verbose) {
+        console.log(str);
+      }
+    };
 
-    const browser = await this.browserProvider.launch({ headless: false });
+    const timer = new Timer(`agreements-scraping-${company}`);
+
+    timer.start();
+
+    const browser = await this.browserProvider.launch({ headless: true });
     const page = await browser.newPage();
 
     container.registerInstance<IBrowser<any, any>>('Browser', browser);
@@ -46,7 +58,7 @@ class Executor {
 
     await siconvSearchPage.search({
       by: By.CNPJ,
-      value: '12.198.693/0001-58',
+      value: company,
     });
 
     const agreementsListPage = new AgreementsListPage();
@@ -54,12 +66,9 @@ class Executor {
     const currentPage = await agreementsListPage.getCurrentPage();
     const totalPages = await agreementsListPage.getTotalPages();
 
-    console.log(`Current page: ${currentPage}`);
-    console.log(`Total pages: ${totalPages}`);
-
     await browser.use(GoBackToMainHandler);
 
-    // await agreementsListPage.navigateToPage(2);
+    /* // await agreementsListPage.navigateToPage(2);
 
     const agreements = await agreementsListPage.getAll();
 
@@ -86,9 +95,11 @@ class Executor {
 
     if (cacheAgreement) {
       console.log(JSON.stringify(cacheAgreement));
-    }
+    } */
 
-    /* for (let i = currentPage; i <= totalPages; i++) {
+    const scrapedAgreements: IAgreement[] = [];
+
+    for (let i = currentPage; i <= totalPages; i++) {
       if (i > 1) {
         await agreementsListPage.navigateToPage(i);
       }
@@ -102,9 +113,14 @@ class Executor {
 
         let cacheAgreement = agreement;
 
-        console.log(agreement.agreement_id);
+        const agreementIndex = agreements.indexOf(agreement) + 1;
 
-        await this.cacheProvider.save('agreement', cacheAgreement);
+        log(`\nPage: ${i}/${totalPages}`);
+        log(
+          `Scraping agreement (${agreementIndex}/${agreements.length}): ${agreement.agreement_id}`,
+        );
+
+        await this.cacheProvider.save('agreement', cacheAgreement, true);
 
         await agreementsListPage.openById(agreement.agreement_id);
 
@@ -118,21 +134,19 @@ class Executor {
 
         cacheAgreement = await this.cacheProvider.recover<IAgreement>(
           'agreement',
+          true,
         );
 
         if (cacheAgreement) {
-          console.log(JSON.stringify(cacheAgreement));
+          scrapedAgreements.push(cacheAgreement);
         }
       }
-    } */
+    }
 
-    console.timeEnd('Elapsed time');
+    timer.stop();
+
+    const formattedTimer = timer.format();
+
+    console.log(`\nElapsed time (company cnpj: ${company}): ${formattedTimer}`);
   }
 }
-
-const executor = container.resolve(Executor);
-
-executor.run().catch(err => {
-  console.log('Occurred an unexpected error:');
-  console.log(err);
-});

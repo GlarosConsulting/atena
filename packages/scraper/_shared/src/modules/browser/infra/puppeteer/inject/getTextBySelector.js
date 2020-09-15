@@ -3,7 +3,7 @@ function getTextBySelector(selector, parent = document, index = 0) {
 
   if(htmlElements.length === 0) return undefined;
 
-  return htmlElements[index].innerText;
+  return htmlElements[index].textContent.trim();
 }
 
 export default getTextBySelector;

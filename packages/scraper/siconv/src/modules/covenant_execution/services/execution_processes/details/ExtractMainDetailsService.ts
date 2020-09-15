@@ -79,14 +79,13 @@ export default class ExtractMainDetailsService {
         const bidding_number = getTextBySelector(
           '#tr-alterarDadosNumeroDaLicitacao > td.field',
         );
-        const object = document.querySelector('#alterarDadosObjeto')
-          .textContent;
+        const object = getTextBySelector('#alterarDadosObjeto');
         const legal_foundation = getTextBySelector(
           '#tr-alterarDadosFundamentoLegal > td.field',
         );
-        const justification = document.querySelector(
+        const justification = getTextBySelector(
           '#tr-alterarDadosFundamentoLegal > td.field',
-        ).textContent;
+        );
         const bidding_value = getTextBySelector('#alterarDadosJustificativa');
 
         const notice_publish_date = getTextBySelector(

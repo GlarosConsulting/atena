@@ -29,7 +29,10 @@ class ExecutionProcessesHandler implements IHandler {
       execution_processes_list,
     };
 
-    const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
+    const agreement = await this.cacheProvider.recover<IAgreement>(
+      'agreement',
+      true,
+    );
 
     if (!agreement) return;
 
@@ -41,7 +44,7 @@ class ExecutionProcessesHandler implements IHandler {
       },
     } as PartialDeep<IAgreement>);
 
-    await this.cacheProvider.save('agreement', agreement);
+    await this.cacheProvider.save('agreement', agreement, true);
   }
 }
 

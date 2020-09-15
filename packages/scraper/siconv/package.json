@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --root-mode upward --extensions \".js,.ts\" --ignore *.spec.ts --out-dir dist --copy-files",
-    "start": "node dist/shared/puppeteer/executor/index.js",
-    "dev": "ts-node -r tsconfig-paths/register --transpile-only src/shared/puppeteer/executor/index.ts",
+    "start": "node dist/shared/index.js",
+    "dev": "ts-node -r tsconfig-paths/register --transpile-only src/shared/index.ts",
     "test": "jest"
   },
   "dependencies": {
@@ -14,7 +14,8 @@
     "date-fns": "^2.16.0",
     "date-fns-tz": "^1.0.10",
     "ioredis": "^4.17.3",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "yargs": "^16.0.3"
   },
   "devDependencies": {
     "@types/ioredis": "^4.17.3",

@@ -4,6 +4,8 @@ import { RedisOptions } from 'ioredis';
 
 interface ICacheConfig {
   driver: 'redis';
+  key: string;
+
   config: {
     redis: RedisOptions;
   };
@@ -11,6 +13,7 @@ interface ICacheConfig {
 
 export default {
   driver: 'redis',
+  key: process.env.REDIS_DEFAULT_CACHE_KEY,
 
   config: {
     redis: {

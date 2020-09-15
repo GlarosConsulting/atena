@@ -37,7 +37,10 @@ class MainHandler implements IHandler {
       values,
     };
 
-    const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
+    const agreement = await this.cacheProvider.recover<IAgreement>(
+      'agreement',
+      true,
+    );
 
     if (!agreement) return;
 
@@ -49,7 +52,7 @@ class MainHandler implements IHandler {
       },
     } as PartialDeep<IAgreement>);
 
-    await this.cacheProvider.save('agreement', agreement);
+    await this.cacheProvider.save('agreement', agreement, true);
   }
 }
 
