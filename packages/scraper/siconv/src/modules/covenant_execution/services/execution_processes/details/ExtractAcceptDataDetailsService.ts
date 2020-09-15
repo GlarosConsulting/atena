@@ -52,9 +52,9 @@ export default class ExtractAcceptDataDetailsService {
       const execution_process_accept = getTextBySelector(
         '#tr-alterarDadosSituacaoAceiteProcessoExecucao > td.field',
       );
-      const justification = document.querySelector(
+      const justification = getTextBySelector(
         '#alterarDadosJustificativaAceiteProcessoExecucao',
-      ).textContent;
+      );
       const responsible = getTextBySelector(
         '#tr-alterarDadosResponsavelAceiteProcessoExecucao > td.field',
       );

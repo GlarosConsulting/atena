@@ -29,7 +29,7 @@ class Page implements IPage<puppeteer.Page> {
   ): Promise<void> {
     await this.driver.click(selector);
 
-    return this.driver.type(selector, text, options);
+    await this.driver.type(selector, String(text), options);
   }
 
   public async findElementsBySelector(

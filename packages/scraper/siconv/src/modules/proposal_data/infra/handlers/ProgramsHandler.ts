@@ -28,7 +28,10 @@ class ProgramsHandler implements IHandler {
       programs_list,
     };
 
-    const agreement = await this.cacheProvider.recover<IAgreement>('agreement');
+    const agreement = await this.cacheProvider.recover<IAgreement>(
+      'agreement',
+      true,
+    );
 
     if (!agreement) return;
 
@@ -40,7 +43,7 @@ class ProgramsHandler implements IHandler {
       },
     } as PartialDeep<IAgreement>);
 
-    await this.cacheProvider.save('agreement', agreement);
+    await this.cacheProvider.save('agreement', agreement, true);
   }
 }
 
