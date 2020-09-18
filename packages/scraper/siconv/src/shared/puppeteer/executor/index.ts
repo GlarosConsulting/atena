@@ -48,7 +48,7 @@ export default class Executor {
 
     timer.start();
 
-    const browser = await this.browserProvider.launch({ headless: true });
+    const browser = await this.browserProvider.launch({ headless: false });
     const page = await browser.newPage();
 
     container.registerInstance<IBrowser<any, any>>('Browser', browser);
@@ -108,6 +108,14 @@ export default class Executor {
 
       for (const agreement of agreements) {
         if (i > 1) {
+          const nowTotalPages = await agreementsListPage.getTotalPages();
+
+          if (nowTotalPages < totalPages) {
+            await agreementsListPage.openById(agreements[0].agreement_id);
+
+            await browser.run(page, GoBackFromAgreementHandler);
+          }
+
           await agreementsListPage.navigateToPage(i);
         }
 
@@ -147,6 +155,8 @@ export default class Executor {
 
     const formattedTimer = timer.format();
 
-    console.log(`\nElapsed time (company cnpj: ${company}): ${formattedTimer}`);
+    console.log(
+      `\nElapsed time for company CNPJ '${company}': ${formattedTimer}`,
+    );
   }
 }

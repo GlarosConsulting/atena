@@ -20,7 +20,13 @@ export default class ExtractAgreementsListService {
       throw new AppError('You should be on agreements list page.');
     }
 
-    await this.page.driver.waitForSelector('#tbodyrow');
+    const [findTableBodyElement] = await this.page.findElementsBySelector(
+      '#tbodyrow',
+    );
+
+    if (!findTableBodyElement) {
+      return [];
+    }
 
     await injectFunctions(this.page);
 

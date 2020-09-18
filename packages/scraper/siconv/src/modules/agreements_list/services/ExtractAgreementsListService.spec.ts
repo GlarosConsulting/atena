@@ -50,6 +50,17 @@ describe('ExtractAgreementsList', () => {
     );
   });
 
+  it('should be able to extract agreements list', async () => {
+    await searchAgreements.execute({
+      by: By.CNPJ,
+      value: '24.225.834/0001-63',
+    });
+
+    const agreements = await extractAgreementsList.execute();
+
+    expect(agreements).toEqual([]);
+  });
+
   it('should not be able to extract agreements list outside agreements list page', async () => {
     await expect(extractAgreementsList.execute()).rejects.toBeInstanceOf(
       AppError,
