@@ -10,7 +10,10 @@ class Page implements IPage<puppeteer.Page> {
     url: string,
     options?: IGoToOptionsDTO,
   ): Promise<puppeteer.Response> {
-    return this.driver.goto(url, { waitUntil: 'networkidle2', ...options });
+    return this.driver.goto(url, {
+      waitUntil: 'networkidle2',
+      ...options,
+    });
   }
 
   public async select(

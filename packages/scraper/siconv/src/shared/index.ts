@@ -12,7 +12,7 @@ import Executor from '@shared/puppeteer/executor';
 
 interface IArgv extends Argv {
   company: string;
-  cacheKey: string;
+  cache_key: string;
   verbose: boolean;
 }
 
@@ -27,24 +27,24 @@ command(
   (argv: IArgv) => {
     const executor = container.resolve(Executor);
 
-    const { company, cacheKey, verbose } = argv;
+    const { company, cache_key, verbose } = argv;
 
-    if (cacheKey) {
-      cacheConfig.key = cacheKey;
+    if (cache_key) {
+      cacheConfig.key = cache_key;
     }
 
     executor
       .run({ company, verbose })
-      .then(() => {
-        process.exit();
-      })
       .catch(err => {
         console.log('Occurred an unexpected error:');
         console.log(err);
+      })
+      .finally(() => {
+        process.exit();
       });
   },
 )
-  .option('cacheKey', {
+  .option('cache_key', {
     type: 'string',
     description: 'Set the custom cache key',
   })

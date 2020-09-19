@@ -10,6 +10,7 @@ class PuppeteerBrowserProvider implements IBrowserProvider<Browser> {
       product: 'chrome',
       ignoreHTTPSErrors: true,
       args: [
+        '-wait-for-browser',
         '--ignore-certificate-errors',
         '--enable-features=NetworkService',
         '--no-sandbox',

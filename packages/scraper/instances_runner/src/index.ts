@@ -14,7 +14,7 @@ async function runScraperForCompany(companyCnpj: string) {
     'start',
     'run',
     companyCnpj,
-    '--cacheKey',
+    '--cache_key',
     '123456789',
     // '--verbose',
   ]);
