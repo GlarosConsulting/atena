@@ -45,6 +45,7 @@
     "no-console": "off",
     "no-plusplus": "off",
     "react/prop-types": "off",
+    "no-loop-func": "off",
     "jsx-a11y/label-has-for": "off",
     "no-case-declarations": "off",
     "import/prefer-default-export": "off",
