@@ -24,6 +24,7 @@ import GoBackToMainHandler from '../../handlers/GoBackToMainHandler';
 
 interface IRequest {
   company: string;
+  headless: boolean;
   verbose: boolean;
 }
 
@@ -37,7 +38,7 @@ export default class Executor {
     private cacheProvider: ICacheProvider,
   ) {}
 
-  public async run({ company, verbose }: IRequest): Promise<void> {
+  public async run({ company, headless, verbose }: IRequest): Promise<void> {
     const log = (str: string) => {
       if (verbose) {
         console.log(str);
@@ -48,7 +49,7 @@ export default class Executor {
 
     timer.start();
 
-    const browser = await this.browserProvider.launch({ headless: false });
+    const browser = await this.browserProvider.launch({ headless });
     const page = await browser.newPage();
 
     container.registerInstance<IBrowser<any, any>>('Browser', browser);

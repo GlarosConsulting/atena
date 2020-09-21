@@ -16,6 +16,7 @@ async function runScraperForCompany(companyCnpj: string) {
     companyCnpj,
     '--cache_key',
     '123456789',
+    // '--headless',
     // '--verbose',
   ]);
 }
@@ -24,7 +25,7 @@ async function run() {
   const { data: companies } = await api.get<ICompany[]>('companies', {
     params: {
       page: 1,
-      rowsPerPage: 64,
+      rowsPerPage: 256,
     },
   });
 
