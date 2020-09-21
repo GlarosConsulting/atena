@@ -124,7 +124,7 @@
           ".",
           "packages/scraper/_shared",
           "packages/scraper/siconv",
-          "packages/scraper/instances_runner"
+          "packages/scraper/ares"
         ]
       }
     ],
