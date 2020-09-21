@@ -51,10 +51,12 @@ command(
   })
   .option('headless', {
     type: 'boolean',
+    default: false,
     description: 'Run with headless browser',
   })
   .option('verbose', {
     type: 'boolean',
+    default: false,
     description: 'Run with verbose logging',
   })
   .demandCommand(1)

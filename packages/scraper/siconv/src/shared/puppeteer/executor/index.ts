@@ -24,8 +24,8 @@ import GoBackToMainHandler from '../../handlers/GoBackToMainHandler';
 
 interface IRequest {
   company: string;
-  headless: boolean;
-  verbose: boolean;
+  headless?: boolean;
+  verbose?: boolean;
 }
 
 @injectable()

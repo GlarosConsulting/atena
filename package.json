@@ -1,10 +1,21 @@
 {
   "name": "atena",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "André 'Dezzy' <@andredezzy>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">= 12.16.x",
+    "yarn": ">= 1.22.x",
+    "npm": ">= 6.14.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GlarosConsulting/atena.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GlarosConsulting/atena/issues"
+  },
   "workspaces": [
     "packages/scraper/*"
   ],
@@ -12,7 +23,21 @@
     "build:scraper": "lerna run build --scope @scraper/* --stream",
     "lint:fix": "eslint --fix packages --ext ts,tsx",
     "test": "lerna run test --stream --parallel -- --watchAll false",
-    "scraper:siconv": "yarn workspace @scraper/siconv"
+    "scraper:siconv": "yarn workspace @scraper/siconv",
+    "scraper:ares": "yarn workspace @scraper/ares"
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx}": [
+      "yarn lint:fix",
+      "git add",
+      "yarn test --bail --findRelatedTests"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",

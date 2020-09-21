@@ -7,7 +7,7 @@ interface ICompany {
   cnpj: string;
 }
 
-async function runScraperForCompany(companyCnpj: string) {
+async function runScraperForCompany(companyCnpj: string): Promise<void> {
   await spawn('yarn', [
     'workspace',
     '@scraper/siconv',
