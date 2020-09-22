@@ -8,7 +8,7 @@ import { command, Argv } from 'yargs';
 
 import cacheConfig from '@config/cache';
 
-import Executor from '@shared/puppeteer/executor';
+import Launcher from '@shared/puppeteer/launcher';
 
 interface IArgv extends Argv {
   company: string;
@@ -26,7 +26,7 @@ command(
     });
   },
   (argv: IArgv) => {
-    const executor = container.resolve(Executor);
+    const launcher = container.resolve(Launcher);
 
     const { company, cache_key, headless, verbose } = argv;
 
@@ -34,8 +34,8 @@ command(
       cacheConfig.key = cache_key;
     }
 
-    executor
-      .run({ company, headless, verbose })
+    launcher
+      .launch({ company, headless, verbose })
       .catch(err => {
         console.log('Occurred an unexpected error:');
         console.log(err);

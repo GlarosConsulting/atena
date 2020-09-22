@@ -5,8 +5,6 @@ import IBrowser from '@scraper/shared/modules/browser/models/IBrowser';
 import IPage from '@scraper/shared/modules/browser/models/IPage';
 import IBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/models/IBrowserProvider';
 
-import cacheConfig from '@config/cache';
-
 import Timer from '@utils/timer';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
@@ -29,7 +27,7 @@ interface IRequest {
 }
 
 @injectable()
-export default class Executor {
+export default class Launcher {
   constructor(
     @inject('BrowserProvider')
     private browserProvider: IBrowserProvider<Browser>,
@@ -38,7 +36,7 @@ export default class Executor {
     private cacheProvider: ICacheProvider,
   ) {}
 
-  public async run({ company, headless, verbose }: IRequest): Promise<void> {
+  public async launch({ company, headless, verbose }: IRequest): Promise<void> {
     const log = (str: string) => {
       if (verbose) {
         console.log(str);
