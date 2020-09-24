@@ -17,8 +17,8 @@ import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 
-import GoBackFromAgreementHandler from '../../handlers/GoBackFromAgreementHandler';
-import GoBackToMainHandler from '../../handlers/GoBackToMainHandler';
+import GoBackFromAgreementHandler from '../handlers/GoBackFromAgreementHandler';
+import GoBackToMainHandler from '../handlers/GoBackToMainHandler';
 
 interface IRequest {
   company: string;
