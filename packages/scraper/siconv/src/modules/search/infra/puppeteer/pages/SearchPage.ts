@@ -1,8 +1,7 @@
-import { container } from 'tsyringe';
-
 import ISearchDTO from '@modules/search/dtos/ISearchDTO';
 import ISearchPage from '@modules/search/pages/ISearchPage';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
+import { container } from 'tsyringe';
 
 class SearchPage implements ISearchPage {
   public async navigateTo(): Promise<void> {

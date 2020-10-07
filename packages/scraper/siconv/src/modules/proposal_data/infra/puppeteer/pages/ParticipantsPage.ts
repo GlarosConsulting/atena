@@ -1,9 +1,8 @@
-import { container } from 'tsyringe';
-
 import IMainParticipants from '@modules/proposal_data/models/participants/IMainParticipants';
 import IParticipantsPage from '@modules/proposal_data/pages/IParticipantsPage';
 import ExtractMainParticipantsService from '@modules/proposal_data/services/participants/ExtractMainParticipantsService';
 import NavigateToParticipantsPageService from '@modules/proposal_data/services/participants/NavigateToParticipantsPageService';
+import { container } from 'tsyringe';
 
 class ParticipantsPage implements IParticipantsPage {
   public async navigateTo(): Promise<void> {

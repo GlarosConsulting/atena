@@ -2,6 +2,7 @@
   "env": {
     "browser": true,
     "es6": true,
+    "node": true,
     "jest": true
   },
   "globals": {
@@ -22,70 +23,63 @@
     "prettier"
   ],
   "extends": [
+    "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "prettier/react"
   ],
   "rules": {
-    "no-new": "off",
     "prettier/prettier": "error",
-    "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "import/no-dynamic-require": "off",
+    "camelcase": "off",
+    "semi": "off",
+    "comma-dangle": "off",
+    "function-paren-newline": "off",
+    "class-methods-use-this": "off",
+    "space-before-function-paren": "off",
+    "implicit-arrow-linebreak": "off",
+    "arrow-parens": "off",
+    "operator-linebreak": "off",
+    "object-curly-newline": "off",
+    "no-new": "off",
     "no-param-reassign": "off",
     "no-unused-expressions": "off",
     "no-underscore-dangle": "off",
-    "class-methods-use-this": "off",
     "no-useless-constructor": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "camelcase": "off",
     "no-console": "off",
     "no-plusplus": "off",
-    "react/prop-types": "off",
     "no-loop-func": "off",
-    "jsx-a11y/label-has-for": "off",
     "no-case-declarations": "off",
-    "import/prefer-default-export": "off",
     "no-await-in-loop": "off",
     "no-restricted-syntax": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "argsIgnorePattern": "^_|^next$"
-      }
-    ],
-    "react/jsx-filename-extension": [
-      "warn",
-      {
-        "extensions": [
-          ".jsx",
-          ".tsx"
-        ]
-      }
-    ],
+    "import/no-dynamic-require": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/button-has-type": "off",
+    "react/no-danger": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/label-has-for": "off",
     "import-helpers/order-imports": [
       "warn",
       {
-        "newlines-between": "always",
+        "newlinesBetween": "always",
         "groups": [
           [
-            "/^react/"
+            "/^react/",
+            "/^next/"
           ],
-          [
-            "builtin",
-            "external",
-            "internal"
-          ],
+          "module",
           "/^@scraper\/shared/",
           "/^@config/",
           "/^@utils/",
           "/^@shared/",
-          "/^@/",
+          "/^@\//",
           [
             "parent",
             "sibling",
@@ -111,21 +105,20 @@
         }
       }
     ],
-    "@typescript-eslint/explicit-module-boundary-types": [
-      "warn",
-      {
-        "allowArgumentsExplicitlyTypedAsAny": true
-      }
-    ],
-    "import/no-extraneous-dependencies": [
+    "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "devDependencies": true,
-        "packageDir": [
-          ".",
-          "packages/scraper/_shared",
-          "packages/scraper/siconv",
-          "packages/scraper/ares"
+        "argsIgnorePattern": "^_|^next$"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
         ]
       }
     ],
@@ -136,7 +129,7 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
   },
   "settings": {
     "import/extensions": [

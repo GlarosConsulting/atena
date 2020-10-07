@@ -1,3 +1,4 @@
+import IProgramDetails from '@modules/proposal_data/models/programs/IProgramDetails';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
@@ -5,8 +6,6 @@ import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inj
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
 import parsePrice from '@utils/parsePrice';
-
-import IProgramDetails from '@modules/proposal_data/models/programs/IProgramDetails';
 
 interface IExtractProgramDetails extends Omit<IProgramDetails, 'values'> {
   values: {

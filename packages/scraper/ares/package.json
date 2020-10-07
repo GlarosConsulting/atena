@@ -10,7 +10,10 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
+    "ioredis": "^4.17.3",
+    "tsyringe": "^4.3.0"
   },
   "devDependencies": {}
 }

@@ -1,5 +1,3 @@
-import { container } from 'tsyringe';
-
 import IBankData from '@modules/proposal_data/models/main/IBankData';
 import IDates from '@modules/proposal_data/models/main/IDates';
 import IExecutors from '@modules/proposal_data/models/main/IExecutors';
@@ -13,6 +11,7 @@ import ExtractExecutorsService from '@modules/proposal_data/services/main/Extrac
 import ExtractJustificationService from '@modules/proposal_data/services/main/ExtractJustificationService';
 import ExtractMainDataService from '@modules/proposal_data/services/main/ExtractMainDataService';
 import ExtractValuesService from '@modules/proposal_data/services/main/ExtractValuesService';
+import { container } from 'tsyringe';
 
 class DataPage implements IDataPage {
   public async navigateTo(): Promise<void> {

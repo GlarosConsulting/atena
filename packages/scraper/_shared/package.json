@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "puppeteer": "3.0.4"
+    "puppeteer": "3.0.4",
+    "tsyringe": "^4.3.0"
   },
   "devDependencies": {
     "@types/puppeteer": "^3.0.1"

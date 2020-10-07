@@ -1,3 +1,4 @@
+import IExecutionProcesses from '@modules/covenant_execution/models/execution_processes';
 import merge from 'lodash/merge';
 import { injectable, inject } from 'tsyringe';
 import { PartialDeep } from 'type-fest';
@@ -6,8 +7,6 @@ import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
-
-import IExecutionProcesses from '@modules/covenant_execution/models/execution_processes';
 
 import ExecutionProcessesPage from '../puppeteer/pages/ExecutionProcessesPage';
 
