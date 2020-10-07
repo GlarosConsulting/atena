@@ -1,12 +1,12 @@
-import AppError from '@scraper/shared/errors/AppError';
-import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
-import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
-import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
-
 import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
 import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
+
+import AppError from '@scraper/shared/errors/AppError';
+import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
+import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
 import ExtractProgramsListService from '../ExtractProgramsListService';
 import NavigateToProgramsPageService from '../NavigateToProgramsPageService';
@@ -95,9 +95,9 @@ describe('NavigateToProgramDetailsPage', () => {
 
     const [{ program_id }] = await extractProgramsList.execute();
 
-    jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
-      return [];
-    });
+    jest
+      .spyOn(page, 'findElementsByText')
+      .mockImplementationOnce(async () => []);
 
     await expect(
       navigateToProgramDetailsPage.execute({ program_id }),

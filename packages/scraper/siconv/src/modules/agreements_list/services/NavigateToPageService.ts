@@ -1,9 +1,8 @@
+import ExtractListInfoService from '@modules/agreements_list/services/ExtractListInfoService';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
-
-import ExtractListInfoService from '@modules/agreements_list/services/ExtractListInfoService';
 
 interface IRequest {
   page: number;

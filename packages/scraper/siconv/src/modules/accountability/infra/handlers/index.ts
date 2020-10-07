@@ -1,8 +1,8 @@
+import DataPage from '@modules/accountability/infra/puppeteer/pages/DataPage';
+
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
-
-import DataPage from '@modules/accountability/infra/puppeteer/pages/DataPage';
 
 import MainHandler from './MainHandler';
 

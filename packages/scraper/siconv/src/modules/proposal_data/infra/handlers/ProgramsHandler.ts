@@ -1,3 +1,5 @@
+import ProgramsPage from '@modules/proposal_data/infra/puppeteer/pages/ProgramsPage';
+import IPrograms from '@modules/proposal_data/models/programs';
 import merge from 'lodash/merge';
 import { injectable, inject } from 'tsyringe';
 import { PartialDeep } from 'type-fest';
@@ -6,9 +8,6 @@ import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
-
-import ProgramsPage from '@modules/proposal_data/infra/puppeteer/pages/ProgramsPage';
-import IPrograms from '@modules/proposal_data/models/programs';
 
 @injectable()
 class ProgramsHandler implements IHandler {

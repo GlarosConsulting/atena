@@ -1,12 +1,12 @@
-import AppError from '@scraper/shared/errors/AppError';
-import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
-import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
-import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
-
 import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
 import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
+
+import AppError from '@scraper/shared/errors/AppError';
+import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
+import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
 import NavigateToProgramsPageService from './NavigateToProgramsPageService';
 
@@ -79,9 +79,9 @@ describe('NavigateToProgramsPage', () => {
 
     await openAgreement.execute({ agreement_id });
 
-    jest.spyOn(page, 'findElementsByText').mockImplementationOnce(async () => {
-      return [];
-    });
+    jest
+      .spyOn(page, 'findElementsByText')
+      .mockImplementationOnce(async () => []);
 
     await expect(navigateToProgramsPage.execute()).rejects.toBeInstanceOf(
       AppError,

@@ -26,9 +26,9 @@ export default class ExtractListInfoService {
     await injectFunctions(this.page);
 
     /* istanbul ignore next */
-    const listInfoText = await this.page.evaluate(() => {
-      return getTextBySelector('#listaResultado > span:nth-child(1)');
-    });
+    const listInfoText = await this.page.evaluate(() =>
+      getTextBySelector('#listaResultado > span:nth-child(1)'),
+    );
 
     let current_page = 0;
     let total_pages = 0;

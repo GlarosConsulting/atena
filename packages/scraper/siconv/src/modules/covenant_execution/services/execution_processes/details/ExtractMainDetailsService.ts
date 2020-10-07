@@ -1,3 +1,4 @@
+import IMainDetails from '@modules/covenant_execution/models/execution_processes/details/IMainDetails';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
@@ -6,8 +7,6 @@ import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
 import parseDate from '@utils/parseDate';
 import parsePrice from '@utils/parsePrice';
-
-import IMainDetails from '@modules/covenant_execution/models/execution_processes/details/IMainDetails';
 
 interface IExtractMainDetails
   extends Omit<IMainDetails, 'bidding_value' | 'dates'> {
