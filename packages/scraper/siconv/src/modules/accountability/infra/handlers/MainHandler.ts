@@ -1,5 +1,3 @@
-import DataPage from '@modules/accountability/infra/puppeteer/pages/DataPage';
-import IMain from '@modules/accountability/models/main';
 import merge from 'lodash/merge';
 import { injectable, inject } from 'tsyringe';
 import { PartialDeep } from 'type-fest';
@@ -8,6 +6,9 @@ import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
+
+import DataPage from '@modules/accountability/infra/puppeteer/pages/DataPage';
+import IMain from '@modules/accountability/models/main';
 
 @injectable()
 class MainHandler implements IHandler {

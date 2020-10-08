@@ -1,10 +1,11 @@
-import IMainParticipants from '@modules/proposal_data/models/participants/IMainParticipants';
-import IProgram from '@modules/proposal_data/models/programs/IProgram';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inject';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+
+import IMainParticipants from '@modules/proposal_data/models/participants/IMainParticipants';
+import IProgram from '@modules/proposal_data/models/programs/IProgram';
 
 interface IExtractProgram extends Omit<IProgram, 'investment_global_value'> {
   investment_global_value: string;

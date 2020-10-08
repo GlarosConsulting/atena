@@ -2,7 +2,7 @@
   "name": "@scraper/siconv",
   "version": "1.0.0",
   "author": "André 'Dezzy' <@andredezzy>",
-  "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "babel src --root-mode upward --extensions \".js,.ts\" --ignore *.spec.ts --out-dir dist --copy-files",
     "start": "node dist/shared/index.js",

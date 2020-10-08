@@ -1,11 +1,12 @@
+import { container } from 'tsyringe';
+
+import IAgreement from '@shared/models/IAgreement';
+
 import IAgreementsListPage from '@modules/agreements_list/pages/IAgreementsListPage';
 import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
 import ExtractListInfoService from '@modules/agreements_list/services/ExtractListInfoService';
 import NavigateToPageService from '@modules/agreements_list/services/NavigateToPageService';
 import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
-import { container } from 'tsyringe';
-
-import IAgreement from '@shared/models/IAgreement';
 
 class AgreementsListPage implements IAgreementsListPage {
   public async navigateTo(): Promise<void> {

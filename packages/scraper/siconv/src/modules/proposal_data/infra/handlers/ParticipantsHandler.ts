@@ -1,5 +1,3 @@
-import ParticipantsPage from '@modules/proposal_data/infra/puppeteer/pages/ParticipantsPage';
-import IParticipants from '@modules/proposal_data/models/participants';
 import merge from 'lodash/merge';
 import { injectable, inject } from 'tsyringe';
 import { PartialDeep } from 'type-fest';
@@ -8,6 +6,9 @@ import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
+
+import ParticipantsPage from '@modules/proposal_data/infra/puppeteer/pages/ParticipantsPage';
+import IParticipants from '@modules/proposal_data/models/participants';
 
 @injectable()
 class ParticipantsHandler implements IHandler {

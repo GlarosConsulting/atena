@@ -1,0 +1,41 @@
+import ICacheProvider from '../models/ICacheProvider';
+
+interface ICacheData {
+  [key: string]: string;
+}
+
+class FakeCacheProvider implements ICacheProvider {
+  private cache: ICacheData = {};
+
+  public async save(key: string, value: any): Promise<void> {
+    this.cache[key] = JSON.stringify(value);
+  }
+
+  public async recover<T>(key: string): Promise<T | null> {
+    const data = this.cache[key];
+
+    if (!data) return null;
+
+    const parsedData = JSON.parse(data) as T;
+
+    return parsedData;
+  }
+
+  public async invalidate(...keys: string[]): Promise<void> {
+    keys.forEach(key => {
+      delete this.cache[key];
+    });
+  }
+
+  public async invalidatePrefix(...prefixes: string[]): Promise<void> {
+    const keys = Object.keys(this.cache).filter(key =>
+      prefixes.some(prefix => key.startsWith(`${prefix}`)),
+    );
+
+    keys.forEach(key => {
+      delete this.cache[key];
+    });
+  }
+}
+
+export default FakeCacheProvider;

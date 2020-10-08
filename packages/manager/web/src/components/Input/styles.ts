@@ -7,16 +7,16 @@ interface IContainerProps {
   theme: DefaultTheme;
   isFocused: boolean;
   isFilled: boolean;
+  isErrored: boolean;
 }
 
 export const Container = styled(Box)<IContainerProps>`
-  --blue-light: ${props => props.theme.colors.blue[50]};
   --base-color: ${props => props.theme.colors.gray[500]};
   --text-color-focused: ${props => props.theme.colors.blue[800]};
-
-  background: var(--blue-light);
-  border-radius: 10px;
-  width: 100%;
+  --focused-box-shadow: 0 0 0 3px
+    ${props => transparentize(0.4, props.theme.colors.blue[400])};
+  --errored-box-shadow: 0 0 0 3px
+    ${props => transparentize(0.4, props.theme.colors.red[500])};
 
   color: var(--base-color);
   cursor: text;
@@ -31,16 +31,22 @@ export const Container = styled(Box)<IContainerProps>`
   }
 
   ${props =>
+    props.isErrored &&
+    css`
+      box-shadow: var(--errored-box-shadow);
+    `}
+
+  ${props =>
     props.isFocused &&
     css`
-      box-shadow: 0 0 0 3px ${transparentize(0.4, props.theme.colors.blue[400])};
-      color: var(--text-color-focused);
+      box-shadow: var(--focused-box-shadow);
+      color: var(--text-color-focused) !important;
     `}
 
   ${props =>
     props.isFilled &&
     css`
-      color: var(--text-color-focused);
+      color: var(--text-color-focused) !important;
     `}
 
   svg {

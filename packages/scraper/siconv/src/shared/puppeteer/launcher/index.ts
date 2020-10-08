@@ -1,9 +1,3 @@
-import AccountabilityHandler from '@modules/accountability/infra/handlers';
-import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';
-import CovenantExecutionHandler from '@modules/covenant_execution/infra/handlers';
-import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
-import { By } from '@modules/search/dtos/ISearchDTO';
-import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 import { container, injectable, inject } from 'tsyringe';
 
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
@@ -15,6 +9,13 @@ import Timer from '@utils/timer';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
+
+import AccountabilityHandler from '@modules/accountability/infra/handlers';
+import AgreementsListPage from '@modules/agreements_list/infra/puppeteer/pages/AgreementsListPage';
+import CovenantExecutionHandler from '@modules/covenant_execution/infra/handlers';
+import ProposalDataHandler from '@modules/proposal_data/infra/handlers';
+import { By } from '@modules/search/dtos/ISearchDTO';
+import SiconvSearchPage from '@modules/search/infra/puppeteer/pages/SearchPage';
 
 import GoBackFromAgreementHandler from '../handlers/GoBackFromAgreementHandler';
 import GoBackToMainHandler from '../handlers/GoBackToMainHandler';

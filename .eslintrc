@@ -31,6 +31,7 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "indent": "off",
     "camelcase": "off",
     "semi": "off",
     "comma-dangle": "off",
@@ -54,6 +55,7 @@
     "no-restricted-syntax": "off",
     "import/no-dynamic-require": "off",
     "import/prefer-default-export": "off",
+    "import/no-cycle": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/camelcase": "off",
@@ -63,6 +65,7 @@
     "react/jsx-props-no-spreading": "off",
     "react/button-has-type": "off",
     "react/no-danger": "off",
+    "react/require-default-props": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/label-has-for": "off",
     "import-helpers/order-imports": [
@@ -79,6 +82,7 @@
           "/^@config/",
           "/^@utils/",
           "/^@shared/",
+          "/^@modules/",
           "/^@\//",
           [
             "parent",
@@ -120,6 +124,14 @@
           ".ts",
           ".tsx"
         ]
+      }
+    ],
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "object": false
+        }
       }
     ],
     "import/extensions": [

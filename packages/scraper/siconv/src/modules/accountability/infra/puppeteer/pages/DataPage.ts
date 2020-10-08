@@ -1,3 +1,5 @@
+import { container } from 'tsyringe';
+
 import IDates from '@modules/accountability/models/main/IDates';
 import IMainData from '@modules/accountability/models/main/IMainData';
 import IValues from '@modules/accountability/models/main/IValues';
@@ -6,7 +8,6 @@ import ExtractDatesService from '@modules/accountability/services/main/ExtractDa
 import ExtractMainDataService from '@modules/accountability/services/main/ExtractMainDataService';
 import ExtractValuesService from '@modules/accountability/services/main/ExtractValuesService';
 import NavigateToAccountabilityPageService from '@modules/accountability/services/NavigateToAccountabilityPageService';
-import { container } from 'tsyringe';
 
 class DataPage implements IDataPage {
   public async navigateTo(): Promise<void> {

@@ -51,7 +51,11 @@ const Input: React.FC<IInputProps> = ({
     <Container
       isFocused={isFocused}
       isFilled={isFilled}
+      isErrored={!!error}
+      bg="blue.50"
+      width="100%"
       height={12}
+      borderRadius="md"
       paddingLeft={4}
       {...containerProps}
       onClick={() => {
@@ -63,7 +67,6 @@ const Input: React.FC<IInputProps> = ({
       <ChakraInput
         ref={inputRef}
         defaultValue={defaultValue}
-        isInvalid={!!error}
         focusBorderColor={null}
         paddingLeft={0}
         onFocus={handleInputFocus}
