@@ -2,13 +2,14 @@ import { AppProps } from 'next/app';
 import React from 'react';
 
 import ThemeContainer from '@/contexts/theme/ThemeContainer';
+import AppProvider from '@/hooks';
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
-  <>
-    <ThemeContainer>
+  <ThemeContainer>
+    <AppProvider>
       <Component {...pageProps} />
-    </ThemeContainer>
-  </>
+    </AppProvider>
+  </ThemeContainer>
 );
 
 export default MyApp;

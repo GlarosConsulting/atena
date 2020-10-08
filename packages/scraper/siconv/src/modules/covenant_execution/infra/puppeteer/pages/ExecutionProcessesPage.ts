@@ -1,8 +1,9 @@
+import { container } from 'tsyringe';
+
 import IExecutionProcess from '@modules/covenant_execution/models/execution_processes/IExecutionProcess';
 import IExecutionProcessesPage from '@modules/covenant_execution/pages/IExecutionProcessPage';
 import ExtractProgramsListService from '@modules/covenant_execution/services/execution_processes/ExtractExecutionProcessesListService';
 import NavigateToExecutionProcessesPageService from '@modules/covenant_execution/services/execution_processes/NavigateToExecutionProcessesPageService';
-import { container } from 'tsyringe';
 
 class ExecutionProcessesPage implements IExecutionProcessesPage {
   public async navigateTo(): Promise<void> {

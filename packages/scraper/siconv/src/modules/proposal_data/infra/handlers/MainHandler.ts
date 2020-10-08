@@ -1,4 +1,3 @@
-import IMain from '@modules/proposal_data/models/main';
 import merge from 'lodash/merge';
 import { injectable, inject } from 'tsyringe';
 import { PartialDeep } from 'type-fest';
@@ -7,6 +6,8 @@ import { IHandler } from '@scraper/shared/modules/browser/models/IBrowser';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAgreement from '@shared/models/IAgreement';
+
+import IMain from '@modules/proposal_data/models/main';
 
 import DataPage from '../puppeteer/pages/DataPage';
 

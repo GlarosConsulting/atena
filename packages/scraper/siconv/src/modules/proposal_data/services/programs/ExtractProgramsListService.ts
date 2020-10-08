@@ -1,4 +1,3 @@
-import IProgram from '@modules/proposal_data/models/programs/IProgram';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
@@ -6,6 +5,8 @@ import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inj
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
 import parsePrice from '@utils/parsePrice';
+
+import IProgram from '@modules/proposal_data/models/programs/IProgram';
 
 import ExtractProgramDetailsService from './details/ExtractProgramDetailsService';
 import NavigateToProgramDetailsPageService from './details/NavigateToProgramDetailsPageService';

@@ -1,13 +1,13 @@
+import AppError from '@scraper/shared/errors/AppError';
+import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
+import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
+import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
+
 import ExtractAgreementsListService from '@modules/agreements_list/services/ExtractAgreementsListService';
 import NavigateToPageService from '@modules/agreements_list/services/NavigateToPageService';
 import OpenAgreementByIdService from '@modules/agreements_list/services/OpenAgreementByIdService';
 import { By } from '@modules/search/dtos/ISearchDTO';
 import SearchAgreementsService from '@modules/search/services/SearchAgreementsService';
-
-import AppError from '@scraper/shared/errors/AppError';
-import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
-import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
-import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
 
 import NavigateToCovenantExecutionPageService from '../../NavigateToCovenantExecutionPageService';
 import ExtractExecutionProcessesListService from '../ExtractExecutionProcessesListService';

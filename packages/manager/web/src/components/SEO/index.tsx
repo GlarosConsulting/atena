@@ -18,7 +18,7 @@ const SEO: React.FC<ISEOProps> = ({
 }) => {
   const pageTitle = `${
     !shouldExcludeTitleSuffix ? 'Atena Gestor - ' : ''
-  } ${title}`;
+  }${title}`;
   const pageImage = image
     ? `${process.env.NEXT_PUBLIC_SITE_URL}/${image}`
     : null;

@@ -1,19 +1,67 @@
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useCallback, useRef } from 'react';
-import { FiLock, FiMail } from 'react-icons/fi';
+import { FiLock, FiUser } from 'react-icons/fi';
 
-import { Button, Flex, Heading, Link } from '@chakra-ui/core';
+import { useToast, Button, Flex, Heading, Link } from '@chakra-ui/core';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 import Input from '@/components/Input';
 import SEO from '@/components/SEO';
+import { useAuthentication } from '@/hooks/authentication';
+import getValidationErrors from '@/utils/getValidationErrors';
+
+interface IFormData {
+  username: string;
+  password: string;
+}
 
 const Login: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const handleSubmit = useCallback(() => {
-    console.log('submit');
+  const router = useRouter();
+
+  const toast = useToast();
+
+  const { logIn } = useAuthentication();
+
+  const handleSubmit = useCallback(async (data: IFormData) => {
+    try {
+      formRef.current?.setErrors({});
+
+      const schema = Yup.object().shape({
+        username: Yup.string()
+          .matches(/^[a-z0-9]+([._]?[a-z0-9]+)*$/, 'Digite um usuário válido')
+          .required('Usuário obrigatório'),
+        password: Yup.string().required('Senha obrigatória'),
+      });
+
+      await schema.validate(data, { abortEarly: false });
+
+      await logIn(data);
+
+      router.replace('/app');
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+
+        formRef.current?.setErrors(errors);
+
+        return;
+      }
+
+      console.log(err);
+
+      toast({
+        status: 'error',
+        title: 'Erro na autenticação',
+        description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
+        position: 'top',
+        duration: 5000,
+      });
+    }
   }, []);
 
   return (
@@ -25,6 +73,7 @@ const Login: React.FC = () => {
         height="100vh"
         justifyContent="center"
         alignItems="center"
+        paddingX={6}
       >
         <Flex
           backgroundColor="blue.200"
@@ -32,11 +81,12 @@ const Login: React.FC = () => {
           flexDirection="column"
           alignItems="stretch"
           padding={16}
+          boxShadow="xl"
         >
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Heading marginBottom={6}>Login</Heading>
 
-            <Input name="email" icon={FiMail} placeholder="E-mail" />
+            <Input name="username" icon={FiUser} placeholder="Usuário" />
             <Input
               name="password"
               icon={FiLock}

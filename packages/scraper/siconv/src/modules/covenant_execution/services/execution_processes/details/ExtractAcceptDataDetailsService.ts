@@ -1,4 +1,3 @@
-import IAcceptDataDetails from '@modules/covenant_execution/models/execution_processes/details/IAcceptDataDetails';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
@@ -6,6 +5,8 @@ import injectFunctions from '@scraper/shared/modules/browser/infra/puppeteer/inj
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
 import parseDate from '@utils/parseDate';
+
+import IAcceptDataDetails from '@modules/covenant_execution/models/execution_processes/details/IAcceptDataDetails';
 
 interface IExtractAcceptDataDetails
   extends Omit<IAcceptDataDetails, 'analysis_date' | 'analysis_record_date'> {

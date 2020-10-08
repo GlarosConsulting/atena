@@ -2,8 +2,8 @@
   "name": "@scraper/shared",
   "description": "Shared between all scraper packages.",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "author": "André 'Dezzy' <@andredezzy>",
+  "private": true,
   "scripts": {
     "build": "babel src --root-mode upward --extensions \".js,.ts\" --ignore *.spec.ts --out-dir dist --copy-files"
   },

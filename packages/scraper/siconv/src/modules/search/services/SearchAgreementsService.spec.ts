@@ -1,9 +1,9 @@
-import { By } from '@modules/search/dtos/ISearchDTO';
-
 import AppError from '@scraper/shared/errors/AppError';
 import Browser from '@scraper/shared/modules/browser/infra/puppeteer/models/Browser';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 import PuppeteerBrowserProvider from '@scraper/shared/modules/browser/providers/BrowserProvider/implementations/PuppeteerBrowserProvider';
+
+import { By } from '@modules/search/dtos/ISearchDTO';
 
 import SearchAgreementsService from './SearchAgreementsService';
 

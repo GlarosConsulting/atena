@@ -1,10 +1,11 @@
-import { By } from '@modules/search/dtos/ISearchDTO';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@scraper/shared/errors/AppError';
 import Page from '@scraper/shared/modules/browser/infra/puppeteer/models/Page';
 
 import siconvConfig from '@config/siconv';
+
+import { By } from '@modules/search/dtos/ISearchDTO';
 
 interface IRequest {
   by: By;
