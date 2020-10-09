@@ -27,7 +27,7 @@ describe('LogOutUser', () => {
     logOutUser = new LogOutUserService(fakeCacheProvider);
   });
 
-  it('should be able to delete log out', async () => {
+  it('should be able to log out', async () => {
     await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -36,7 +36,7 @@ describe('LogOutUser', () => {
     });
 
     const { access_token } = await authenticateUser.execute({
-      username: 'johndoe@example.com',
+      username: 'johndoe',
       password: '123456',
     });
 
@@ -47,7 +47,7 @@ describe('LogOutUser', () => {
     expect(response).toBe(true);
   });
 
-  it('should not be able to delete log out with invalid access token', async () => {
+  it('should not be able to log out with invalid access token', async () => {
     await expect(
       logOutUser.execute({
         access_token: 'invalid-token',

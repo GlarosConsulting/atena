@@ -36,7 +36,7 @@ describe('RefreshAccessToken', () => {
     });
 
     const { refresh_token } = await authenticateUser.execute({
-      username: 'johndoe@example.com',
+      username: 'johndoe',
       password: '123456',
     });
 

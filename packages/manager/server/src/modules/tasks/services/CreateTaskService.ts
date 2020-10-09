@@ -1,10 +1,4 @@
-import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
-
-import authenticationConfig from '@config/authentication';
-
-import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
-import AppError from '@shared/errors/AppError';
 
 import Task from '../infra/typeorm/entities/Task';
 import ITasksRepository from '../repositories/ITasksRepository';
