@@ -3,5 +3,4 @@ export default interface ICreateUserDTO {
   email: string;
   username: string;
   password: string;
-  referred_by_id?: string;
 }

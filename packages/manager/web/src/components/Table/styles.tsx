@@ -52,21 +52,21 @@ export const TableRow = styled(Flex)`
   }
 `;
 
-type TableIconButtonProps = SpaceProps & {
+interface ITableIconButtonProps extends SpaceProps {
   icon: any;
   onClick:
     | ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void)
     | undefined;
   isDisabled: boolean;
   variantColor?: string;
-};
+}
 
-export const TableIconButton: React.FC<TableIconButtonProps> = ({
+export const TableIconButton: React.FC<ITableIconButtonProps> = ({
   icon,
   onClick,
   isDisabled,
   children,
-  variantColor,
+  variantColor = 'gray',
   ...rest
 }) => (
   <IconButton
@@ -82,7 +82,3 @@ export const TableIconButton: React.FC<TableIconButtonProps> = ({
     {children}
   </IconButton>
 );
-
-TableIconButton.defaultProps = {
-  variantColor: 'gray',
-};

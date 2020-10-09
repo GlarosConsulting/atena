@@ -27,8 +27,9 @@
   },
   "scripts": {
     "build:scraper": "lerna run build --scope @scraper/* --stream",
+    "build:manager": "lerna run build --scope @manager/* --stream",
     "lint:fix": "eslint --fix packages --ext ts,tsx",
-    "test": "lerna run test --stream --parallel -- --watchAll false",
+    "test": "lerna run test --scope @manager/* --stream --parallel -- --watchAll false",
     "scraper:ares": "yarn workspace @scraper/ares",
     "scraper:siconv": "yarn workspace @scraper/siconv",
     "manager:web": "yarn workspace @manager/web",

@@ -27,37 +27,6 @@ describe('CreateUser', () => {
     expect(user).toHaveProperty('id');
   });
 
-  it('should be able to create a new user referred by another', async () => {
-    const user1 = await createUser.execute({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      username: 'johndoe',
-      password: '123456',
-    });
-
-    const user2 = await createUser.execute({
-      name: 'John Tre',
-      email: 'johntre@example.com',
-      username: 'johntre',
-      password: '123456',
-      referred_by: user1.username,
-    });
-
-    expect(user2.referred_by_id).toEqual(user1.id);
-  });
-
-  it('should be able to create a new user referred by a non-existing user', async () => {
-    const user = await createUser.execute({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      username: 'johndoe',
-      password: '123456',
-      referred_by: 'non-existing-user',
-    });
-
-    expect(user.referred_by_id).toBeFalsy();
-  });
-
   it('should not be able to create two users with the same email', async () => {
     await createUser.execute({
       name: 'John Doe',

@@ -11,7 +11,6 @@ interface IRequest {
   email: string;
   username: string;
   password: string;
-  referred_by?: string;
 }
 
 @injectable()
@@ -29,7 +28,6 @@ class CreateUserService {
     email,
     username,
     password,
-    referred_by,
   }: IRequest): Promise<User> {
     const checkEmailExists = await this.usersRepository.findByEmail(email);
 
@@ -47,22 +45,11 @@ class CreateUserService {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    let referred_by_id;
-
-    if (referred_by) {
-      const referredByUser = await this.usersRepository.findByUsername(
-        referred_by,
-      );
-
-      referred_by_id = referredByUser?.id;
-    }
-
     const user = await this.usersRepository.create({
       name,
       email,
       username,
       password: hashedPassword,
-      referred_by_id,
     });
 
     return user;
