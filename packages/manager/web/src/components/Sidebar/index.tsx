@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
   return (
     <Flex
       as="nav"
-      position="absolute"
+      position="fixed"
       top={0}
       left={0}
       bg="blue.500"

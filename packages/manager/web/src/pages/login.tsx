@@ -42,7 +42,7 @@ const Login: React.FC = () => {
 
       await logIn(data);
 
-      router.replace('/app');
+      router.replace('/app/tasks');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);

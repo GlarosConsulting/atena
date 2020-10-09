@@ -83,16 +83,20 @@ const AuthenticationProvider: React.FC = ({ children }) => {
   );
 
   useEffect(() => {
+    const route = router.asPath;
+
+    const isRoute = (name: string) => route.split('?')[0] === name;
+
     if (!isLoggedIn()) {
-      if (router.route !== '/login') {
+      if (!isRoute('/login')) {
         router.replace('/login');
       }
 
       return;
     }
 
-    if (router.route === '/' || router.route === '/login') {
-      router.replace('/app');
+    if (isRoute('/') || isRoute('/login') || isRoute('/app')) {
+      router.replace('/app/tasks');
       return;
     }
 

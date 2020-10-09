@@ -19,6 +19,7 @@ const ThemeContainer: React.FC = ({ children }) => (
             light: {
               ...config.light,
               bg: theme.colors.gray[100],
+              color: theme.colors.gray[700],
             },
           })}
         />

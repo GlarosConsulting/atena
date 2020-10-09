@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/core';
 import { BoxProps } from '@chakra-ui/core/dist/Box';
 
 interface ICardProps extends BoxProps {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<any, MouseEvent>) => void;
   color?: string;
 }
 

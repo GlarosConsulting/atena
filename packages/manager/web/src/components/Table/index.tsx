@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   FiChevronDown,
   FiChevronLeft,
@@ -12,9 +12,9 @@ import { Column, Row, usePagination, useSortBy, useTable } from 'react-table';
 
 import { BoxProps, Flex, Text } from '@chakra-ui/core';
 
-import Card from '../Card';
-import BottomSection from '../Card/CardFooter';
-import TopSection from '../Card/CardHeader/index';
+import Card from './Card';
+import BottomSection from './Card/CardFooter';
+import TopSection from './Card/CardHeader/index';
 import {
   StyledTable,
   TableCell,
@@ -24,22 +24,22 @@ import {
 } from './styles';
 
 interface ITableProps<T extends object> extends BoxProps {
+  heading?: React.ReactNode;
+  columns: Column<T>[];
   data: any;
   pageSize?: number;
-  tableHeading?: React.ReactNode;
-  columns: Column<T>[];
   onRowClick?: (row: Row<T>) => void;
 }
 
 const Table = <T extends object>({
+  heading,
   columns,
   data,
-  tableHeading,
   pageSize: initialPageSize = 10,
   onRowClick,
   ...rest
 }: ITableProps<T>) => {
-  const tableColumns = React.useMemo(() => columns, [columns]);
+  const tableColumns = useMemo(() => columns, [columns]);
 
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 40em)' });
 
@@ -78,7 +78,7 @@ const Table = <T extends object>({
       width="100%"
       {...rest}
     >
-      {tableHeading && <TopSection>{tableHeading}</TopSection>}
+      {heading && <TopSection>{heading}</TopSection>}
 
       <StyledTable {...getTableProps()}>
         <TableHead>
@@ -100,7 +100,7 @@ const Table = <T extends object>({
                 >
                   <Text fontWeight="bold">{column.render('Header')}</Text>
 
-                  {() => {
+                  {(() => {
                     if (column.isSorted) {
                       if (column.isSortedDesc) {
                         return <FiChevronDown size={20} />;
@@ -110,7 +110,7 @@ const Table = <T extends object>({
                     }
 
                     return '';
-                  }}
+                  })()}
                 </TableCell>
               ))}
             </Flex>
@@ -165,7 +165,7 @@ const Table = <T extends object>({
           <Text mr={4}>
             Página{' '}
             <strong>
-              {pageIndex + 1} of {pageOptions.length}
+              {pageIndex + 1} de {pageOptions.length}
             </strong>
           </Text>
 
