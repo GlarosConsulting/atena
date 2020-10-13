@@ -1,11 +1,16 @@
-import React from 'react';
+import { GetStaticProps } from 'next';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Column, Row } from 'react-table';
 
 import { Box, Heading, useDisclosure } from '@chakra-ui/core';
+import { format, parseISO } from 'date-fns';
 
 import TaskDetailsModal from '@/components/_pages/app/tasks/TaskDetailsModal';
 import SEO from '@/components/SEO';
 import Sidebar from '@/components/Sidebar';
 import Table from '@/components/Table';
+import ITask from '@/interfaces/tasks/ITask';
+import fetch from '@/lib/fetch';
 
 const COLUMNS = [
   {
@@ -28,10 +33,48 @@ const COLUMNS = [
     Header: 'Detalhes',
     accessor: 'details',
   },
-];
+] as Column[];
 
-const App: React.FC = () => {
+type ITaskFormatted = ITask;
+
+interface ITasksResponse {
+  urgent: ITask[];
+  next: ITask[];
+}
+
+interface IAppProps {
+  tasks: ITasksResponse;
+}
+
+const App: React.FC<IAppProps> = ({ tasks }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [activeTaskRow, setActiveTaskRow] = useState<ITask>();
+
+  const handleOpenTaskDetailsModal = useCallback((row: Row) => {
+    const task = row.original as ITask;
+
+    setActiveTaskRow(task);
+    onOpen();
+  }, []);
+
+  const urgentTasksTableData = useMemo(
+    () =>
+      tasks.urgent.map<ITaskFormatted>(task => ({
+        ...task,
+        date: format(parseISO(task.date), 'dd/MM/yyyy'),
+      })),
+    [],
+  );
+
+  const nextTasksTableData = useMemo(
+    () =>
+      tasks.next.map<ITaskFormatted>(task => ({
+        ...task,
+        date: format(parseISO(task.date), 'dd/MM/yyyy'),
+      })),
+    [],
+  );
 
   return (
     <>
@@ -39,7 +82,14 @@ const App: React.FC = () => {
 
       <Sidebar />
 
-      <TaskDetailsModal isOpen={isOpen} onClose={onClose} />
+      <TaskDetailsModal
+        task={activeTaskRow}
+        isOpen={isOpen}
+        onClose={() => {
+          setActiveTaskRow(null);
+          onClose();
+        }}
+      />
 
       <Box as="section" marginLeft={24} marginY={6} paddingRight={8}>
         <Box>
@@ -54,40 +104,9 @@ const App: React.FC = () => {
 
           <Table
             columns={COLUMNS}
-            data={[
-              {
-                instrument: '864230/2018',
-                date: '10/10/2020',
-                status: 'Execução',
-                task: 'Contrato/Subconvênio',
-                details: 'Cadastrar propostas da empresa',
-              },
-              {
-                instrument: '864230/2018',
-                date: '14/10/2020',
-                status: 'Prestação de contas',
-                task: 'Movimentações financeiras',
-                details: 'Cadastrar extratos',
-              },
-              {
-                instrument: '500230/2018',
-                date: '14/10/2020',
-                status: 'Execução',
-                task: 'Movimentações financeiras',
-                details: 'Cadastrar ART',
-              },
-              {
-                instrument: '864230/2018',
-                date: '14/10/2020',
-                status: 'Prestação de contas',
-                task: 'Movimentações financeiras',
-                details: 'Cadastrar orçamento',
-              },
-            ]}
+            data={urgentTasksTableData}
             marginTop={4}
-            onRowClick={() => {
-              onOpen();
-            }}
+            onRowClick={handleOpenTaskDetailsModal}
           />
         </Box>
 
@@ -103,30 +122,9 @@ const App: React.FC = () => {
 
           <Table
             columns={COLUMNS}
-            data={[
-              {
-                instrument: '864230/2018',
-                date: '20/10/2020',
-                status: 'Execução',
-                task: 'Contrato/Subconvênio',
-                details: 'Cadastrar medições da obra',
-              },
-              {
-                instrument: '864230/2018',
-                date: '13/11/2020',
-                status: 'Prestação de contas',
-                task: 'Movimentos financeiras',
-                details: 'Cadastrar extratos',
-              },
-              {
-                instrument: '864230/2018',
-                date: '20/11/2020',
-                status: 'Prestação de contas',
-                task: 'Movimentos financeiras',
-                details: 'Executar lançamentos',
-              },
-            ]}
+            data={nextTasksTableData}
             marginTop={4}
+            onRowClick={handleOpenTaskDetailsModal}
           />
         </Box>
       </Box>
@@ -135,3 +133,14 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+export const getStaticProps: GetStaticProps<IAppProps> = async () => {
+  const response = await fetch<ITasksResponse>('/tasks/filtered');
+
+  return {
+    props: {
+      tasks: response.data,
+    },
+    revalidate: 5,
+  };
+};

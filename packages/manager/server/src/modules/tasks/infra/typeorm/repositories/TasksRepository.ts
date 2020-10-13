@@ -12,6 +12,18 @@ class TasksRepository implements ITasksRepository {
     this.ormRepository = getRepository(Task);
   }
 
+  public async findAll(): Promise<Task[]> {
+    return this.ormRepository.find({ relations: ['alerts'] });
+  }
+
+  public async findById(id: string): Promise<Task | undefined> {
+    const task = await this.ormRepository.findOne(id, {
+      relations: ['alerts'],
+    });
+
+    return task;
+  }
+
   public async create(data: ICreateTaskDTO): Promise<Task> {
     const task = this.ormRepository.create(data);
 

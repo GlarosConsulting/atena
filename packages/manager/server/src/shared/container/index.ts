@@ -4,8 +4,10 @@ import '@modules/users/providers';
 
 import './providers';
 
-import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
-import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import TaskAlertsRepository from '@modules/tasks/infra/typeorm/repositories/TaskAlertsRepository';
+import TasksRepository from '@modules/tasks/infra/typeorm/repositories/TasksRepository';
+import ITaskAlertsRepository from '@modules/tasks/repositories/ITaskAlertsRepository';
+import ITasksRepository from '@modules/tasks/repositories/ITasksRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import UserTokensRepository from '@modules/users/infra/typeorm/repositories/UserTokensRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
@@ -21,7 +23,12 @@ container.registerSingleton<IUserTokensRepository>(
   UserTokensRepository,
 );
 
-container.registerSingleton<INotificationsRepository>(
-  'NotificationsRepository',
-  NotificationsRepository,
+container.registerSingleton<ITasksRepository>(
+  'TasksRepository',
+  TasksRepository,
+);
+
+container.registerSingleton<ITaskAlertsRepository>(
+  'TaskAlertsRepository',
+  TaskAlertsRepository,
 );

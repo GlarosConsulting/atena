@@ -4,30 +4,17 @@
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "username": "",
-    "password": "",
-    "database": "",
+    "username": "postgres",
+    "password": "docker",
+    "database": "atena_manager",
     "entities": [
-      "src/modules/**/infra/typeorm/entities/*.ts"
+      "dist/modules/**/infra/typeorm/entities/*.js"
     ],
     "migrations": [
-      "src/shared/infra/typeorm/migrations/*.ts"
+      "dist/shared/infra/typeorm/migrations/*.js"
     ],
     "cli": {
-      "migrationsDir": "src/shared/infra/typeorm/migrations"
+      "migrationsDir": "dist/shared/infra/typeorm/migrations"
     }
-  },
-  {
-    "name": "mongo",
-    "type": "mongodb",
-    "host": "localhost",
-    "port": 27017,
-    "username": "",
-    "password": "",
-    "database": "",
-    "useUnifiedTopology": true,
-    "entities": [
-      "src/modules/**/infra/typeorm/schemas/*.ts"
-    ]
   }
 ]

@@ -1,9 +1,9 @@
 interface IWebSocketConfig {
   driver: 'socketio';
-  cache_key: string;
+  cacheKey: string;
 }
 
 export default {
   driver: 'socketio',
-  cache_key: 'websocket-connections',
+  cacheKey: 'websocket-connections',
 } as IWebSocketConfig;
