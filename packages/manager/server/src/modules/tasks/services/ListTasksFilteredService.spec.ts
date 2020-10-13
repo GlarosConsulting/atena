@@ -23,8 +23,8 @@ describe('ListTasksFiltered', () => {
     });
 
     fakeTasksRepository.create({
-      instrument: '777-666',
-      date: addDays(new Date(), 5),
+      instrument: '666-777',
+      date: addDays(new Date(), 6),
       status: 'Execução',
       task: 'Contrato/Subconvênio',
       details: 'Cadastrar propostas da empresa',

@@ -1,3 +1,5 @@
+import AppError from '@shared/errors/AppError';
+
 import FakeTaskAlertsRepository from '../repositories/fakes/FakeTaskAlertsRepository';
 import FakeTasksRepository from '../repositories/fakes/FakeTasksRepository';
 import CreateTaskAlertService from './CreateTaskAlertService';
@@ -40,5 +42,16 @@ describe('CreateTaskAlert', () => {
         description: expect.any(String),
       }),
     );
+  });
+
+  it('should not be able to create task alert with non-existing task id', async () => {
+    await expect(
+      createTaskAlert.execute({
+        task_id: 'non-existing-task',
+        user_id: 'any-user',
+        date: new Date(),
+        description: 'Alerta criado',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
