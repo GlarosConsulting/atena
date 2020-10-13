@@ -1,23 +1,23 @@
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeTasksRepository from '../repositories/fakes/FakeTasksRepository';
 import CreateTaskService from './CreateTaskService';
 
-let fakeUsersRepository: FakeUsersRepository;
+let fakeTasksRepository: FakeTasksRepository;
 let createTask: CreateTaskService;
 
 describe('CreateTask', () => {
   beforeEach(() => {
-    fakeUsersRepository = new FakeUsersRepository();
+    fakeTasksRepository = new FakeTasksRepository();
 
-    createTask = new CreateTaskService(fakeUsersRepository);
+    createTask = new CreateTaskService(fakeTasksRepository);
   });
 
   it('should be able to create task', async () => {
     const task = await createTask.execute({
-      instrument: '',
+      instrument: '777-666',
       date: new Date(),
-      status: '',
-      task: '',
-      details: '',
+      status: 'Execução',
+      task: 'Contrato/Subconvênio',
+      details: 'Cadastrar propostas da empresa',
     });
 
     expect(task).toEqual(
@@ -27,6 +27,7 @@ describe('CreateTask', () => {
         status: expect.any(String),
         task: expect.any(String),
         details: expect.any(String),
+        alerts: expect.any(Array),
       }),
     );
   });

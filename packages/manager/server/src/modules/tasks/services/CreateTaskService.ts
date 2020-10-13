@@ -12,7 +12,7 @@ interface IRequest {
 }
 
 @injectable()
-class CreateTaskService {
+export default class CreateTaskService {
   constructor(
     @inject('TasksRepository')
     private tasksRepository: ITasksRepository,
@@ -36,5 +36,3 @@ class CreateTaskService {
     return createdTask;
   }
 }
-
-export default CreateTaskService;

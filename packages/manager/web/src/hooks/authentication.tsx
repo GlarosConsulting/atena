@@ -55,7 +55,7 @@ const AuthenticationProvider: React.FC = ({ children }) => {
 
   const logIn = useCallback(
     async ({ username, password }: ISignInCredentials) => {
-      const response = await api.post<ICreateSessionResponse>('sessions', {
+      const response = await api.post<ICreateSessionResponse>('/sessions', {
         username,
         password,
       });
