@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { Column, Row } from 'react-table';
@@ -158,9 +157,5 @@ const App: React.FC = () => {
     </>
   );
 };
-
-export const getServerSideProps: GetServerSideProps = async () => ({
-  props: {},
-});
 
 export default App;

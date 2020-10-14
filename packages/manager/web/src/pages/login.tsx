@@ -92,11 +92,15 @@ const Login: React.FC = () => {
             <Heading marginBottom={6}>Login</Heading>
 
             <Input name="username" icon={FiUser} placeholder="Usuário" />
+
             <Input
               name="password"
               icon={FiLock}
               type="password"
               placeholder="Senha"
+              containerProps={{
+                marginTop: 3,
+              }}
             />
 
             <Button
