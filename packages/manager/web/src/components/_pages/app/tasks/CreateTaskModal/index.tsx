@@ -65,6 +65,13 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
 
       await createTask(data);
 
+      toast({
+        status: 'success',
+        title: 'Tarefa criada com sucesso!',
+        position: 'top',
+        duration: 3000,
+      });
+
       onClose(event);
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -149,7 +156,7 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onClose} marginRight={4}>
               Cancelar
             </Button>
 
