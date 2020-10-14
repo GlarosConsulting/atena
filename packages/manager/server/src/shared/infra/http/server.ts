@@ -20,6 +20,8 @@ import WebSocket from '../websocket/server';
 // import rateLimiter from './middlewares/rateLimiter';
 import routes from './routes';
 
+const PORT = process.env.PORT || 3333;
+
 const app = express();
 const server = http.createServer(app);
 
@@ -56,6 +58,6 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     .json({ status: 'error', message: 'Internal server error' });
 });
 
-server.listen(3333, () => {
+server.listen(PORT, () => {
   console.log('🚀 Server started at port 3333!');
 });
