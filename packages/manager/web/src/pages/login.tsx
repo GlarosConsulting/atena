@@ -66,7 +66,12 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <SEO title="Atena Gestor" image="og/boost.png" shouldExcludeTitleSuffix />
+      <SEO
+        title="Atena Gestor"
+        image="og/boost.png"
+        shouldExcludeTitleSuffix
+        description="Fazer login na plataforma"
+      />
 
       <Flex
         as="main"

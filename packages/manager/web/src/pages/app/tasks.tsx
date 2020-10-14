@@ -78,7 +78,11 @@ const App: React.FC<IAppProps> = ({ tasks }) => {
 
   return (
     <>
-      <SEO title="Tarefas" />
+      <SEO
+        title="Tarefas"
+        image="og/boost.png"
+        description="Listagem de tarefas de licitações"
+      />
 
       <Sidebar />
 
