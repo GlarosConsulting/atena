@@ -26,10 +26,6 @@ export const Container = styled(Box)<IContainerProps>`
 
   transition: box-shadow 0.2s;
 
-  & + div {
-    margin-top: 16px;
-  }
-
   ${props =>
     props.isErrored &&
     css`

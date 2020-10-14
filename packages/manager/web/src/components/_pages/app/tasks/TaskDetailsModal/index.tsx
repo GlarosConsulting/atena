@@ -17,11 +17,11 @@ import {
 } from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
-import ITask from '@/interfaces/tasks/ITask';
 import ITaskAlert from '@/interfaces/tasks/ITaskAlert';
+import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
 
 interface ITaskDetailsModalProps {
-  task?: ITask;
+  task?: ITaskFormatted;
   isOpen: boolean;
   onClose?: (
     event: React.MouseEvent | React.KeyboardEvent,
@@ -74,7 +74,7 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
           <Stack spacing={2}>
             <Stack spacing={0}>
               <Heading size="sm">Data:</Heading>
-              <Text>{task.date}</Text>
+              <Text>{task.date_formatted}</Text>
             </Stack>
 
             <Stack spacing={0}>
