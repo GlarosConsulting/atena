@@ -26,6 +26,7 @@
     ]
   },
   "scripts": {
+    "heroku-postbuild": "yarn manager:server build",
     "build:scraper": "lerna run build --scope @scraper/* --stream",
     "build:manager": "lerna run build --scope @manager/* --stream",
     "lint:fix": "eslint --fix packages --ext ts,tsx",
