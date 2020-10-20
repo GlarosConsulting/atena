@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   Button,
@@ -18,9 +18,9 @@ import {
 } from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
+import { useTasks } from '@/hooks/tasks';
 import ITaskAlert from '@/interfaces/tasks/ITaskAlert';
 import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
-import api from '@/services/api';
 
 interface ITaskDetailsModalProps {
   task?: ITaskFormatted;
@@ -57,6 +57,8 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
     );
   }
 
+  const { addAlertToTask } = useTasks();
+
   const [alerts, setAlerts] = useState(() =>
     task.alerts.map<ITaskAlertFormatted>(alert => ({
       ...alert,
@@ -71,26 +73,29 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
     setObservation(event.target.value);
   }
 
-  async function handleAccomplishTask() {
+  const handleAccomplishTask = useCallback(async () => {
     setIsAccomplishingTask(true);
 
-    console.log(observation);
-
-    const response = await api.post<ITaskAlert>(`/tasks/${task.id}/alerts`, {
+    const [alert] = await addAlertToTask(task.id, {
       date: new Date(),
       description: observation,
     });
 
+    if (!alert) {
+      setIsAccomplishingTask(false);
+      return;
+    }
+
     const newAlert: ITaskAlertFormatted = {
-      ...response.data,
-      date_formatted: format(parseISO(response.data.date), 'dd/MM/yyyy'),
+      ...alert,
+      date_formatted: format(parseISO(alert.date), 'dd/MM/yyyy'),
     };
 
     setAlerts([...alerts, newAlert]);
 
     setIsAccomplishingTask(false);
     setObservation('');
-  }
+  }, [observation]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

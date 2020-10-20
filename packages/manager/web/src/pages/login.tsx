@@ -52,8 +52,6 @@ const Login: React.FC = () => {
         return;
       }
 
-      console.log(err);
-
       toast({
         status: 'error',
         title: 'Erro na autenticação',

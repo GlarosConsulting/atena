@@ -48,8 +48,6 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
   const { createTask } = useTasks();
 
   const handleSubmit = useCallback(async (data: IFormData, event) => {
-    console.log('submit', data);
-
     try {
       formRef.current?.setErrors({});
 
@@ -81,8 +79,6 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
 
         return;
       }
-
-      console.log(err);
 
       toast({
         status: 'error',

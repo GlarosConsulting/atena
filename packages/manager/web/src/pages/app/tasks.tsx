@@ -67,7 +67,7 @@ const App: React.FC = () => {
 
   const urgentTasksTableData = useMemo(
     () =>
-      tasks?.urgent.map<ITaskFormatted>(task => ({
+      tasks?.urgent?.map<ITaskFormatted>(task => ({
         ...task,
         date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
       })) || [],
@@ -76,7 +76,7 @@ const App: React.FC = () => {
 
   const nextTasksTableData = useMemo(
     () =>
-      tasks?.next.map<ITaskFormatted>(task => ({
+      tasks?.next?.map<ITaskFormatted>(task => ({
         ...task,
         date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
       })) || [],
