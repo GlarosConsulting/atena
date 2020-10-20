@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Text,
   Textarea,
@@ -19,6 +20,7 @@ import { format, parseISO } from 'date-fns';
 
 import ITaskAlert from '@/interfaces/tasks/ITaskAlert';
 import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
+import api from '@/services/api';
 
 interface ITaskDetailsModalProps {
   task?: ITaskFormatted;
@@ -29,7 +31,9 @@ interface ITaskDetailsModalProps {
   ) => void;
 }
 
-type ITaskAlertFormatted = ITaskAlert;
+interface ITaskAlertFormatted extends ITaskAlert {
+  date_formatted: string;
+}
 
 const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
   task,
@@ -53,14 +57,40 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
     );
   }
 
-  const taskAlertsFormatted = useMemo(
-    () =>
-      task.alerts.map<ITaskAlertFormatted>(alert => ({
-        ...alert,
-        date: format(parseISO(alert.date), 'dd/MM/yyyy'),
-      })),
-    [],
+  const [alerts, setAlerts] = useState(() =>
+    task.alerts.map<ITaskAlertFormatted>(alert => ({
+      ...alert,
+      date_formatted: format(parseISO(alert.date), 'dd/MM/yyyy'),
+    })),
   );
+
+  const [isAccomplishingTask, setIsAccomplishingTask] = useState(false);
+  const [observation, setObservation] = useState('');
+
+  function handleTextareaChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setObservation(event.target.value);
+  }
+
+  async function handleAccomplishTask() {
+    setIsAccomplishingTask(true);
+
+    console.log(observation);
+
+    const response = await api.post<ITaskAlert>(`/tasks/${task.id}/alerts`, {
+      date: new Date(),
+      description: observation,
+    });
+
+    const newAlert: ITaskAlertFormatted = {
+      ...response.data,
+      date_formatted: format(parseISO(response.data.date), 'dd/MM/yyyy'),
+    };
+
+    setAlerts([...alerts, newAlert]);
+
+    setIsAccomplishingTask(false);
+    setObservation('');
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -87,7 +117,7 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
             <Stack as="section" spacing={2} marginTop={2}>
               <Heading size="sm">Histórico:</Heading>
 
-              {taskAlertsFormatted.map(alert => (
+              {alerts.map(alert => (
                 <Flex
                   as="article"
                   bg="blue.100"
@@ -97,7 +127,7 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
                   overflow="hidden"
                 >
                   <Text color="blue.900" display="flex" alignItems="center">
-                    {alert.date}
+                    {alert.date_formatted}
                   </Text>
 
                   <Divider
@@ -120,21 +150,27 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
                 bg="blue.900"
                 color="white"
                 marginRight={2}
-                paddingX={10}
+                paddingX={isAccomplishingTask ? 0 : 10}
+                width={isAccomplishingTask ? 32 : 'auto'}
                 height={null}
+                isDisabled={isAccomplishingTask}
                 _hover={{
                   bg: 'blue.800',
                 }}
                 _focusWithin={{
                   bg: 'blue.800',
                 }}
+                onClick={handleAccomplishTask}
               >
-                Tarefa realizada
+                {isAccomplishingTask ? <Spinner /> : 'Tarefa realizada'}
               </Button>
+
               <Textarea
                 placeholder="Observações"
                 borderColor="gray.400"
                 color="blue.900"
+                value={observation}
+                onChange={handleTextareaChange}
               />
             </Flex>
           </Stack>
