@@ -52,8 +52,6 @@ const Login: React.FC = () => {
         return;
       }
 
-      console.log(err);
-
       toast({
         status: 'error',
         title: 'Erro na autenticação',
@@ -66,7 +64,12 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <SEO title="Atena Gestor" image="og/boost.png" shouldExcludeTitleSuffix />
+      <SEO
+        title="Atena Gestor"
+        image="og/boost.png"
+        shouldExcludeTitleSuffix
+        description="Fazer login na plataforma"
+      />
 
       <Flex
         as="main"
@@ -87,11 +90,15 @@ const Login: React.FC = () => {
             <Heading marginBottom={6}>Login</Heading>
 
             <Input name="username" icon={FiUser} placeholder="Usuário" />
+
             <Input
               name="password"
               icon={FiLock}
               type="password"
               placeholder="Senha"
+              containerProps={{
+                marginTop: 3,
+              }}
             />
 
             <Button

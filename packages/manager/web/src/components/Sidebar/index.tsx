@@ -5,7 +5,7 @@ import { Avatar, Box, Flex, useTheme } from '@chakra-ui/core';
 
 import { useAuthentication } from '@/hooks/authentication';
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC = ({ children }) => {
   const theme = useTheme();
 
   const { user, logOut } = useAuthentication();
@@ -26,6 +26,10 @@ const Sidebar: React.FC = () => {
       boxShadow="xl"
     >
       <div />
+
+      <Flex flexDirection="column" alignItems="center">
+        {children}
+      </Flex>
 
       <Flex flexDirection="column" alignItems="center">
         <Avatar src={user?.avatar_url} size="sm" />

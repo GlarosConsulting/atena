@@ -44,6 +44,7 @@
     "object-curly-newline": "off",
     "no-new": "off",
     "no-param-reassign": "off",
+    "no-confusing-arrow": "off",
     "no-unused-expressions": "off",
     "no-underscore-dangle": "off",
     "no-useless-constructor": "off",

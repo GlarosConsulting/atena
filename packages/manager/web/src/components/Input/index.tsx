@@ -4,7 +4,7 @@ import { IconBaseProps } from 'react-icons';
 import {
   Input as ChakraInput,
   InputProps as ChakraInputProps,
-  BoxProps as ChakraBoxProps,
+  PseudoBoxProps as ChakraPseudoBoxProps,
 } from '@chakra-ui/core';
 import { useField } from '@unform/core';
 
@@ -13,7 +13,7 @@ import { Container } from './styles';
 interface IInputProps extends ChakraInputProps {
   name: string;
   icon?: React.ComponentType<IconBaseProps>;
-  containerProps?: ChakraBoxProps;
+  containerProps?: ChakraPseudoBoxProps;
 }
 
 const Input: React.FC<IInputProps> = ({

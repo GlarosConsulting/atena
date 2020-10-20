@@ -1,16 +1,17 @@
-import { GetStaticProps } from 'next';
 import React, { useCallback, useMemo, useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
 import { Column, Row } from 'react-table';
 
-import { Box, Heading, useDisclosure } from '@chakra-ui/core';
+import { Box, Button, Heading, useDisclosure, useTheme } from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
+import CreateTaskModal from '@/components/_pages/app/tasks/CreateTaskModal';
 import TaskDetailsModal from '@/components/_pages/app/tasks/TaskDetailsModal';
 import SEO from '@/components/SEO';
 import Sidebar from '@/components/Sidebar';
 import Table from '@/components/Table';
-import ITask from '@/interfaces/tasks/ITask';
-import fetch from '@/lib/fetch';
+import { useTasks } from '@/hooks/tasks';
+import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
 
 const COLUMNS = [
   {
@@ -19,7 +20,7 @@ const COLUMNS = [
   },
   {
     Header: 'Data',
-    accessor: 'date',
+    accessor: 'date_formatted',
   },
   {
     Header: 'Fase',
@@ -35,59 +36,84 @@ const COLUMNS = [
   },
 ] as Column[];
 
-type ITaskFormatted = ITask;
+const App: React.FC = () => {
+  const theme = useTheme();
 
-interface ITasksResponse {
-  urgent: ITask[];
-  next: ITask[];
-}
+  const {
+    isOpen: isTaskDetailsOpen,
+    onOpen: onOpenTaskDetails,
+    onClose: onCloseTaskDetails,
+  } = useDisclosure();
+  const {
+    isOpen: isCreateTaskOpen,
+    onOpen: onOpenCreateTask,
+    onClose: onCloseCreateTask,
+  } = useDisclosure();
 
-interface IAppProps {
-  tasks: ITasksResponse;
-}
+  const { tasks } = useTasks();
 
-const App: React.FC<IAppProps> = ({ tasks }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [activeTaskRow, setActiveTaskRow] = useState<ITaskFormatted>();
 
-  const [activeTaskRow, setActiveTaskRow] = useState<ITask>();
+  const handleOpenCreateTaskModal = useCallback(() => {
+    onOpenCreateTask();
+  }, []);
 
   const handleOpenTaskDetailsModal = useCallback((row: Row) => {
-    const task = row.original as ITask;
+    const task = row.original as ITaskFormatted;
 
     setActiveTaskRow(task);
-    onOpen();
+    onOpenTaskDetails();
   }, []);
 
   const urgentTasksTableData = useMemo(
     () =>
-      tasks.urgent.map<ITaskFormatted>(task => ({
+      tasks?.urgent?.map<ITaskFormatted>(task => ({
         ...task,
-        date: format(parseISO(task.date), 'dd/MM/yyyy'),
-      })),
-    [],
+        date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
+      })) || [],
+    [tasks],
   );
 
   const nextTasksTableData = useMemo(
     () =>
-      tasks.next.map<ITaskFormatted>(task => ({
+      tasks?.next?.map<ITaskFormatted>(task => ({
         ...task,
-        date: format(parseISO(task.date), 'dd/MM/yyyy'),
-      })),
-    [],
+        date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
+      })) || [],
+    [tasks],
   );
 
   return (
     <>
-      <SEO title="Tarefas" />
+      <SEO
+        title="Tarefas"
+        image="og/boost.png"
+        description="Listagem de tarefas de licitações"
+      />
 
-      <Sidebar />
+      <Sidebar>
+        <Button
+          bg="blue.400"
+          padding={1}
+          borderRadius="50%"
+          marginTop={16}
+          _hover={{
+            bg: 'blue.300',
+          }}
+          onClick={handleOpenCreateTaskModal}
+        >
+          <FiPlus size={theme.sizes[8]} color={theme.colors.white} />
+        </Button>
+      </Sidebar>
+
+      <CreateTaskModal isOpen={isCreateTaskOpen} onClose={onCloseCreateTask} />
 
       <TaskDetailsModal
         task={activeTaskRow}
-        isOpen={isOpen}
+        isOpen={isTaskDetailsOpen}
         onClose={() => {
           setActiveTaskRow(null);
-          onClose();
+          onCloseTaskDetails();
         }}
       />
 
@@ -133,14 +159,3 @@ const App: React.FC<IAppProps> = ({ tasks }) => {
 };
 
 export default App;
-
-export const getStaticProps: GetStaticProps<IAppProps> = async () => {
-  const response = await fetch<ITasksResponse>('/tasks/filtered');
-
-  return {
-    props: {
-      tasks: response.data,
-    },
-    revalidate: 5,
-  };
-};
