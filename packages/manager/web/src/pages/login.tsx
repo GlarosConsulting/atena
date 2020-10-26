@@ -42,6 +42,14 @@ const Login: React.FC = () => {
 
       await logIn(data);
 
+      toast({
+        status: 'success',
+        title: 'Autenticado com sucesso',
+        description: 'Você está sendo redirecionado para a página inicial.',
+        position: 'top',
+        duration: 3000,
+      });
+
       router.replace('/app/tasks');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {

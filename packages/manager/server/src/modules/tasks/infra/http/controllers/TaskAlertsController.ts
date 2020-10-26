@@ -7,15 +7,13 @@ import CreateTaskAlertService from '@modules/tasks/services/CreateTaskAlertServi
 export default class TaskAlertsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const task_id = request.params.id;
-    const user_id = request.user.id;
-    const { date, description } = request.body;
+    const { user_id, description } = request.body;
 
     const createTaskAlert = container.resolve(CreateTaskAlertService);
 
     const taskAlert = await createTaskAlert.execute({
       task_id,
       user_id,
-      date,
       description,
     });
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Flex, IconButton } from '@chakra-ui/core';
 import styled from '@emotion/styled';

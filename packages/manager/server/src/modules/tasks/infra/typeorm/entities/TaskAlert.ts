@@ -19,7 +19,7 @@ export default class TaskAlert {
   task_id: string;
 
   @Column('uuid')
-  user_id: string;
+  user_id?: string;
 
   @Column('timestamp with time zone')
   date: Date;

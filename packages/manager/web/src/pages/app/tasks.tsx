@@ -1,8 +1,16 @@
+import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
+import { FiBell, FiPlus } from 'react-icons/fi';
 import { Column, Row } from 'react-table';
 
-import { Box, Button, Heading, useDisclosure, useTheme } from '@chakra-ui/core';
+import {
+  Box,
+  Button,
+  Heading,
+  Tooltip,
+  useDisclosure,
+  useTheme,
+} from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
 import CreateTaskModal from '@/components/_pages/app/tasks/CreateTaskModal';
@@ -11,6 +19,7 @@ import SEO from '@/components/SEO';
 import Sidebar from '@/components/Sidebar';
 import Table from '@/components/Table';
 import { useTasks } from '@/hooks/tasks';
+import IFilteredTasks from '@/interfaces/tasks/IFilteredTasks';
 import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
 
 const COLUMNS = [
@@ -39,6 +48,8 @@ const COLUMNS = [
 const App: React.FC = () => {
   const theme = useTheme();
 
+  const router = useRouter();
+
   const {
     isOpen: isTaskDetailsOpen,
     onOpen: onOpenTaskDetails,
@@ -50,9 +61,13 @@ const App: React.FC = () => {
     onClose: onCloseCreateTask,
   } = useDisclosure();
 
-  const { tasks } = useTasks();
+  const { tasks: _tasks } = useTasks();
 
   const [activeTaskRow, setActiveTaskRow] = useState<ITaskFormatted>();
+
+  const handleGoToGovernmentPrograms = useCallback(() => {
+    router.replace('/app/government-programs');
+  }, []);
 
   const handleOpenCreateTaskModal = useCallback(() => {
     onOpenCreateTask();
@@ -65,23 +80,20 @@ const App: React.FC = () => {
     onOpenTaskDetails();
   }, []);
 
-  const urgentTasksTableData = useMemo(
-    () =>
-      tasks?.urgent?.map<ITaskFormatted>(task => ({
-        ...task,
-        date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
-      })) || [],
-    [tasks],
-  );
+  const tasks: IFilteredTasks = useMemo(() => {
+    const filterAndFormat = (list?: ITaskFormatted[]) =>
+      list
+        ?.filter(task => !task.last_alert || !task.last_alert?.user_id)
+        .map<ITaskFormatted>(task => ({
+          ...task,
+          date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
+        })) || [];
 
-  const nextTasksTableData = useMemo(
-    () =>
-      tasks?.next?.map<ITaskFormatted>(task => ({
-        ...task,
-        date_formatted: format(parseISO(task.date), 'dd/MM/yyyy'),
-      })) || [],
-    [tasks],
-  );
+    return {
+      urgent: filterAndFormat(_tasks?.urgent),
+      next: filterAndFormat(_tasks?.next),
+    };
+  }, [_tasks]);
 
   return (
     <>
@@ -91,20 +103,42 @@ const App: React.FC = () => {
         description="Listagem de tarefas de licitações"
       />
 
-      <Sidebar>
-        <Button
-          bg="blue.400"
-          padding={1}
-          borderRadius="50%"
-          marginTop={16}
-          _hover={{
-            bg: 'blue.300',
-          }}
-          onClick={handleOpenCreateTaskModal}
-        >
-          <FiPlus size={theme.sizes[8]} color={theme.colors.white} />
-        </Button>
-      </Sidebar>
+      <Sidebar
+        top={
+          <Tooltip
+            label="Programas do governo"
+            aria-label="Programas do governo"
+          >
+            <Button
+              bg="orange.300"
+              padding={1}
+              borderRadius="50%"
+              _hover={{
+                bg: 'orange.400',
+              }}
+              onClick={handleGoToGovernmentPrograms}
+            >
+              <FiBell size={theme.sizes[6]} color={theme.colors.white} />
+            </Button>
+          </Tooltip>
+        }
+        middle={
+          <Tooltip label="Criar nova tarefa" aria-label="Criar nova tarefa">
+            <Button
+              bg="blue.400"
+              padding={1}
+              borderRadius="50%"
+              marginTop={16}
+              _hover={{
+                bg: 'blue.300',
+              }}
+              onClick={handleOpenCreateTaskModal}
+            >
+              <FiPlus size={theme.sizes[8]} color={theme.colors.white} />
+            </Button>
+          </Tooltip>
+        }
+      />
 
       <CreateTaskModal isOpen={isCreateTaskOpen} onClose={onCloseCreateTask} />
 
@@ -130,7 +164,8 @@ const App: React.FC = () => {
 
           <Table
             columns={COLUMNS}
-            data={urgentTasksTableData}
+            data={tasks.urgent}
+            pageSize={5}
             marginTop={4}
             onRowClick={handleOpenTaskDetailsModal}
           />
@@ -148,7 +183,8 @@ const App: React.FC = () => {
 
           <Table
             columns={COLUMNS}
-            data={nextTasksTableData}
+            data={tasks.next}
+            pageSize={5}
             marginTop={4}
             onRowClick={handleOpenTaskDetailsModal}
           />

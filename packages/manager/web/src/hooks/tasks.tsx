@@ -26,7 +26,7 @@ interface ICreateTaskDTO {
 }
 
 interface IAddAlertToTaskDTO {
-  date: Date;
+  user_id: string;
   description: string;
 }
 
@@ -108,10 +108,7 @@ const TasksProvider: React.FC = ({ children }) => {
 
       const newTasks = {
         ...tasks,
-        [taskIsIn]: [
-          ...tasks[taskIsIn].filter(task => task.id !== id),
-          findTask,
-        ],
+        [taskIsIn]: [...tasks[taskIsIn].filter(task => task.id !== id)],
       };
 
       setTasks(newTasks);
