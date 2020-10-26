@@ -1,8 +1,6 @@
 import { celebrate, Segments, Joi } from 'celebrate';
 import { Router } from 'express';
 
-import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-
 import ListTasksFilteredController from '../controllers/ListTasksFilteredController';
 import TaskAlertsController from '../controllers/TaskAlertsController';
 import TasksController from '../controllers/TasksController';
@@ -28,10 +26,9 @@ tasksRouter.post(
 
 tasksRouter.post(
   '/:id/alerts',
-  ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      date: Joi.date().required(),
+      user_id: Joi.string().uuid().optional(),
       description: Joi.string().required(),
     },
   }),

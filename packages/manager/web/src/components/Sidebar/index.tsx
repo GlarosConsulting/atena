@@ -1,11 +1,16 @@
 import React from 'react';
 import { FiPower } from 'react-icons/fi';
 
-import { Avatar, Box, Flex, useTheme } from '@chakra-ui/core';
+import { Avatar, Box, Flex, Tooltip, useTheme } from '@chakra-ui/core';
 
 import { useAuthentication } from '@/hooks/authentication';
 
-const Sidebar: React.FC = ({ children }) => {
+interface ISidebarProps {
+  top?: React.ReactNode;
+  middle?: React.ReactNode;
+}
+
+const Sidebar: React.FC<ISidebarProps> = ({ top, middle }) => {
   const theme = useTheme();
 
   const { user, logOut } = useAuthentication();
@@ -22,21 +27,25 @@ const Sidebar: React.FC = ({ children }) => {
       flexDirection="column"
       justifyContent="space-between"
       alignItems="center"
-      paddingY={6}
+      paddingY={5}
       boxShadow="xl"
     >
-      <div />
+      <Flex flexDirection="column" alignItems="center">
+        {top}
+      </Flex>
 
       <Flex flexDirection="column" alignItems="center">
-        {children}
+        {middle}
       </Flex>
 
       <Flex flexDirection="column" alignItems="center">
         <Avatar src={user?.avatar_url} size="sm" />
 
-        <Box cursor="pointer" onClick={logOut} marginTop={4}>
-          <FiPower size={theme.sizes[8]} color={theme.colors.white} />
-        </Box>
+        <Tooltip label="Sair" aria-label="Sair">
+          <Box cursor="pointer" onClick={logOut} marginTop={4}>
+            <FiPower size={theme.sizes[8]} color={theme.colors.white} />
+          </Box>
+        </Tooltip>
       </Flex>
     </Flex>
   );

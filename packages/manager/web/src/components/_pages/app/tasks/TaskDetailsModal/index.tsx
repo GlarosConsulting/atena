@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
   Button,
@@ -15,9 +15,11 @@ import {
   Stack,
   Text,
   Textarea,
+  useToast,
 } from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
+import { useAuthentication } from '@/hooks/authentication';
 import { useTasks } from '@/hooks/tasks';
 import ITaskAlert from '@/interfaces/tasks/ITaskAlert';
 import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
@@ -57,14 +59,10 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
     );
   }
 
-  const { addAlertToTask } = useTasks();
+  const toast = useToast();
 
-  const [alerts, setAlerts] = useState(() =>
-    task.alerts.map<ITaskAlertFormatted>(alert => ({
-      ...alert,
-      date_formatted: format(parseISO(alert.date), 'dd/MM/yyyy'),
-    })),
-  );
+  const { user } = useAuthentication();
+  const { addAlertToTask } = useTasks();
 
   const [isAccomplishingTask, setIsAccomplishingTask] = useState(false);
   const [observation, setObservation] = useState('');
@@ -73,29 +71,51 @@ const TaskDetailsModal: React.FC<ITaskDetailsModalProps> = ({
     setObservation(event.target.value);
   }
 
-  const handleAccomplishTask = useCallback(async () => {
-    setIsAccomplishingTask(true);
+  const handleAccomplishTask = useCallback(
+    async event => {
+      setIsAccomplishingTask(true);
 
-    const [alert] = await addAlertToTask(task.id, {
-      date: new Date(),
-      description: observation,
-    });
+      const [alert] = await addAlertToTask(task.id, {
+        user_id: user.id,
+        description: observation,
+      });
 
-    if (!alert) {
-      setIsAccomplishingTask(false);
-      return;
-    }
+      if (!alert) {
+        setIsAccomplishingTask(false);
 
-    const newAlert: ITaskAlertFormatted = {
-      ...alert,
-      date_formatted: format(parseISO(alert.date), 'dd/MM/yyyy'),
-    };
+        toast({
+          status: 'error',
+          title: 'Erro ao realizar tarefa',
+          description: 'Ocorreu um erro ao criar o alerta, tente novamente.',
+          position: 'top',
+          duration: 5000,
+        });
 
-    setAlerts([...alerts, newAlert]);
+        return;
+      }
 
-    setIsAccomplishingTask(false);
-    setObservation('');
-  }, [observation]);
+      toast({
+        status: 'success',
+        title: 'Tarefa realizada com sucesso',
+        description:
+          'Alerta criado com sucesso, e a tarefa foi retirada da lista.',
+        position: 'top',
+        duration: 3000,
+      });
+
+      onClose(event, 'pressedEscape');
+    },
+    [observation],
+  );
+
+  const alerts = useMemo(
+    () =>
+      task.alerts.map<ITaskAlertFormatted>(alert => ({
+        ...alert,
+        date_formatted: format(parseISO(alert.date), 'dd/MM/yyyy'),
+      })),
+    [],
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
