@@ -8,4 +8,5 @@ export default interface ITask {
   task: string;
   details: string;
   alerts: ITaskAlert[];
+  last_alert: ITaskAlert | null;
 }

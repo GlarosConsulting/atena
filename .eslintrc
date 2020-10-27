@@ -18,6 +18,7 @@
     "@typescript-eslint",
     "import",
     "import-helpers",
+    "react",
     "react-hooks",
     "jest",
     "prettier"
@@ -31,6 +32,7 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "dot-notation": "off",
     "indent": "off",
     "camelcase": "off",
     "semi": "off",

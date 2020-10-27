@@ -1,6 +1,6 @@
-import ITaskFormatted from './ITaskFormatted';
+import ITask from '@/interfaces/tasks/ITask';
 
 export default interface IFilteredTasks {
-  urgent: ITaskFormatted[];
-  next: ITaskFormatted[];
+  urgent: ITask[];
+  next: ITask[];
 }

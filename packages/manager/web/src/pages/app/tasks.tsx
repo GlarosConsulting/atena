@@ -3,14 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { FiBell, FiPlus } from 'react-icons/fi';
 import { Column, Row } from 'react-table';
 
-import {
-  Box,
-  Button,
-  Heading,
-  Tooltip,
-  useDisclosure,
-  useTheme,
-} from '@chakra-ui/core';
+import { Box, Button, Tooltip, useDisclosure, useTheme } from '@chakra-ui/core';
 import { format, parseISO } from 'date-fns';
 
 import CreateTaskModal from '@/components/_pages/app/tasks/CreateTaskModal';
@@ -18,8 +11,10 @@ import TaskDetailsModal from '@/components/_pages/app/tasks/TaskDetailsModal';
 import SEO from '@/components/SEO';
 import Sidebar from '@/components/Sidebar';
 import Table from '@/components/Table';
+import Title from '@/components/Title';
 import { useTasks } from '@/hooks/tasks';
-import IFilteredTasks from '@/interfaces/tasks/IFilteredTasks';
+import IFilteredTasksFormatted from '@/interfaces/tasks/IFilteredTasksFormatted';
+import ITask from '@/interfaces/tasks/ITask';
 import ITaskFormatted from '@/interfaces/tasks/ITaskFormatted';
 
 const COLUMNS = [
@@ -80,8 +75,8 @@ const App: React.FC = () => {
     onOpenTaskDetails();
   }, []);
 
-  const tasks: IFilteredTasks = useMemo(() => {
-    const filterAndFormat = (list?: ITaskFormatted[]) =>
+  const tasks: IFilteredTasksFormatted = useMemo(() => {
+    const filterAndFormat = (list?: ITask[]) =>
       list
         ?.filter(task => !task.last_alert || !task.last_alert?.user_id)
         .map<ITaskFormatted>(task => ({
@@ -153,39 +148,23 @@ const App: React.FC = () => {
 
       <Box as="section" marginLeft={24} marginY={6} paddingRight={8}>
         <Box>
-          <Heading
-            size="lg"
-            borderBottom="1px solid"
-            borderBottomColor="gray.300"
-            paddingBottom={2}
-          >
-            Tarefas urgentes
-          </Heading>
+          <Title>Tarefas urgentes</Title>
 
           <Table
             columns={COLUMNS}
             data={tasks.urgent}
             pageSize={5}
-            marginTop={4}
             onRowClick={handleOpenTaskDetailsModal}
           />
         </Box>
 
         <Box marginTop={8}>
-          <Heading
-            size="lg"
-            borderBottom="1px solid"
-            borderBottomColor="gray.300"
-            paddingBottom={2}
-          >
-            Próximas tarefas
-          </Heading>
+          <Title>Próximas tarefas</Title>
 
           <Table
             columns={COLUMNS}
             data={tasks.next}
             pageSize={5}
-            marginTop={4}
             onRowClick={handleOpenTaskDetailsModal}
           />
         </Box>
