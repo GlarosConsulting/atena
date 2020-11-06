@@ -1,13 +1,13 @@
-interface IAmendment {
+export interface IAmendment {
   id: string;
   name: string;
-  proposition_date: Date;
-  limit_date: Date;
-  program_date: Date;
+  proposition_date: string;
+  limit_date: string;
+  program_date: string;
   ministry: string;
 }
 
-export interface IGovernmentProgram {
+export default interface IGovernmentProgram {
   id: string;
   name: string;
   amendments: IAmendment[];
