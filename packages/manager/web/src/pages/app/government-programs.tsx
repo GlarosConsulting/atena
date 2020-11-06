@@ -12,8 +12,8 @@ import {
   Tooltip,
   useTheme,
 } from '@chakra-ui/core';
-import { format, parseISO } from 'date-fns';
-import { useMediaLayout } from 'use-media';
+import { format, isValid, parseISO } from 'date-fns';
+import { useMedia } from 'use-media';
 
 import Row from '@/components/_pages/app/government-programs/Row';
 import SEO from '@/components/SEO';
@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
   const router = useRouter();
 
-  const isWide = useMediaLayout({ minWidth: theme.breakpoints['md'] });
+  const isWide = useMedia({ minWidth: theme.breakpoints['md'] });
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isRowOpen, setIsRowOpen] = useState<string>();
@@ -57,9 +57,7 @@ const App: React.FC = () => {
         governmentProgram => {
           if (
             governmentProgram.amendments.some(amendment => {
-              try {
-                parseISO(amendment[key]);
-              } catch {
+              if (!isValid(new Date(amendment[key]))) {
                 return false;
               }
 
