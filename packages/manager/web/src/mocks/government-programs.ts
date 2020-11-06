@@ -1,13 +1,13 @@
 import { subDays } from 'date-fns';
 
-import { IGovernmentProgram } from '@/interfaces/government-programs/IGovernmentProgram';
+import IGovernmentProgram from '@/interfaces/government-programs/IGovernmentProgram';
 import getRandomInt from '@/utils/getRandomInt';
 
 function generateDate() {
   const now = new Date();
   const daysToSubtract = getRandomInt(1, 30);
 
-  return subDays(now, daysToSubtract);
+  return subDays(now, daysToSubtract).toISOString();
 }
 
 export default [

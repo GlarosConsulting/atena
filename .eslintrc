@@ -69,6 +69,7 @@
     "react/button-has-type": "off",
     "react/no-danger": "off",
     "react/require-default-props": "off",
+    "react/jsx-curly-newline": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/label-has-for": "off",
     "import-helpers/order-imports": [

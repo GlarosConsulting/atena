@@ -2,9 +2,9 @@ import React from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
 import { Collapse, Flex, useTheme } from '@chakra-ui/core';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
-import { IGovernmentProgram } from '@/interfaces/government-programs/IGovernmentProgram';
+import IGovernmentProgram from '@/interfaces/government-programs/IGovernmentProgram';
 
 import { Container, Value, AmendmentRow } from './styles';
 
@@ -62,13 +62,13 @@ const Row: React.FC<IRow> = ({ data, isOpen = false, onClick }) => {
               {amendment.name}
             </Value>
             <Value width="20%">
-              {format(amendment.proposition_date, 'dd/MM/yyyy')}
+              {format(parseISO(amendment.proposition_date), 'dd/MM/yyyy')}
             </Value>
             <Value width="15%">
-              {format(amendment.limit_date, 'dd/MM/yyyy')}
+              {format(parseISO(amendment.limit_date), 'dd/MM/yyyy')}
             </Value>
             <Value width="15%">
-              {format(amendment.program_date, 'dd/MM/yyyy')}
+              {format(parseISO(amendment.program_date), 'dd/MM/yyyy')}
             </Value>
             <Value width="20%" isTruncated>
               {amendment.ministry}

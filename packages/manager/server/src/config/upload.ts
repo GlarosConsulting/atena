@@ -38,7 +38,7 @@ export default {
 
   config: {
     aws: {
-      bucket: 'payme-trade',
+      bucket: 'atena-manager',
     },
   },
 } as IUploadConfig;
