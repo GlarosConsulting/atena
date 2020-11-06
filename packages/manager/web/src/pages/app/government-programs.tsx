@@ -130,7 +130,7 @@ const App: React.FC = () => {
             Programas do governo
             <Button
               bg="blue.400"
-              marginTop="-5px"
+              marginTop="-10px"
               _hover={{ bg: 'blue.300' }}
               _focusWithin={{ bg: 'blue.300' }}
               onClick={handleToggleFilters}
