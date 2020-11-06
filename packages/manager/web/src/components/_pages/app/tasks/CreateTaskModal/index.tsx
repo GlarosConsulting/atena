@@ -3,6 +3,7 @@ import { FiAlignLeft, FiBookmark, FiHash, FiTag } from 'react-icons/fi';
 
 import {
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,6 +19,7 @@ import * as Yup from 'yup';
 
 import DatePicker from '@/components/DatePicker';
 import Input from '@/components/Input';
+import Switch from '@/components/Switch';
 import { useTasks } from '@/hooks/tasks';
 import getValidationErrors from '@/utils/getValidationErrors';
 
@@ -57,6 +59,7 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
         status: Yup.string().required('Instrumento obrigatório'),
         task: Yup.string().required('Instrumento obrigatório'),
         details: Yup.string().required('Instrumento obrigatório'),
+        monitor: Yup.boolean().default(false),
       });
 
       await schema.validate(data, { abortEarly: false });
@@ -149,6 +152,21 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
                 marginTop: 3,
               }}
             />
+
+            <Flex justifyContent="flex-end">
+              <Switch
+                name="monitor"
+                label="Monitorar e alertar"
+                switchProps={{
+                  size: 'lg',
+                }}
+                labelProps={{
+                  position: 'left',
+                  fontSize: 'lg',
+                }}
+                marginTop={4}
+              />
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
