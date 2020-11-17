@@ -67,9 +67,7 @@ const Row: React.FC<IRow> = ({ data, isOpen = false, onClick }) => {
             <Value width="15%">
               {format(parseISO(amendment.limit_date), 'dd/MM/yyyy')}
             </Value>
-            <Value width="15%">
-              {format(parseISO(amendment.program_date), 'dd/MM/yyyy')}
-            </Value>
+            <Value width="15%">{amendment.program}</Value>
             <Value width="20%" isTruncated>
               {amendment.ministry}
             </Value>

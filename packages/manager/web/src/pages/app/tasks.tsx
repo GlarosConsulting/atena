@@ -23,6 +23,10 @@ const COLUMNS = [
     accessor: 'instrument',
   },
   {
+    Header: 'Contrato',
+    accessor: 'contract',
+  },
+  {
     Header: 'Data',
     accessor: 'date_formatted',
   },

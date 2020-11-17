@@ -18,6 +18,9 @@ export default class Task {
   @Column()
   instrument: string;
 
+  @Column()
+  contract: string;
+
   @Column('timestamp with time zone')
   date: Date;
 

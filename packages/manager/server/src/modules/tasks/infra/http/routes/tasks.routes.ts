@@ -15,10 +15,12 @@ tasksRouter.post(
   celebrate({
     [Segments.BODY]: {
       instrument: Joi.string().required(),
+      contract: Joi.string().required(),
       date: Joi.date().required(),
       status: Joi.string().required(),
       task: Joi.string().required(),
       details: Joi.string().required(),
+      monitor: Joi.boolean().default(false),
     },
   }),
   tasksController.create,

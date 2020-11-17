@@ -34,6 +34,7 @@ describe('CreateTaskAlert', () => {
 
     const task = await fakeTasksRepository.create({
       instrument: '777-666',
+      contract: 'any-contract',
       date: new Date(),
       status: 'Execução',
       task: 'Contrato/Subconvênio',
@@ -68,6 +69,7 @@ describe('CreateTaskAlert', () => {
   it('should not be able to create task alert with non-existing user id', async () => {
     const task = await fakeTasksRepository.create({
       instrument: '777-666',
+      contract: 'any-contract',
       date: new Date(),
       status: 'Execução',
       task: 'Contrato/Subconvênio',
