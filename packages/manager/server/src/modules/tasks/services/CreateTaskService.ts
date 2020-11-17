@@ -5,6 +5,7 @@ import ITasksRepository from '../repositories/ITasksRepository';
 
 interface IRequest {
   instrument: string;
+  contract: string;
   date: Date;
   status: string;
   task: string;
@@ -20,6 +21,7 @@ export default class CreateTaskService {
 
   public async execute({
     instrument,
+    contract,
     date,
     status,
     task,
@@ -27,6 +29,7 @@ export default class CreateTaskService {
   }: IRequest): Promise<Task> {
     const createdTask = await this.tasksRepository.create({
       instrument,
+      contract,
       date,
       status,
       task,

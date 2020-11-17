@@ -3,6 +3,7 @@ import ITaskAlert from './ITaskAlert';
 export default interface ITask {
   id: string;
   instrument: string;
+  contract: string;
   date: string;
   status: string;
   task: string;

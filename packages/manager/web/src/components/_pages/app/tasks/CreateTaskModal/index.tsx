@@ -1,5 +1,11 @@
 import React, { useCallback, useRef } from 'react';
-import { FiAlignLeft, FiBookmark, FiHash, FiTag } from 'react-icons/fi';
+import {
+  FiAlignLeft,
+  FiBookmark,
+  FiHash,
+  FiPackage,
+  FiTag,
+} from 'react-icons/fi';
 
 import {
   Button,
@@ -25,6 +31,7 @@ import getValidationErrors from '@/utils/getValidationErrors';
 
 interface IFormData {
   instrument: string;
+  contract: string;
   date: Date;
   status: string;
   task: string;
@@ -55,6 +62,7 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
 
       const schema = Yup.object().shape({
         instrument: Yup.string().required('Instrumento obrigatório'),
+        contract: Yup.string().optional(),
         date: Yup.date().required('Data obrigatória'),
         status: Yup.string().required('Instrumento obrigatório'),
         task: Yup.string().required('Instrumento obrigatório'),
@@ -112,6 +120,18 @@ const CreateTaskModal: React.FC<ICreateTaskModalProps> = ({
                 border: '1px solid',
                 borderColor: 'gray.400',
                 bg: 'white',
+              }}
+            />
+
+            <Input
+              name="contract"
+              icon={FiPackage}
+              placeholder="Contrato"
+              containerProps={{
+                border: '1px solid',
+                borderColor: 'gray.400',
+                bg: 'white',
+                marginTop: 3,
               }}
             />
 

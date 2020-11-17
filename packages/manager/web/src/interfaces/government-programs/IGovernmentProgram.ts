@@ -3,7 +3,7 @@ export interface IAmendment {
   name: string;
   proposition_date: string;
   limit_date: string;
-  program_date: string;
+  program: string;
   ministry: string;
 }
 

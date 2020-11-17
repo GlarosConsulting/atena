@@ -16,6 +16,7 @@ describe('ListTasksFiltered', () => {
   it('should be able to list tasks filtered', async () => {
     fakeTasksRepository.create({
       instrument: '777-666',
+      contract: 'any-contract',
       date: new Date(),
       status: 'Execução',
       task: 'Contrato/Subconvênio',
@@ -24,6 +25,7 @@ describe('ListTasksFiltered', () => {
 
     fakeTasksRepository.create({
       instrument: '666-777',
+      contract: 'any-contract',
       date: addDays(new Date(), 6),
       status: 'Execução',
       task: 'Contrato/Subconvênio',
@@ -36,6 +38,7 @@ describe('ListTasksFiltered', () => {
       urgent: expect.arrayContaining([
         expect.objectContaining({
           instrument: expect.any(String),
+          contract: expect.any(String),
           date: expect.any(Date),
           status: expect.any(String),
           task: expect.any(String),
@@ -46,6 +49,7 @@ describe('ListTasksFiltered', () => {
       next: expect.arrayContaining([
         expect.objectContaining({
           instrument: expect.any(String),
+          contract: expect.any(String),
           date: expect.any(Date),
           status: expect.any(String),
           task: expect.any(String),
