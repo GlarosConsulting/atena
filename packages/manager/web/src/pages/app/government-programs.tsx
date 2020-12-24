@@ -181,10 +181,7 @@ const App: React.FC = () => {
               <Input
                 placeholder="Programa"
                 onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                  handleFilterByKeyAndValue(
-                    'program_date',
-                    e.currentTarget.value,
-                  )
+                  handleFilterByKeyAndValue('program', e.currentTarget.value)
                 }
               />
               <Input
